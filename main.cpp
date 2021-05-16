@@ -25,8 +25,10 @@ class AreaAbsorber : public olc::PixelGameEngine {
 	bool moveShapesDown;
 
 	// Variables
+	const int textScale = 4;
 	olc::vi2d mainCirclePos;
 	int mainCircleRadius;
+	int score;
 
 	// Other shapes containers
 	struct shapesContainer{
@@ -41,6 +43,11 @@ class AreaAbsorber : public olc::PixelGameEngine {
 		void drawShapes(AreaAbsorber& aa){
 			for(auto it = otherCircle.begin(); it != otherCircle.end(); ++it){
 				aa.FillCircle(it->second.first, it->second.second, olc::RED);
+			}
+		}
+		void hideShapes(AreaAbsorber& aa){
+			for(auto it = otherCircle.begin(); it != otherCircle.end(); ++it){
+				aa.FillCircle(it->second.first, it->second.second, olc::WHITE);
 			}
 		}
 		void addShape(AreaAbsorber& aa){
@@ -64,7 +71,7 @@ class AreaAbsorber : public olc::PixelGameEngine {
 		}
 
 		// Returns true if the collision destroyed the circle
-		bool checkCollision(olc::vi2d pos, int& radius){
+		bool checkCollision(olc::vi2d pos, int& radius, int& score){
 			for(auto it = otherCircle.begin(); it != otherCircle.end(); ++it){
 				// Get the distances
 				int32_t x = it->second.first.x;
@@ -78,7 +85,8 @@ class AreaAbsorber : public olc::PixelGameEngine {
 					}else{
 						deleteShape(it->first);
 						// Add the smaller circle to the main Circle
-						radius += it->second.second / 10;
+						radius += it->second.second / 2;
+						score += it->second.second;
 					}
 				}
 			}
@@ -95,8 +103,6 @@ public:
 
 	void setMainMenu(){
 		// Make a text saying to press space bar to start in the center of the screen
-		const int scale = 4;
-
 		const std::string press = "Press";
 		olc::vi2d pressSize = GetTextSize(press);
 		const std::string space = "SPACE";
@@ -107,32 +113,32 @@ public:
 		olc::vi2d startSize = GetTextSize(start);
 
 		DrawString(// Press
-			ScreenWidth() / 2 - scale * (pressSize.x / 2), 
-			ScreenHeight() / 2 - scale * (pressSize.y + spaceSize.y + 2), 
+			ScreenWidth() / 2 - textScale * (pressSize.x / 2), 
+			ScreenHeight() / 2 - textScale * (pressSize.y + spaceSize.y + 2), 
 			press, 
 			olc::BLACK,
-			scale
+			textScale
 		);
 		DrawString(// SPACE
-			ScreenWidth() / 2 - scale * (spaceSize.x / 2), 
-			ScreenHeight() / 2 - scale * (spaceSize.y), 
+			ScreenWidth() / 2 - textScale * (spaceSize.x / 2), 
+			ScreenHeight() / 2 - textScale * (spaceSize.y), 
 			space, 
 			olc::BLACK,
-			scale
+			textScale
 		);
 		DrawString(// To
-			ScreenWidth() / 2 - scale * (toSize.x / 2), 
-			ScreenHeight() / 2 + scale * (2), 
+			ScreenWidth() / 2 - textScale * (toSize.x / 2), 
+			ScreenHeight() / 2 + textScale * (2), 
 			to, 
 			olc::BLACK,
-			scale
+			textScale
 		);
 		DrawString(// Start!
-			ScreenWidth() / 2 - scale * (startSize.x / 2), 
-			ScreenHeight() / 2 + scale * (toSize.y + 2), 
+			ScreenWidth() / 2 - textScale * (startSize.x / 2), 
+			ScreenHeight() / 2 + textScale * (toSize.y + 2), 
 			start, 
 			olc::BLACK,
-			scale
+			textScale
 		);
 	}
 
@@ -159,6 +165,8 @@ public:
 		// for(int y = 0; y < ScreenHeight(); ++y){
 		// 	Draw(middleX, y, olc::RED);
 		// }
+
+		drawScore();
 
 		setMainMenu();
 
@@ -197,6 +205,40 @@ public:
 		}
 	}
 
+	void drawScore(){
+		// Draw "Score - "
+		const std::string scoreTitle = "Score - ";
+		olc::vi2d scTitSize = GetTextSize(scoreTitle);
+		DrawString(
+			0,
+			0,
+			scoreTitle,
+			olc::BLACK,
+			textScale
+		);
+
+		// Draw the actual score
+		DrawString(
+			scTitSize.x * textScale,
+			0,
+			std::to_string(score),
+			olc::BLACK,
+			textScale
+		);
+	}
+
+	void clearScore(){
+		// Make a white rectangle white to clear the score
+		const std::string scoreTitle = "Score - ";
+		olc::vi2d scTitSize = GetTextSize(scoreTitle);
+		olc::vi2d scoreSize = GetTextSize(std::to_string(score));
+
+		int rectLength = textScale * (scTitSize.x + scoreSize.x);
+		int rectHeight = textScale * (scTitSize.y + scoreSize.y);
+
+		FillRect(0, 0, rectLength, rectHeight);
+	}
+
 
 public:
 	bool OnUserCreate() override {
@@ -216,8 +258,14 @@ public:
 				Clear(olc::WHITE);
 				FillCircle(mainCirclePos, 3, olc::BLUE);
 				inMainMenu = false;
+				score = 0;
 			}
 		}else{
+			// Clear the Screen where it needs to
+			clearScore();
+			FillCircle(mainCirclePos, mainCircleRadius, olc::WHITE);
+			shapesContainer.hideShapes(*this);
+
 			checkUserInput();
 
 			// Generate shape if needed
@@ -233,15 +281,16 @@ public:
 			moveShapesDown = !moveShapesDown;
 
 			// Collision detection
-			if(shapesContainer.checkCollision(mainCirclePos, mainCircleRadius)){
+			if(shapesContainer.checkCollision(mainCirclePos, mainCircleRadius, score)){
 				// Back to main menu and end the game
 				initializeGame();
+				inMainMenu = true;
+			}else{
+				// Draw the screen.
+				FillCircle(mainCirclePos, mainCircleRadius, olc::BLUE);
+				shapesContainer.drawShapes(*this);
+				drawScore();
 			}
-
-			// Clear and update the circle position
-			Clear(olc::WHITE);
-			FillCircle(mainCirclePos, mainCircleRadius, olc::BLUE);
-			shapesContainer.drawShapes(*this);
 		}
 
 		// Check the escape button to end the program
