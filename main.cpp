@@ -2,6 +2,10 @@
 #include "olcPixelGameEngine.h"
 
 #include <iostream>
+#include <map>
+#include <utility>
+#include <stdlib.h>
+#include <time.h>
 
 // Command to compile 
 // g++ -o main.exe main.cpp -luser32 -lgdi32 -lopengl32 -lgdiplus -lShlwapi -ldwmapi -lstdc++fs -static -std=c++17
@@ -17,9 +21,43 @@ class AreaAbsorber : public olc::PixelGameEngine {
 
 	// flags
 	bool inMainMenu;
+	bool moveShapesDown;
 
 	// Variables
 	olc::vi2d mainCirclePos;
+
+	// Other shapes containers
+	struct shapesContainer{
+		int id;
+		std::map<int, std::pair<olc::vi2d, int>> otherCircle; // key = id, value = location, areaSize
+		void initialize(){
+			id = 0;
+		}
+		void drawShapes(AreaAbsorber& aa){
+			for(auto it = otherCircle.begin(); it != otherCircle.end(); ++it){
+				aa.FillCircle(it->second.first, 10, olc::RED);
+			}
+		}
+		void addShape(AreaAbsorber& aa){
+			olc::vi2d loc = olc::vi2d(rand() % aa.ScreenWidth(), 0);
+			otherCircle[id] = std::make_pair(loc, 2);
+			++id;
+		}
+		void moveShapes(AreaAbsorber& aa){
+			for(auto it = otherCircle.begin(); it != otherCircle.end(); ++it){
+				it->second.first += olc::vi2d(0, 1);
+				// if it reaches the bottom, delete it
+				int pos = it->second.first.y;
+				if(pos == aa.ScreenHeight()){
+					deleteShape(it->first);
+				}
+			}
+		}
+		void deleteShape(int shapeId){
+			otherCircle.erase(shapeId);
+		}
+	};
+	shapesContainer shapesContainer;
 
 public:
 	AreaAbsorber(){
@@ -27,7 +65,9 @@ public:
 	}
 
 	void setMainMenu(){
-		// Make a text saying to press space bar to start
+		// Make a text saying to press space bar to start in the center of the screen
+		const int scale = 4;
+
 		const std::string press = "Press";
 		olc::vi2d pressSize = GetTextSize(press);
 		const std::string space = "SPACE";
@@ -38,37 +78,81 @@ public:
 		olc::vi2d startSize = GetTextSize(start);
 
 		DrawString(// Press
-			ScreenWidth() / 2 - pressSize.x / 2, 
-			ScreenHeight() / 2 - pressSize.y - spaceSize.y - 2, press, 
-			olc::BLACK
+			ScreenWidth() / 2 - scale * (pressSize.x / 2), 
+			ScreenHeight() / 2 - scale * (pressSize.y + spaceSize.y + 2), 
+			press, 
+			olc::BLACK,
+			scale
 		);
 		DrawString(// SPACE
-			ScreenWidth() / 2 - spaceSize.x / 2, 
-			ScreenHeight() / 2 - spaceSize.y, 
+			ScreenWidth() / 2 - scale * (spaceSize.x / 2), 
+			ScreenHeight() / 2 - scale * (spaceSize.y), 
 			space, 
-			olc::BLACK
+			olc::BLACK,
+			scale
 		);
 		DrawString(// To
-			ScreenWidth() / 2 - toSize.x / 2, 
-			ScreenHeight() / 2 + 2, 
+			ScreenWidth() / 2 - scale * (toSize.x / 2), 
+			ScreenHeight() / 2 + scale * (2), 
 			to, 
-			olc::BLACK
+			olc::BLACK,
+			scale
 		);
 		DrawString(// Start!
-			ScreenWidth() / 2 - startSize.x / 2, 
-			ScreenHeight() / 2 + toSize.y + 2, 
+			ScreenWidth() / 2 - scale * (startSize.x / 2), 
+			ScreenHeight() / 2 + scale * (toSize.y + 2), 
 			start, 
-			olc::BLACK
+			olc::BLACK,
+			scale
 		);
 
 		// Set flags
 		inMainMenu = true;
 	}
 
+	void checkUserInput(){
+		// Get the up, down, left, right buttons
+		upButton = GetKey(olc::Key::UP);
+		downButton = GetKey(olc::Key::DOWN);
+		leftButton = GetKey(olc::Key::LEFT);
+		rightButton = GetKey(olc::Key::RIGHT);
+
+		// Update the position of the circle
+		if(upButton.bHeld){
+			if(mainCirclePos.y > 0){
+				mainCirclePos -= olc::vi2d(0, 1);
+			}
+		}
+		if(downButton.bHeld){
+			if(mainCirclePos.y < ScreenHeight()){
+				mainCirclePos += olc::vi2d(0, 1);
+			}
+		}
+		if(leftButton.bHeld){
+			if(mainCirclePos.x > 0){
+				mainCirclePos -= olc::vi2d(1, 0);
+			}
+		}
+		if(rightButton.bHeld){
+			if(mainCirclePos.x < ScreenWidth()){
+				mainCirclePos += olc::vi2d(1, 0);
+			}
+		}
+	}
+
 
 public:
 	bool OnUserCreate() override {
 		// Called once at the start, so create things here
+
+		// Set flags
+		moveShapesDown = false;
+
+		srand(time(0));
+
+		// Initialize the struct
+		shapesContainer.initialize();
+
 
 		// Make the background white
 		Clear(olc::WHITE);
@@ -102,29 +186,24 @@ public:
 				inMainMenu = false;
 			}
 		}else{
-			// Get the up, down, left, right buttons
-			upButton = GetKey(olc::Key::UP);
-			downButton = GetKey(olc::Key::DOWN);
-			leftButton = GetKey(olc::Key::LEFT);
-			rightButton = GetKey(olc::Key::RIGHT);
+			checkUserInput();
 
-			// Update the position of the circle
-			if(upButton.bHeld){
-				mainCirclePos -= olc::vi2d(0, 1);
+			// Generate shape if needed
+			const int likelyHood = 200;
+			if(rand() % likelyHood == 0){ // If likely then make a shape
+				shapesContainer.addShape(*this);
 			}
-			if(downButton.bHeld){
-				mainCirclePos += olc::vi2d(0, 1);
+
+			// Move the shapes every other frame
+			if(moveShapesDown){
+				shapesContainer.moveShapes(*this);
 			}
-			if(leftButton.bHeld){
-				mainCirclePos -= olc::vi2d(1, 0);
-			}
-			if(rightButton.bHeld){
-				mainCirclePos += olc::vi2d(1, 0);
-			}
+			moveShapesDown = !moveShapesDown;
 
 			// Clear and update the circle position
 			Clear(olc::WHITE);
 			FillCircle(mainCirclePos, 10, olc::BLUE);
+			shapesContainer.drawShapes(*this);
 		}
 
 		// Check the escape button to end the program
@@ -139,7 +218,7 @@ public:
 
 int main(){
 	AreaAbsorber aa;
-	if(aa.Construct(500, 1000, 1, 1))
+	if(aa.Construct(750, 1000, 1, 1))
 		aa.Start();
 
 	return 0;
