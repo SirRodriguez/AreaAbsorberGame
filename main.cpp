@@ -32,6 +32,7 @@ class AreaAbsorber : public olc::PixelGameEngine {
 		std::map<int, std::pair<olc::vi2d, int>> otherCircle; // key = id, value = location, areaSize
 		void initialize(){
 			id = 0;
+			otherCircle.clear();
 		}
 		void drawShapes(AreaAbsorber& aa){
 			for(auto it = otherCircle.begin(); it != otherCircle.end(); ++it){
@@ -105,9 +106,36 @@ public:
 			olc::BLACK,
 			scale
 		);
+	}
 
+	void initializeGame(){
 		// Set flags
 		inMainMenu = true;
+		moveShapesDown = false;
+
+		// Initialize the random seed
+		srand(time(0));
+
+		// Initialize the struct
+		shapesContainer.initialize();
+
+		// Make the background white
+		Clear(olc::WHITE);
+
+		// Make a middle horizontal and vertical line for debugging
+		// int32_t middleX = ScreenWidth() / 2;
+		// int32_t middleY = ScreenHeight() / 2;
+		// for(int x = 0; x < ScreenWidth(); ++x){
+		// 	Draw(x, middleY, olc::RED);
+		// }
+		// for(int y = 0; y < ScreenHeight(); ++y){
+		// 	Draw(middleX, y, olc::RED);
+		// }
+
+		setMainMenu();
+
+		// Set main circle position to middle
+		mainCirclePos = olc::vi2d(ScreenWidth() / 2, ScreenHeight() / 2);
 	}
 
 	void checkUserInput(){
@@ -145,32 +173,7 @@ public:
 	bool OnUserCreate() override {
 		// Called once at the start, so create things here
 
-		// Set flags
-		moveShapesDown = false;
-
-		srand(time(0));
-
-		// Initialize the struct
-		shapesContainer.initialize();
-
-
-		// Make the background white
-		Clear(olc::WHITE);
-
-		// Make a middle horizontal and vertical line for debugging
-		// int32_t middleX = ScreenWidth() / 2;
-		// int32_t middleY = ScreenHeight() / 2;
-		// for(int x = 0; x < ScreenWidth(); ++x){
-		// 	Draw(x, middleY, olc::RED);
-		// }
-		// for(int y = 0; y < ScreenHeight(); ++y){
-		// 	Draw(middleX, y, olc::RED);
-		// }
-
-		setMainMenu();
-
-		// Set main circle position to middle
-		mainCirclePos = olc::vi2d(ScreenWidth() / 2, ScreenHeight() / 2);
+		initializeGame();
 
 		return true;
 	}
@@ -209,7 +212,12 @@ public:
 		// Check the escape button to end the program
 		escButton = GetKey(olc::Key::ESCAPE);
 		if(escButton.bPressed){
-			olc_Terminate();
+			if(inMainMenu){
+				olc_Terminate();
+			}else{
+				// Go back to main menu
+				initializeGame();
+			}
 		}
 
 		return true;
