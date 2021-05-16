@@ -6,6 +6,7 @@
 #include <utility>
 #include <stdlib.h>
 #include <time.h>
+#include <cmath>
 
 // Command to compile 
 // g++ -o main.exe main.cpp -luser32 -lgdi32 -lopengl32 -lgdiplus -lShlwapi -ldwmapi -lstdc++fs -static -std=c++17
@@ -29,19 +30,19 @@ class AreaAbsorber : public olc::PixelGameEngine {
 	// Other shapes containers
 	struct shapesContainer{
 		int id;
-		std::map<int, std::pair<olc::vi2d, int>> otherCircle; // key = id, value = location, areaSize
+		std::map<int, std::pair<olc::vi2d, int>> otherCircle; // key = id, value = location, radius
 		void initialize(){
 			id = 0;
 			otherCircle.clear();
 		}
 		void drawShapes(AreaAbsorber& aa){
 			for(auto it = otherCircle.begin(); it != otherCircle.end(); ++it){
-				aa.FillCircle(it->second.first, 10, olc::RED);
+				aa.FillCircle(it->second.first, it->second.second, olc::RED);
 			}
 		}
 		void addShape(AreaAbsorber& aa){
 			olc::vi2d loc = olc::vi2d(rand() % aa.ScreenWidth(), 0);
-			otherCircle[id] = std::make_pair(loc, 2);
+			otherCircle[id] = std::make_pair(loc, 10);
 			++id;
 		}
 		void moveShapes(AreaAbsorber& aa){
@@ -56,6 +57,20 @@ class AreaAbsorber : public olc::PixelGameEngine {
 		}
 		void deleteShape(int shapeId){
 			otherCircle.erase(shapeId);
+		}
+
+		void checkCollision(olc::vi2d pos, int radius){
+			for(auto it = otherCircle.begin(); it != otherCircle.end(); ++it){
+				// Get the distances
+				int32_t x = it->second.first.x;
+				int32_t y = it->second.first.y;
+				double distance = std::sqrt( (pos.x - x) * (pos.x - x) + (pos.y - y) * (pos.y - y) );
+
+				// check if distance is less or equal the two radius combined
+				if(distance <= it->second.second + radius){
+					deleteShape(it->first);
+				}
+			}
 		}
 	};
 	shapesContainer shapesContainer;
@@ -202,6 +217,9 @@ public:
 				shapesContainer.moveShapes(*this);
 			}
 			moveShapesDown = !moveShapesDown;
+
+			// Collision detection
+			shapesContainer.checkCollision(mainCirclePos, 10);
 
 			// Clear and update the circle position
 			Clear(olc::WHITE);
