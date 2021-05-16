@@ -26,14 +26,17 @@ class AreaAbsorber : public olc::PixelGameEngine {
 
 	// Variables
 	olc::vi2d mainCirclePos;
+	int mainCircleRadius;
 
 	// Other shapes containers
 	struct shapesContainer{
 		int id;
 		std::map<int, std::pair<olc::vi2d, int>> otherCircle; // key = id, value = location, radius
+		int maxRadius;
 		void initialize(){
 			id = 0;
 			otherCircle.clear();
+			maxRadius = 50;
 		}
 		void drawShapes(AreaAbsorber& aa){
 			for(auto it = otherCircle.begin(); it != otherCircle.end(); ++it){
@@ -42,7 +45,8 @@ class AreaAbsorber : public olc::PixelGameEngine {
 		}
 		void addShape(AreaAbsorber& aa){
 			olc::vi2d loc = olc::vi2d(rand() % aa.ScreenWidth(), 0);
-			otherCircle[id] = std::make_pair(loc, 10);
+			int radius = rand() % maxRadius;
+			otherCircle[id] = std::make_pair(loc, radius);
 			++id;
 		}
 		void moveShapes(AreaAbsorber& aa){
@@ -59,7 +63,8 @@ class AreaAbsorber : public olc::PixelGameEngine {
 			otherCircle.erase(shapeId);
 		}
 
-		void checkCollision(olc::vi2d pos, int radius){
+		// Returns true if the collision destroyed the circle
+		bool checkCollision(olc::vi2d pos, int& radius){
 			for(auto it = otherCircle.begin(); it != otherCircle.end(); ++it){
 				// Get the distances
 				int32_t x = it->second.first.x;
@@ -68,9 +73,17 @@ class AreaAbsorber : public olc::PixelGameEngine {
 
 				// check if distance is less or equal the two radius combined
 				if(distance <= it->second.second + radius){
-					deleteShape(it->first);
+					if(it->second.second > radius){
+						return true;
+					}else{
+						deleteShape(it->first);
+						// Add the smaller circle to the main Circle
+						radius += it->second.second / 10;
+					}
 				}
 			}
+
+			return false;
 		}
 	};
 	shapesContainer shapesContainer;
@@ -149,8 +162,9 @@ public:
 
 		setMainMenu();
 
-		// Set main circle position to middle
+		// Set main circle position to middle and its defualt radius
 		mainCirclePos = olc::vi2d(ScreenWidth() / 2, ScreenHeight() / 2);
+		mainCircleRadius = 10;
 	}
 
 	void checkUserInput(){
@@ -219,11 +233,14 @@ public:
 			moveShapesDown = !moveShapesDown;
 
 			// Collision detection
-			shapesContainer.checkCollision(mainCirclePos, 10);
+			if(shapesContainer.checkCollision(mainCirclePos, mainCircleRadius)){
+				// Back to main menu and end the game
+				initializeGame();
+			}
 
 			// Clear and update the circle position
 			Clear(olc::WHITE);
-			FillCircle(mainCirclePos, 10, olc::BLUE);
+			FillCircle(mainCirclePos, mainCircleRadius, olc::BLUE);
 			shapesContainer.drawShapes(*this);
 		}
 
