@@ -276,7 +276,7 @@ public:
 			checkUserInput();
 
 			// Generate shape if needed
-			const int likelyHood = 60;
+			const int likelyHood = 30;
 			if(rand() % likelyHood == 0){ // If likely then make a shape
 				shapesContainer.addShape(*this);
 			}
