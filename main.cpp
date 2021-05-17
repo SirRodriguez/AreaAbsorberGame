@@ -33,6 +33,9 @@ class AreaAbsorber : public olc::PixelGameEngine {
 	int mainCircleRadius;
 	// Score
 	int score;
+	int level;
+	// Likelyhood of other circles generated
+	int likelyHood;
 
 	// Other shapes containers
 	struct shapesContainer{
@@ -72,6 +75,10 @@ class AreaAbsorber : public olc::PixelGameEngine {
 		}
 		void deleteShape(int shapeId){
 			otherCircle.erase(shapeId);
+		}
+		void eraseAll(AreaAbsorber& aa){
+			hideShapes(aa);
+			otherCircle.clear();
 		}
 
 		// Returns true if the collision destroyed the circle
@@ -170,6 +177,9 @@ public:
 		// Set speeds
 		otherShapeSpeed = 4;
 		MainCircleSpeed = 3;
+
+		// Set LikelyHood
+		likelyHood = 50;
 	}
 
 	void checkUserInput(){
@@ -202,10 +212,14 @@ public:
 		}
 	}
 
+	// Draw score and level
 	void drawScore(){
 		// Draw "Score - "
 		const std::string scoreTitle = "Score - ";
 		olc::vi2d scTitSize = GetTextSize(scoreTitle);
+		const std::string levelTitle = "Level - ";
+		olc::vi2d lvlTitSize = GetTextSize(levelTitle);
+
 		DrawString(
 			0,
 			0,
@@ -213,12 +227,27 @@ public:
 			olc::BLACK,
 			textScale
 		);
-
 		// Draw the actual score
 		DrawString(
 			scTitSize.x * textScale,
 			0,
 			std::to_string(score),
+			olc::BLACK,
+			textScale
+		);
+
+		DrawString(
+			0,
+			scTitSize.y * textScale,
+			levelTitle,
+			olc::BLACK,
+			textScale
+		);
+		// Draw actual level
+		DrawString(
+			lvlTitSize.x * textScale,
+			scTitSize.y * textScale,
+			std::to_string(level),
 			olc::BLACK,
 			textScale
 		);
@@ -230,10 +259,20 @@ public:
 		olc::vi2d scTitSize = GetTextSize(scoreTitle);
 		olc::vi2d scoreSize = GetTextSize(std::to_string(score));
 
-		int rectLength = textScale * (scTitSize.x + scoreSize.x);
-		int rectHeight = textScale * (scTitSize.y + scoreSize.y);
+		int scoreRectLength = textScale * (scTitSize.x + scoreSize.x);
+		int scoreRectHeight = textScale * (scTitSize.y + scoreSize.y);
 
-		FillRect(0, 0, rectLength, rectHeight);
+		FillRect(0, 0, scoreRectLength, scoreRectHeight);
+
+		// Make a white rectangle white to clear the level
+		const std::string levelTitle = "Level - ";
+		olc::vi2d lvlTitSize = GetTextSize(levelTitle);
+		olc::vi2d levelSize = GetTextSize(std::to_string(level));
+
+		int levelRectLength = textScale * (lvlTitSize.x + levelSize.x);
+		int levelRectHeight = textScale * (lvlTitSize.y + levelSize.y);
+
+		FillRect(0, scoreRectHeight, levelRectLength, levelRectHeight);
 	}
 
 
@@ -256,6 +295,7 @@ public:
 				FillCircle(mainCirclePos, 3, olc::BLUE);
 				inMainMenu = false;
 				score = 0;
+				level = 1;
 			}
 		}else{
 			// Clear the Screen where it needs to
@@ -266,9 +306,16 @@ public:
 			checkUserInput();
 
 			// Generate shape if needed
-			const int likelyHood = 30;
-			if(rand() % likelyHood == 0){ // If likely then make a shape
-				shapesContainer.addShape(*this);
+			bool maxRateReached = false;
+			if(likelyHood - (level - 1) * 5 > 0){
+				if(rand() % (likelyHood - (level - 1) * 5) == 0){
+					shapesContainer.addShape(*this);
+				}
+			}else{
+				if(rand() % 5 == 0){
+					shapesContainer.addShape(*this);
+				}
+				maxRateReached = true;
 			}
 
 			// Move the shapes down
@@ -277,6 +324,16 @@ public:
 
 			// Collision detection
 			bool collide = shapesContainer.checkCollision(mainCirclePos, mainCircleRadius, score);
+
+			// Check the size for the circle and resize if too big (ie next level)
+			if(mainCircleRadius >= 50){
+				mainCircleRadius = 10;
+				shapesContainer.eraseAll(*this);
+				++level;
+				if(maxRateReached){
+					++otherShapeSpeed;
+				}
+			}
 
 			// Draw the screen.
 			FillCircle(mainCirclePos, mainCircleRadius, olc::BLUE);
