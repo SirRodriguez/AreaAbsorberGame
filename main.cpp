@@ -159,16 +159,6 @@ public:
 		// Make the background white
 		Clear(olc::WHITE);
 
-		// Make a middle horizontal and vertical line for debugging
-		// int32_t middleX = ScreenWidth() / 2;
-		// int32_t middleY = ScreenHeight() / 2;
-		// for(int x = 0; x < ScreenWidth(); ++x){
-		// 	Draw(x, middleY, olc::RED);
-		// }
-		// for(int y = 0; y < ScreenHeight(); ++y){
-		// 	Draw(middleX, y, olc::RED);
-		// }
-
 		drawScore();
 
 		setMainMenu();
@@ -286,15 +276,17 @@ public:
 			
 
 			// Collision detection
-			if(shapesContainer.checkCollision(mainCirclePos, mainCircleRadius, score)){
+			bool collide = shapesContainer.checkCollision(mainCirclePos, mainCircleRadius, score);
+
+			// Draw the screen.
+			FillCircle(mainCirclePos, mainCircleRadius, olc::BLUE);
+			shapesContainer.drawShapes(*this);
+			drawScore();
+
+			if(collide){
 				// Back to main menu and end the game
 				initializeGame();
 				inMainMenu = true;
-			}else{
-				// Draw the screen.
-				FillCircle(mainCirclePos, mainCircleRadius, olc::BLUE);
-				shapesContainer.drawShapes(*this);
-				drawScore();
 			}
 		}
 
