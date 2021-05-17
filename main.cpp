@@ -22,12 +22,16 @@ class AreaAbsorber : public olc::PixelGameEngine {
 
 	// flags
 	bool inMainMenu;
-	bool moveShapesDown;
 
-	// Variables
+	// Text
 	const int textScale = 4;
+	// Move Speeds
+	int otherShapeSpeed;
+	int MainCircleSpeed;
+	// Poition
 	olc::vi2d mainCirclePos;
 	int mainCircleRadius;
+	// Score
 	int score;
 
 	// Other shapes containers
@@ -56,9 +60,9 @@ class AreaAbsorber : public olc::PixelGameEngine {
 			otherCircle[id] = std::make_pair(loc, radius);
 			++id;
 		}
-		void moveShapes(AreaAbsorber& aa){
+		void moveShapes(AreaAbsorber& aa, int pixels){
 			for(auto it = otherCircle.begin(); it != otherCircle.end(); ++it){
-				it->second.first += olc::vi2d(0, 1);
+				it->second.first += olc::vi2d(0, pixels);
 				// if it reaches the bottom, delete it
 				int pos = it->second.first.y;
 				if(pos == aa.ScreenHeight()){
@@ -145,7 +149,6 @@ public:
 	void initializeGame(){
 		// Set flags
 		inMainMenu = true;
-		moveShapesDown = false;
 
 		// Initialize the random seed
 		srand(time(0));
@@ -173,6 +176,10 @@ public:
 		// Set main circle position to middle and its defualt radius
 		mainCirclePos = olc::vi2d(ScreenWidth() / 2, ScreenHeight() / 2);
 		mainCircleRadius = 10;
+
+		// Set speeds
+		otherShapeSpeed = 4;
+		MainCircleSpeed = 3;
 	}
 
 	void checkUserInput(){
@@ -185,22 +192,22 @@ public:
 		// Update the position of the circle
 		if(upButton.bHeld){
 			if(mainCirclePos.y > 0){
-				mainCirclePos -= olc::vi2d(0, 1);
+				mainCirclePos -= olc::vi2d(0, MainCircleSpeed);
 			}
 		}
 		if(downButton.bHeld){
 			if(mainCirclePos.y < ScreenHeight()){
-				mainCirclePos += olc::vi2d(0, 1);
+				mainCirclePos += olc::vi2d(0, MainCircleSpeed);
 			}
 		}
 		if(leftButton.bHeld){
 			if(mainCirclePos.x > 0){
-				mainCirclePos -= olc::vi2d(1, 0);
+				mainCirclePos -= olc::vi2d(MainCircleSpeed, 0);
 			}
 		}
 		if(rightButton.bHeld){
 			if(mainCirclePos.x < ScreenWidth()){
-				mainCirclePos += olc::vi2d(1, 0);
+				mainCirclePos += olc::vi2d(MainCircleSpeed, 0);
 			}
 		}
 	}
@@ -269,16 +276,14 @@ public:
 			checkUserInput();
 
 			// Generate shape if needed
-			const int likelyHood = 200;
+			const int likelyHood = 60;
 			if(rand() % likelyHood == 0){ // If likely then make a shape
 				shapesContainer.addShape(*this);
 			}
 
-			// Move the shapes every other frame
-			if(moveShapesDown){
-				shapesContainer.moveShapes(*this);
-			}
-			moveShapesDown = !moveShapesDown;
+			// Move the shapes down
+			shapesContainer.moveShapes(*this, otherShapeSpeed);
+			
 
 			// Collision detection
 			if(shapesContainer.checkCollision(mainCirclePos, mainCircleRadius, score)){
@@ -310,7 +315,14 @@ public:
 
 int main(){
 	AreaAbsorber aa;
-	if(aa.Construct(750, 1000, 1, 1))
+	const int width = 750;
+	const int height = 1000;
+	const int pixel_width = 1;
+	const int pixel_height = 1;
+	const bool full_screen = true;
+	const bool vsync = true;
+	const bool cohesion = false;
+	if(aa.Construct(width, height, pixel_width, pixel_height, full_screen, vsync, cohesion))
 		aa.Start();
 
 	return 0;
