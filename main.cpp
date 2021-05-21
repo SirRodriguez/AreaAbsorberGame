@@ -176,7 +176,7 @@ public:
 
 		// Set speeds
 		otherShapeSpeed = 4;
-		MainCircleSpeed = 3;
+		MainCircleSpeed = 5;
 
 		// Set LikelyHood
 		likelyHood = 50;
@@ -332,6 +332,7 @@ public:
 				++level;
 				if(maxRateReached){
 					++otherShapeSpeed;
+					++MainCircleSpeed;
 				}
 			}
 
