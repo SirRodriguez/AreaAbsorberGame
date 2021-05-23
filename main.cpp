@@ -1,10 +1,10 @@
 // Command to compile 
-// g++ -o main.exe main.cpp -luser32 -lgdi32 -lopengl32 -lgdiplus -lShlwapi -ldwmapi -lstdc++fs -static -std=c++17
+// g++ -o AreaAbsorber.exe main.cpp -luser32 -lgdi32 -lopengl32 -lgdiplus -lShlwapi -ldwmapi -lstdc++fs -static -std=c++17
 
 #define OLC_PGE_APPLICATION
 #include "olcPixelGameEngine.h"
 
-#include "AreaAbsorber.h"
+#include "lib\AreaAbsorber.h"
 
 int main(){
 	AreaAbsorber aa;
