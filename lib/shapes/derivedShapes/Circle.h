@@ -11,9 +11,11 @@ class Circle : public Shape{
 
 public:
 	Circle()
-	: Shape(){}
+	: Shape(), radius(0){}
 	Circle(olc::PixelGameEngine& pge)
-	: Shape(pge){}
+	: Shape(pge), radius(0){}
+	Circle(olc::PixelGameEngine& pge, olc::vi2d& pos, int newRadius)
+	: Shape(pge, pos), radius(newRadius) {}
 
 	void draw(const olc::Pixel& color){
 		pixelGameEngine->FillCircle(position, radius, color);
@@ -25,6 +27,8 @@ public:
 	void setRadius(int r){ radius = r; }
 	void addRadius(int r){ radius += r; }
 	int getRadius(){ return radius; }
+
+	~Circle(){}
 };
 
 #endif

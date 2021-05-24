@@ -8,19 +8,26 @@ protected:
 	int area;
 
 public:
-	Shape(){}
+	Shape(){
+		pixelGameEngine = nullptr;
+		position = olc::vi2d(0,0);
+		area = 0;
+	}
 	Shape(olc::PixelGameEngine& pge){
 		pixelGameEngine = &pge;
+		position = olc::vi2d(0,0);
+		area = 0;
 	}
-	// Shape(olc::PixelGameEngine& pge, olc::vi2d& pos){
-	// 	pixelGameEngine = &pge;
-	// 	position = pos;
-	// }
+	Shape(olc::PixelGameEngine& pge, olc::vi2d& pos){
+		pixelGameEngine = &pge;
+		position = pos;
+		area = 0;
+	}
 
 	bool belowTopOfScreen(){ return position.y > 0; }
-	bool aboveBottomOfScreen(){ return position.y < pixelGameEngine->ScreenHeight(); }
-	bool rightOfLeftOfScreen(){ return position.x > 0; }
-	bool leftOfRightOfScreen(){ return position.x < pixelGameEngine->ScreenWidth(); }
+	bool aboveBottomOfScreen(){	return position.y < pixelGameEngine->ScreenHeight(); }
+	bool rightOfLeftOfScreen(){	return position.x > 0; }
+	bool leftOfRightOfScreen(){	return position.x < pixelGameEngine->ScreenWidth();	}
 
 	void setPosition(olc::vi2d point){ position = point; }
 	void movePosition(olc::vi2d otherPoint){ position += otherPoint; }
@@ -32,6 +39,8 @@ public:
 
 	virtual void draw(const olc::Pixel& color) = 0;
 	virtual void clear() = 0;
+
+	virtual ~Shape(){}
 };
 
 #endif

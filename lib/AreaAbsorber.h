@@ -40,6 +40,9 @@ public:
 		sAppName = "AreaAbsorber";
 
 		mainCircle = Circle(*this);
+
+		score = 0;
+		level = 0;
 	}
 
 	void setMainMenu(){
@@ -91,7 +94,7 @@ public:
 		srand(time(0));
 
 		// Initialize the struct
-		shapesContainer.initialize();
+		shapesContainer.initialize(*this);
 
 		// Make the background white
 		Clear(olc::WHITE);
@@ -229,9 +232,10 @@ public:
 			clearScore();
 			mainCircle.clear();
 			for(auto it = shapesContainer.begin(); it != shapesContainer.end(); ++it){
-				FillCircle(it->second.first, it->second.second, olc::WHITE);
+				it->clear();
 			}
 
+			// User input
 			checkUserInput();
 
 			// Generate shape if needed
@@ -250,7 +254,6 @@ public:
 			// Move the shapes down
 			shapesContainer.moveShapes(ScreenHeight(), otherShapeSpeed);
 			
-
 			// Collision detection
 			int collideNumber = shapesContainer.checkCollision2(mainCircle.getPosition(), mainCircle.getRadius());
 			if(collideNumber > 0){
@@ -274,7 +277,7 @@ public:
 			mainCircle.draw(olc::BLUE);
 			// Draw the shapes
 			for(auto it = shapesContainer.begin(); it != shapesContainer.end(); ++it){
-				FillCircle(it->second.first, it->second.second, olc::RED);
+				it->draw(olc::RED);
 			}
 			drawScore();
 
