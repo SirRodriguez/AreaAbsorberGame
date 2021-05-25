@@ -31,7 +31,7 @@ public:
 
 	void setPosition(olc::vi2d point){ position = point; }
 	void movePosition(olc::vi2d otherPoint){ position += otherPoint; }
-	olc::vi2d& getPosition(){ return position; }
+	const olc::vi2d& getPosition(){ return position; }
 
 	void setArea(int a){ area = a; }
 	void addArea(int a){ area += a; }

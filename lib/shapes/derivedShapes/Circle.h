@@ -14,6 +14,8 @@ public:
 	: Shape(), radius(0){}
 	Circle(olc::PixelGameEngine& pge)
 	: Shape(pge), radius(0){}
+	Circle(olc::PixelGameEngine& pge, olc::vi2d& pos)
+	: Shape(pge, pos), radius(0){}
 	Circle(olc::PixelGameEngine& pge, olc::vi2d& pos, int newRadius)
 	: Shape(pge, pos), radius(newRadius) {}
 

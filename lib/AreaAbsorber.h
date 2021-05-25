@@ -24,13 +24,16 @@ class AreaAbsorber : public olc::PixelGameEngine {
 	// Move Speeds
 	int otherShapeSpeed;
 	int MainShapeSpeed;
-	// Poition
-	Circle mainCircle;
 	// Score
 	int score;
 	int level;
 	// Likelyhood of other circles generated
 	int likelyHood;
+	// Colors
+	const olc::Pixel mainCircleColor = olc::BLACK;
+	const olc::Pixel otherCircleColor = olc::RED;
+	const olc::Pixel powerUpColor = olc::GREEN;
+
 
 	// Other shapes containers
 	ShapesContainer shapesContainer;
@@ -38,8 +41,6 @@ class AreaAbsorber : public olc::PixelGameEngine {
 public:
 	AreaAbsorber(){
 		sAppName = "AreaAbsorber";
-
-		mainCircle = Circle(*this);
 
 		score = 0;
 		level = 0;
@@ -103,10 +104,6 @@ public:
 
 		setMainMenu();
 
-		// Set main circle position to middle and its defualt radius
-		mainCircle.setPosition(olc::vi2d(ScreenWidth() / 2, ScreenHeight() / 2));
-		mainCircle.setRadius(10);
-
 		// Set speeds
 		otherShapeSpeed = 4;
 		MainShapeSpeed = 5;
@@ -124,24 +121,16 @@ public:
 
 		// Update the position of the circle
 		if(upButton.bHeld){
-			if(mainCircle.belowTopOfScreen()){
-				mainCircle.movePosition(olc::vi2d(0, -MainShapeSpeed));
-			}
+			shapesContainer.moveMainCircleUp(MainShapeSpeed);
 		}
 		if(downButton.bHeld){
-			if(mainCircle.aboveBottomOfScreen()){
-				mainCircle.movePosition(olc::vi2d(0, MainShapeSpeed));
-			}
+			shapesContainer.moveMainCircleDown(MainShapeSpeed);
 		}
 		if(leftButton.bHeld){
-			if(mainCircle.rightOfLeftOfScreen()){
-				mainCircle.movePosition(olc::vi2d(-MainShapeSpeed, 0));
-			}
+			shapesContainer.moveMainCircleLeft(MainShapeSpeed);
 		}
 		if(rightButton.bHeld){
-			if(mainCircle.leftOfRightOfScreen()){
-				mainCircle.movePosition(olc::vi2d(MainShapeSpeed, 0));
-			}
+			shapesContainer.moveMainCircleRight(MainShapeSpeed);
 		}
 	}
 
@@ -222,7 +211,7 @@ public:
 			spaceButton = GetKey(olc::Key::SPACE);
 			if(spaceButton.bPressed){
 				Clear(olc::WHITE);
-				mainCircle.draw(olc::BLUE);
+				shapesContainer.drawMainCircle(mainCircleColor);
 				inMainMenu = false;
 				score = 0;
 				level = 1;
@@ -230,10 +219,7 @@ public:
 		}else{
 			// Clear the Screen where it needs to
 			clearScore();
-			mainCircle.clear();
-			for(auto it = shapesContainer.begin(); it != shapesContainer.end(); ++it){
-				it->clear();
-			}
+			shapesContainer.hideAll();
 
 			// User input
 			checkUserInput();
@@ -242,30 +228,30 @@ public:
 			bool maxRateReached = false;
 			if(likelyHood - (level - 1) * 5 > 0){
 				if(rand() % (likelyHood - (level - 1) * 5) == 0){
-					shapesContainer.addShape(ScreenWidth());
+					shapesContainer.addCircle();
 				}
 			}else{
 				if(rand() % 5 == 0){
-					shapesContainer.addShape(ScreenWidth());
+					shapesContainer.addCircle();
 				}
 				maxRateReached = true;
 			}
 
 			// Move the shapes down
-			shapesContainer.moveShapes(ScreenHeight(), otherShapeSpeed);
+			shapesContainer.moveShapes(otherShapeSpeed);
 			
 			// Collision detection
-			int collideNumber = shapesContainer.checkCollision2(mainCircle.getPosition(), mainCircle.getRadius());
+			int collideNumber = shapesContainer.checkCollisionForCircle();
 			if(collideNumber > 0){
 				// Make the circle bigger and add to score
-				mainCircle.addRadius(collideNumber / 2);
+				shapesContainer.growMainCircle(collideNumber / 2);
 				score += collideNumber;
 			}
 
 			// Check the size for the circle and resize if too big (ie next level)
-			if(mainCircle.getRadius() >= 50){
-				mainCircle.setRadius(10);
-				shapesContainer.deleteAllShapes();
+			if(shapesContainer.mainCircleTooBig()){
+				shapesContainer.setMainCircleRadius(10);
+				shapesContainer.deleteAllCircles();
 				++level;
 				if(maxRateReached){
 					++otherShapeSpeed;
@@ -274,11 +260,9 @@ public:
 			}
 
 			// Draw the screen.
-			mainCircle.draw(olc::BLUE);
+			shapesContainer.drawMainCircle(mainCircleColor);
 			// Draw the shapes
-			for(auto it = shapesContainer.begin(); it != shapesContainer.end(); ++it){
-				it->draw(olc::RED);
-			}
+			shapesContainer.drawCircles(otherCircleColor);
 			drawScore();
 
 			if(collideNumber == -1){
