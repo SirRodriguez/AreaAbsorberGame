@@ -28,7 +28,8 @@ class AreaAbsorber : public olc::PixelGameEngine {
 	int score;
 	int level;
 	// Likelyhood of other circles generated
-	int likelyHood;
+	int likelyHoodOfCircles;
+	int likelyHoodOfPowerUps;
 	// Colors
 	const olc::Pixel mainCircleColor = olc::BLACK;
 	const olc::Pixel otherCircleColor = olc::RED;
@@ -109,7 +110,8 @@ public:
 		MainShapeSpeed = 5;
 
 		// Set LikelyHood
-		likelyHood = 50;
+		likelyHoodOfCircles = 50;
+		likelyHoodOfPowerUps = 1000;
 	}
 
 	void checkUserInput(){
@@ -224,17 +226,31 @@ public:
 			// User input
 			checkUserInput();
 
-			// Generate shape if needed
+			// Generate Circle if needed
 			bool maxRateReached = false;
-			if(likelyHood - (level - 1) * 5 > 0){
-				if(rand() % (likelyHood - (level - 1) * 5) == 0){
+			if(likelyHoodOfCircles - (level - 1) * 5 > 0){
+				if(rand() % (likelyHoodOfCircles - (level - 1) * 5) == 0){
 					shapesContainer.addCircle();
 				}
 			}else{
+				// This is the max rate of circle generation
 				if(rand() % 5 == 0){
 					shapesContainer.addCircle();
 				}
 				maxRateReached = true;
+			}
+
+			// Generate Powerup if needed
+			bool maxPowerUpRateReached = false;
+			if(likelyHoodOfPowerUps - (level - 1) * 50 > 0){
+				if(rand() % (likelyHoodOfPowerUps - (level - 1) * 50) == 0){
+					shapesContainer.addPowerUp();
+				}
+			}else{
+				if(rand() % 50 == 0){
+					shapesContainer.addPowerUp();
+				}
+				maxPowerUpRateReached = true;
 			}
 
 			// Move the shapes down
@@ -263,6 +279,7 @@ public:
 			shapesContainer.drawMainCircle(mainCircleColor);
 			// Draw the shapes
 			shapesContainer.drawCircles(otherCircleColor);
+			shapesContainer.drawPowerUps(powerUpColor);
 			drawScore();
 
 			if(collideNumber == -1){

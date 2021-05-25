@@ -34,9 +34,16 @@ struct ShapesContainer{
 		}
 	}
 
+	void hidePowerUps(){
+		for(auto it = powerUps.begin(); it != powerUps.end(); ++it){
+			it->clear();
+		}
+	}
+
 	void hideAll(){
 		hideCircles();
 		hideMainCircle();
+		hidePowerUps();
 	}
 
 	void drawMainCircle(const olc::Pixel color){
@@ -49,10 +56,26 @@ struct ShapesContainer{
 		}
 	}
 
+	void drawPowerUps(const olc::Pixel color){
+		for(auto it = powerUps.begin(); it != powerUps.end(); ++it){
+			it->draw(color);
+		}
+	}
+
+	// 
+	// List additions
+	// 
+
 	void addCircle(){
 		olc::vi2d loc = olc::vi2d(rand() % pixelGameEngine->ScreenWidth(), 0);
 		int radius = rand() % maxRadius;
 		otherCircle.push_back(Circle(*pixelGameEngine, loc, radius));
+	}
+
+	void addPowerUp(){
+		olc::vi2d loc = olc::vi2d(rand() % pixelGameEngine->ScreenWidth(), 0);
+		int height = 50;
+		powerUps.push_back(Triangle(*pixelGameEngine, loc, height));
 	}
 
 	// 
