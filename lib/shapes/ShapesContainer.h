@@ -4,38 +4,23 @@
 #include "derivedShapes\Circle.h"
 #include "derivedShapes\Triangle.h"
 
-// 
-// Utility functions
-// 
-
-// Checks if there is a collision with a circle and a line
-// Line equation: ax + by + c = 0
-// Circle: center = (x, y); radius = radius;
-// return 0 if no touch
-// return 1 if touches
-// return 2 if intersects
-int colisionWithCircleAndLine(int a, int b, int c, int x, int y, int radius){
-	// Finding the distance of line from center.
-    int dist = (abs(a * x + b * y + c)) / sqrt(a * a + b * b);
-
-    // Circle touches the line
-    if(radius == dist){
-    	return 1;
-    // Circle intersects the line
-    }else if(radius > dist){
-    	return 2;
-    // Circle is outside the line
-    }else{
-    	return 0;
-    }
-}
-
 struct ShapesContainer{
 	olc::PixelGameEngine* pixelGameEngine;
+	int maxRadius;
+	// Shapes
 	Circle mainCircle;
 	std::list<Circle> otherCircle;
 	std::list<Triangle> powerUps;
-	int maxRadius;
+
+	// Direction of where the power up circles will go
+	enum direction {
+		UP,
+		DOWN,
+		LEFT,
+		RIGHT
+	};
+	std::list<std::pair<direction, Circle>> powerUpCircles;
+
 
 	void initialize(olc::PixelGameEngine& pge){
 		otherCircle.clear();
@@ -60,6 +45,12 @@ struct ShapesContainer{
 		}
 	}
 
+	void hidePowerUpCircles(){
+		for(auto it = powerUpCircles.begin(); it != powerUpCircles.end(); ++it){
+			it->second.clear();
+		}
+	}
+
 	void hidePowerUps(){
 		for(auto it = powerUps.begin(); it != powerUps.end(); ++it){
 			it->clear();
@@ -70,6 +61,7 @@ struct ShapesContainer{
 		hideCircles();
 		hideMainCircle();
 		hidePowerUps();
+		hidePowerUpCircles();
 	}
 
 	void drawMainCircle(const olc::Pixel color){
@@ -85,6 +77,12 @@ struct ShapesContainer{
 	void drawPowerUps(const olc::Pixel color){
 		for(auto it = powerUps.begin(); it != powerUps.end(); ++it){
 			it->draw(color);
+		}
+	}
+
+	void drawPowerUpCircles(const olc::Pixel color){
+		for(auto it = powerUpCircles.begin(); it != powerUpCircles.end(); ++it){
+			it->second.draw(color);
 		}
 	}
 
@@ -104,21 +102,33 @@ struct ShapesContainer{
 		powerUps.push_back(Triangle(*pixelGameEngine, loc, height));
 	}
 
+	void addPowerUpCircles(){
+		olc::vi2d pos = mainCircle.getPosition();
+		powerUpCircles.push_back(std::make_pair(direction::UP, Circle(*pixelGameEngine, pos, mainCircle.getRadius())));
+		powerUpCircles.push_back(std::make_pair(direction::DOWN, Circle(*pixelGameEngine, pos, mainCircle.getRadius())));
+		powerUpCircles.push_back(std::make_pair(direction::LEFT, Circle(*pixelGameEngine, pos, mainCircle.getRadius())));
+		powerUpCircles.push_back(std::make_pair(direction::RIGHT, Circle(*pixelGameEngine, pos, mainCircle.getRadius())));
+	}
+
 	// 
 	// Moving Shapes
 	// 
 
 	void moveMainCircleUp(int pixels){
-		mainCircle.movePosition(olc::vi2d(0, -pixels));
+		if(mainCircle.belowTopOfScreen())
+			mainCircle.movePosition(olc::vi2d(0, -pixels));
 	}
 	void moveMainCircleDown(int pixels){
-		mainCircle.movePosition(olc::vi2d(0, pixels));
+		if(mainCircle.aboveBottomOfScreen())
+			mainCircle.movePosition(olc::vi2d(0, pixels));
 	}
 	void moveMainCircleLeft(int pixels){
-		mainCircle.movePosition(olc::vi2d(-pixels, 0));
+		if(mainCircle.rightOfLeftOfScreen())
+			mainCircle.movePosition(olc::vi2d(-pixels, 0));
 	}
 	void moveMainCircleRight(int pixels){
-		mainCircle.movePosition(olc::vi2d(pixels, 0));
+		if(mainCircle.leftOfRightOfScreen())
+			mainCircle.movePosition(olc::vi2d(pixels, 0));
 	}
 
 	void moveCircles(int pixels){
@@ -145,9 +155,52 @@ struct ShapesContainer{
 		}
 	}
 
+	void movePowerUpCircles(int pixels){
+		for(auto it = powerUpCircles.begin(); it != powerUpCircles.end();){
+			switch(it->first){
+				case direction::UP:
+					it->second.movePosition(olc::vi2d(0, -pixels));
+					if(!it->second.belowTopOfScreen()){
+						powerUpCircles.erase(it++);
+					}else{
+						++it;
+					}
+					break;
+				case direction::DOWN:
+					it->second.movePosition(olc::vi2d(0, pixels));
+					if(!it->second.aboveBottomOfScreen()){
+						powerUpCircles.erase(it++);
+					}else{
+						++it;
+					}
+					break;
+				case direction::LEFT:
+					it->second.movePosition(olc::vi2d(-pixels, 0));
+					if(!it->second.rightOfLeftOfScreen()){
+						powerUpCircles.erase(it++);
+					}else{
+						++it;
+					}
+					break;
+				case direction::RIGHT:
+					it->second.movePosition(olc::vi2d(pixels, 0));
+					if(!it->second.leftOfRightOfScreen()){
+						powerUpCircles.erase(it++);
+					}else{
+						++it;
+					}
+					break;
+				default:
+					++it;
+					break;
+			}
+		}
+	}
+
 	void moveShapes(int pixels){
 		moveCircles(pixels);
 		movePowerUps(pixels);
+		movePowerUpCircles(pixels);
 	}
 
 	// 
@@ -179,11 +232,11 @@ struct ShapesContainer{
 			olc::vi2d otherPos = it->getPosition();
 			int32_t x = otherPos.x;
 			int32_t y = otherPos.y;
-			double distance = std::sqrt( (pos.x - x) * (pos.x - x) + (pos.y - y) * (pos.y - y) ); // TODO: Optimize
+			int distance = (pos.x - x) * (pos.x - x) + (pos.y - y) * (pos.y - y);
 
 			// Check if distance is less or equal to the two radius combined
 			int otherRadius = it->getRadius();
-			if(distance <= otherRadius + radius){
+			if(distance <= (otherRadius + radius) * (otherRadius + radius)){
 				// if the other circle is bigger
 				if(otherRadius > radius){
 					return -1;
@@ -198,6 +251,8 @@ struct ShapesContainer{
 		return 0;
 	}
 
+	// Returns 1 for collision
+	// Returns 0 for no colision
 	int checkCollisionForPowerUps(){
 		const olc::vi2d pos = mainCircle.getPosition();
 		const int radius = mainCircle.getRadius();
@@ -216,6 +271,7 @@ struct ShapesContainer{
 			int c1y = pos.y - tp.y;
 			int c1sqr = c1x * c1x + c1y * c1y - radiusSqr;
 			if(c1sqr <= 0){
+				powerUps.erase(it);
 				return 1;
 			}
 			// bottom left point
@@ -223,6 +279,7 @@ struct ShapesContainer{
 			int c2y = pos.y - blp.y;
 			int c2sqr = c2x * c2x + c2y * c2y - radiusSqr;
 			if(c2sqr <= 0){
+				powerUps.erase(it);
 				return 1;
 			}
 			// bottom right point
@@ -230,6 +287,7 @@ struct ShapesContainer{
 			int c3y = pos.y - brp.y;
 			int c3sqr = c3x * c3x + c3y * c3y - radiusSqr;
 			if(c3sqr <= 0){
+				powerUps.erase(it);
 				return 1;
 			}
 
@@ -246,7 +304,8 @@ struct ShapesContainer{
 			int e3x = tp.x - blp.x;
 			int e3y = tp.y - blp.y;
 
-			if(e1y*c1x <= e1x*c1y && e2y*c2x <= e2x*c2y && e3y*c3x <= e3x*c3y){
+			if(e1y*c1x >= e1x*c1y && e2y*c2x >= e2x*c2y && e3y*c3x >= e3x*c3y){
+				powerUps.erase(it);
 				return 1;
 			}
 
@@ -259,6 +318,7 @@ struct ShapesContainer{
 				int len = e1x*e1x + e1y*e1y;
 				if(k < len){
 					if(c1sqr * len <= k*k){
+						powerUps.erase(it);
 						return 1;
 					}
 				}
@@ -269,6 +329,7 @@ struct ShapesContainer{
 				int len = e2x*e2x + e2y*e2y;
 				if(k < len){
 					if(c2sqr * len <= k*k){
+						powerUps.erase(it);
 						return 1;
 					}
 				}
@@ -279,6 +340,7 @@ struct ShapesContainer{
 				int len = e3x*e3x + e3y*e3y;
 				if(k < len){
 					if(c3sqr * len <= k*k){
+						powerUps.erase(it);
 						return 1;
 					}
 				}

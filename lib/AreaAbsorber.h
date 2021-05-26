@@ -34,6 +34,7 @@ class AreaAbsorber : public olc::PixelGameEngine {
 	const olc::Pixel mainCircleColor = olc::BLACK;
 	const olc::Pixel otherCircleColor = olc::RED;
 	const olc::Pixel powerUpColor = olc::GREEN;
+	const olc::Pixel powerUpCircleColors = olc::GREY;
 
 
 	// Other shapes containers
@@ -268,7 +269,7 @@ public:
 			int powerCollideNumber = shapesContainer.checkCollisionForPowerUps();
 			if(powerCollideNumber == 1){
 				// Make power up
-				std::cout << "Power up collided" << std::endl;
+				shapesContainer.addPowerUpCircles();
 			}
 
 			// Check the size for the circle and resize if too big (ie next level)
@@ -287,6 +288,7 @@ public:
 			// Draw the shapes
 			shapesContainer.drawCircles(otherCircleColor);
 			shapesContainer.drawPowerUps(powerUpColor);
+			shapesContainer.drawPowerUpCircles(powerUpCircleColors);
 			drawScore();
 
 			if(collideNumber == -1){
