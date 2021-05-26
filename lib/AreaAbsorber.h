@@ -272,6 +272,14 @@ public:
 				shapesContainer.addPowerUpCircles();
 			}
 
+			// Power up circle collision detection for other circles
+			int powerCircleCollideNumber = shapesContainer.checkCollisionForPowerUpCircles();
+			if(powerCircleCollideNumber > 0){
+				// Make the circle bigger and add to the score
+				shapesContainer.growMainCircle(powerCircleCollideNumber / 2);
+				score += powerCircleCollideNumber;
+			}
+
 			// Check the size for the circle and resize if too big (ie next level)
 			if(shapesContainer.mainCircleTooBig()){
 				shapesContainer.setMainCircleRadius(10);

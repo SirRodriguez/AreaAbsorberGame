@@ -4,6 +4,11 @@
 #include "derivedShapes\Circle.h"
 #include "derivedShapes\Triangle.h"
 
+#define square(x) ((x)*(x))
+
+// int square(int x){ return x*x; }
+
+
 struct ShapesContainer{
 	olc::PixelGameEngine* pixelGameEngine;
 	int maxRadius;
@@ -228,15 +233,19 @@ struct ShapesContainer{
 		const int radius = mainCircle.getRadius();
 
 		for(auto it = otherCircle.begin(); it != otherCircle.end(); ++it){
+			// Check the collision of the main circle
 			// Get the distances
 			olc::vi2d otherPos = it->getPosition();
 			int32_t x = otherPos.x;
 			int32_t y = otherPos.y;
-			int distance = (pos.x - x) * (pos.x - x) + (pos.y - y) * (pos.y - y);
+
+			// int distanceSqr = (pos.x - x) * (pos.x - x) + (pos.y - y) * (pos.y - y);
+			int distanceSqr = square(pos.x - x) + square(pos.y - y);
+
 
 			// Check if distance is less or equal to the two radius combined
 			int otherRadius = it->getRadius();
-			if(distance <= (otherRadius + radius) * (otherRadius + radius)){
+			if(distanceSqr <= square(otherRadius + radius)){
 				// if the other circle is bigger
 				if(otherRadius > radius){
 					return -1;
@@ -244,6 +253,42 @@ struct ShapesContainer{
 				}else{
 					otherCircle.erase(it);
 					return otherRadius;
+				}
+			}
+		}
+
+		return 0;
+	}
+
+	// Return 0 for no collision
+	// return -1 if the other circle is bigger than the power up circle
+	// return other circle radius if it is smaller than the powerup circle
+	int checkCollisionForPowerUpCircles(){
+		for(auto it = otherCircle.begin(); it != otherCircle.end(); ++it){
+			olc::vi2d otherPos = it->getPosition();
+			int other_x = otherPos.x;
+			int other_y = otherPos.y;
+			int otherRadius = it->getRadius();
+
+			for(auto pit = powerUpCircles.begin(); pit != powerUpCircles.end(); ++pit){
+				olc::vi2d pwrPos = pit->second.getPosition();
+				int pwr_x = pwrPos.x;
+				int pwr_y = pwrPos.y;
+				int pwrRadius = pit->second.getRadius();
+
+				int distanceSqr = square(other_x - pwr_x) + square(other_y - pwr_y);
+				if(distanceSqr <= square(otherRadius + pwrRadius)){
+					// If the other circle is bigger than the power circle
+					if(otherRadius > pwrRadius){
+						// delete the power up circle
+						powerUpCircles.erase(pit);
+						return -1;
+					}else{
+						// delete power up circle and the other circle
+						powerUpCircles.erase(pit);
+						otherCircle.erase(it);
+						return otherRadius;
+					}
 				}
 			}
 		}
