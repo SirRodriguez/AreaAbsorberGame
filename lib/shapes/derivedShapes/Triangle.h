@@ -8,12 +8,6 @@
 class Triangle : public Shape{
 	int height;
 
-private:
-	olc::vi2d topPoint(){ return position + olc::vi2d(0, -(height * 2) / 3); }
-	olc::vi2d botLeftPoint(){ return position + olc::vi2d(-height * RECSQRT3, height / 3); }
-	olc::vi2d botRightPoint(){ return position + olc::vi2d(height * RECSQRT3, height / 3); }
-
-
 public:
 	Triangle()
 	: Shape(), height(0){}
@@ -35,6 +29,10 @@ public:
 	void setHeight(int h){ height = h; }
 	void addHeight(int h){ height += h; }
 	int getHeight(){ return height; }
+
+	olc::vi2d topPoint(){ return position + olc::vi2d(0, -(height * 2) / 3); }
+	olc::vi2d botLeftPoint(){ return position + olc::vi2d(-height * RECSQRT3, height / 3); }
+	olc::vi2d botRightPoint(){ return position + olc::vi2d(height * RECSQRT3, height / 3); }
 };
 
 #endif

@@ -264,6 +264,13 @@ public:
 				score += collideNumber;
 			}
 
+			// Power up collision detection
+			int powerCollideNumber = shapesContainer.checkCollisionForPowerUps();
+			if(powerCollideNumber == 1){
+				// Make power up
+				std::cout << "Power up collided" << std::endl;
+			}
+
 			// Check the size for the circle and resize if too big (ie next level)
 			if(shapesContainer.mainCircleTooBig()){
 				shapesContainer.setMainCircleRadius(10);
