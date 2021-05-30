@@ -6,7 +6,6 @@
 #define PI (355 / 113)
 #define RECPI (113 / 355)
 class Circle : public Shape{
-
 	int radius;
 
 public:

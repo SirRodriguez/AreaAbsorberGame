@@ -3,6 +3,7 @@
 
 #include "derivedShapes\Circle.h"
 #include "derivedShapes\Triangle.h"
+#include "derivedShapes\Line.h"
 #include "..\utils.h"
 
 #define square(x) ((x)*(x))
@@ -10,10 +11,12 @@
 struct ShapesContainer{
 	olc::PixelGameEngine* pixelGameEngine;
 	int maxRadius;
+	int maxLength;
 	// Shapes
 	Circle mainCircle;
 	std::list<Circle> otherCircle;
 	std::list<Triangle> powerUps;
+	std::list<Line> needles;
 
 	// Direction of where the power up circles will go
 	enum direction {
@@ -28,7 +31,10 @@ struct ShapesContainer{
 	void initialize(olc::PixelGameEngine& pge){
 		otherCircle.clear();
 		powerUps.clear();
+		powerUpCircles.clear();
+		needles.clear();
 		maxRadius = 50;
+		maxLength = 50;
 		pixelGameEngine = &pge;
 		olc::vi2d mainPos = olc::vi2d(pixelGameEngine->ScreenWidth() / 2, pixelGameEngine->ScreenHeight() / 2);
 		mainCircle = Circle(pge, mainPos, 10);
@@ -60,11 +66,18 @@ struct ShapesContainer{
 		}
 	}
 
+	void hideNeedles(){
+		for(auto it = needles.begin(); it != needles.end(); ++it){
+			it->clear();
+		}
+	}
+
 	void hideAll(){
 		hideCircles();
 		hideMainCircle();
 		hidePowerUps();
 		hidePowerUpCircles();
+		hideNeedles();
 	}
 
 	void drawMainCircle(const olc::Pixel color){
@@ -86,6 +99,12 @@ struct ShapesContainer{
 	void drawPowerUpCircles(const olc::Pixel color){
 		for(auto it = powerUpCircles.begin(); it != powerUpCircles.end(); ++it){
 			it->second.draw(color);
+		}
+	}
+
+	void drawNeedles(const olc::Pixel color){
+		for(auto it = needles.begin(); it != needles.end(); ++it){
+			it->draw(color);
 		}
 	}
 
@@ -111,6 +130,13 @@ struct ShapesContainer{
 		powerUpCircles.push_back(std::make_pair(direction::DOWN, Circle(*pixelGameEngine, pos, mainCircle.getRadius())));
 		powerUpCircles.push_back(std::make_pair(direction::LEFT, Circle(*pixelGameEngine, pos, mainCircle.getRadius())));
 		powerUpCircles.push_back(std::make_pair(direction::RIGHT, Circle(*pixelGameEngine, pos, mainCircle.getRadius())));
+	}
+
+	void addNeedle(){
+		olc::vi2d loc = olc::vi2d(rand() % pixelGameEngine->ScreenWidth(), 0);
+		int dx = rand() % maxLength;
+		int dy = rand() % maxLength;
+		needles.push_back(Line(*pixelGameEngine, loc, dx, dy));
 	}
 
 	// 
@@ -200,10 +226,23 @@ struct ShapesContainer{
 		}
 	}
 
+	void moveNeedles(int pixels){
+		for(auto it = needles.begin(); it != needles.end();){
+			it->movePosition(olc::vi2d(0, pixels));
+			// if it reaches the bottom, delete it
+			if(!it->aboveBottomOfScreen()){
+				needles.erase(it++);
+			}else{
+				++it;
+			}
+		}
+	}
+
 	void moveShapes(int pixels){
 		moveCircles(pixels);
 		movePowerUps(pixels);
 		movePowerUpCircles(pixels);
+		moveNeedles(pixels);
 	}
 
 	// 
@@ -216,6 +255,14 @@ struct ShapesContainer{
 
 	void deleteAllPowerUps(){
 		powerUps.clear();
+	}
+
+	void deleteAllPowerUpCircles(){
+		powerUpCircles.clear();
+	}
+
+	void deleteAllNeedles(){
+		needles.clear();
 	}
 
 	// 
@@ -275,6 +322,36 @@ struct ShapesContainer{
 			}
 		}
 
+		return 0;
+	}
+
+	// Returns 0 for no collision
+	// Returns 1 for collision with other circle
+	// Returns 2 for collision with power up circles
+	// Returns -1 for collision with main circle
+	int checkCollisionForNeedles(){
+		for(auto it = needles.begin(); it != needles.end(); ++it){
+			// Check collision with main circle
+			if(circleLineCollision(mainCircle, *it)){
+				return -1;
+			}
+
+			// Check collision with other circles
+			for(auto oit = otherCircle.begin(); oit != otherCircle.end(); ++oit){
+				if(circleLineCollision(*oit, *it)){
+					otherCircle.erase(oit);
+					return 1;
+				}
+			}
+
+			// check collision with powerUpCircles
+			for(auto pit = powerUpCircles.begin(); pit != powerUpCircles.end(); ++pit){
+				if(circleLineCollision(pit->second, *it)){
+					powerUpCircles.erase(pit);
+					return 2;
+				}
+			}
+		}
 		return 0;
 	}
 

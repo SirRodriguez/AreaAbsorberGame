@@ -31,11 +31,13 @@ class AreaAbsorber : public olc::PixelGameEngine {
 	// Likelyhood of other circles generated
 	int likelyHoodOfCircles;
 	int likelyHoodOfPowerUps;
+	int likelyHoodOfNeedles;
 	// Colors
 	const olc::Pixel mainCircleColor = olc::BLACK;
 	const olc::Pixel otherCircleColor = olc::RED;
 	const olc::Pixel powerUpColor = olc::GREEN;
 	const olc::Pixel powerUpCircleColors = olc::GREY;
+	const olc::Pixel needleColor = olc::BLACK;
 
 
 	// Other shapes containers
@@ -114,6 +116,7 @@ public:
 		// Set LikelyHood
 		likelyHoodOfCircles = 50;
 		likelyHoodOfPowerUps = 1000;
+		likelyHoodOfNeedles = 1000;
 	}
 
 	void checkUserInput(){
@@ -243,7 +246,7 @@ public:
 			}
 
 			// Generate Powerup if needed
-			bool maxPowerUpRateReached = false;
+			// bool maxPowerUpRateReached = false;
 			if(likelyHoodOfPowerUps - (level - 1) * 50 > 0){
 				if(rand() % (likelyHoodOfPowerUps - (level - 1) * 50) == 0){
 					shapesContainer.addPowerUp();
@@ -252,8 +255,20 @@ public:
 				if(rand() % 50 == 0){
 					shapesContainer.addPowerUp();
 				}
-				maxPowerUpRateReached = true;
+				// maxPowerUpRateReached = true;
 			}
+
+			// Generate Needles if needed
+			if(likelyHoodOfNeedles - (level - 1) * 100 > 0){
+				if(rand() % (likelyHoodOfNeedles - (level - 1) * 100) == 0){
+					shapesContainer.addNeedle();
+				}
+			}else{
+				if(rand() % 50 == 0){
+					shapesContainer.addNeedle();
+				}
+			}
+
 
 			// Move the shapes down
 			shapesContainer.moveShapes(otherShapeSpeed);
@@ -275,21 +290,22 @@ public:
 
 			// Power up circle collision detection for other circles
 			int powerCircleCollideNumber = shapesContainer.checkCollisionForPowerUpCircles();
-			if(powerCircleCollideNumber > 0){
+			if(powerCircleCollideNumber == 0){
 				// Make the circle bigger and add to the score
 				shapesContainer.growMainCircle(powerCircleCollideNumber / 2);
 				score += powerCircleCollideNumber;
 			}
 
+			// Needle Collision detection
+			int needleCollideNumber = shapesContainer.checkCollisionForNeedles();
+
 			// Check the size for the circle and resize if too big (ie next level)
 			if(shapesContainer.mainCircleTooBig()){
 				shapesContainer.setMainCircleRadius(10);
 				shapesContainer.deleteAllCircles();
+				shapesContainer.deleteAllPowerUpCircles();
+				shapesContainer.deleteAllNeedles();
 				++level;
-				// if(maxRateReached){
-				// 	++otherShapeSpeed;
-				// 	++MainShapeSpeed;
-				// }
 			}
 
 			// Draw the screen.
@@ -298,9 +314,10 @@ public:
 			shapesContainer.drawCircles(otherCircleColor);
 			shapesContainer.drawPowerUps(powerUpColor);
 			shapesContainer.drawPowerUpCircles(powerUpCircleColors);
+			shapesContainer.drawNeedles(needleColor);
 			drawScore();
 
-			if(collideNumber == -1){
+			if(collideNumber == -1 || needleCollideNumber == -1){
 				// Back to main menu and end the game
 				initializeGame();
 				inMainMenu = true;

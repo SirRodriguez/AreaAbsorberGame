@@ -44,9 +44,9 @@ bool circleLineCollision(olc::vi2d pos, int r, olc::vi2d s, olc::vi2d e){
 	return circleLineCollision(pos.x, pos.y, r, s.x, s.y, e.x, e.y);
 }
 
-// bool circleLineCollision(Circle& c, Line& l){
-// 	circleLineCollision(c.getPosition(), l.)
-// }
+bool circleLineCollision(Circle& c, Line& l){
+	return circleLineCollision(c.getPosition(), c.getRadius(), l.getStartPoint(), l.getEndPoint());
+}
 
 // 
 // Circle & Triangle Collision functions
