@@ -3,6 +3,7 @@
 
 #include "shapes\ShapesContainer.h"
 #include "shapes\derivedShapes\Circle.h"
+#include "shapes\derivedShapes\Triangle.h"
 
 // Command to compile 
 // g++ -o AreaAbsorber.exe main.cpp -luser32 -lgdi32 -lopengl32 -lgdiplus -lShlwapi -ldwmapi -lstdc++fs -static -std=c++17
@@ -228,7 +229,7 @@ public:
 			checkUserInput();
 
 			// Generate Circle if needed
-			bool maxRateReached = false;
+			// bool maxRateReached = false;
 			if(likelyHoodOfCircles - (level - 1) * 5 > 0){
 				if(rand() % (likelyHoodOfCircles - (level - 1) * 5) == 0){
 					shapesContainer.addCircle();
@@ -238,7 +239,7 @@ public:
 				if(rand() % 5 == 0){
 					shapesContainer.addCircle();
 				}
-				maxRateReached = true;
+				// maxRateReached = true;
 			}
 
 			// Generate Powerup if needed
@@ -285,10 +286,10 @@ public:
 				shapesContainer.setMainCircleRadius(10);
 				shapesContainer.deleteAllCircles();
 				++level;
-				if(maxRateReached){
-					++otherShapeSpeed;
-					++MainShapeSpeed;
-				}
+				// if(maxRateReached){
+				// 	++otherShapeSpeed;
+				// 	++MainShapeSpeed;
+				// }
 			}
 
 			// Draw the screen.

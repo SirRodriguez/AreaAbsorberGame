@@ -299,99 +299,89 @@ struct ShapesContainer{
 	// Returns 1 for collision
 	// Returns 0 for no colision
 	int checkCollisionForPowerUps(){
+		olc::vi2d S, E;
+		int SEx, SEy, SCx, SCy, lineLength, t, closestPointX, closestPointY;
+		float distSqr;
 		const olc::vi2d pos = mainCircle.getPosition();
 		const int radius = mainCircle.getRadius();
-		int radiusSqr = radius * radius;
+
 
 		for(auto it = powerUps.begin(); it != powerUps.end(); ++it){
+
 			olc::vi2d tp = it->topPoint();
 			olc::vi2d blp = it->botLeftPoint();
 			olc::vi2d brp = it->botRightPoint();
 
-			// 
-			// Test 1: Vertex within the circle
-			// 
-			// Top point
-			int c1x = pos.x - tp.x;
-			int c1y = pos.y - tp.y;
-			int c1sqr = c1x * c1x + c1y * c1y - radiusSqr;
-			if(c1sqr <= 0){
-				powerUps.erase(it);
-				return 1;
-			}
-			// bottom left point
-			int c2x = pos.x - blp.x;
-			int c2y = pos.y - blp.y;
-			int c2sqr = c2x * c2x + c2y * c2y - radiusSqr;
-			if(c2sqr <= 0){
-				powerUps.erase(it);
-				return 1;
-			}
-			// bottom right point
-			int c3x = pos.x - brp.x;
-			int c3y = pos.y - brp.y;
-			int c3sqr = c3x * c3x + c3y * c3y - radiusSqr;
-			if(c3sqr <= 0){
+			// tp -> blp side
+			S = tp;
+			E = blp;
+
+			SEx = E.x - S.x;
+			SEy = E.y - S.y;
+
+			SCx = pos.x - S.x;
+			SCy = pos.y - S.y;
+
+			lineLength = SEx * SEx + SEy * SEy;
+
+			t = std::max(0, std::min(lineLength, (SEx * SCx + SEy * SCy)));
+
+			closestPointX = S.x * lineLength + t * SEx;
+			closestPointY = S.y * lineLength + t * SEy;
+
+			distSqr = (pos.x - closestPointX / lineLength) * (pos.x - closestPointX / lineLength) + (pos.y - closestPointY / lineLength) * (pos.y - closestPointY / lineLength);
+			if(distSqr <= radius * radius){
 				powerUps.erase(it);
 				return 1;
 			}
 
-			// 
-			// Test 2: Circle center within the triangle
-			// 
-			// Get edges
-			int e1x = brp.x - tp.x;
-			int e1y = brp.y - tp.y;
+			// blp -> brp
+			S = blp;
+			E = brp;
 
-			int e2x = blp.x - brp.x;
-			int e2y = blp.y - brp.y;
+			SEx = E.x - S.x;
+			SEy = E.y - S.y;
 
-			int e3x = tp.x - blp.x;
-			int e3y = tp.y - blp.y;
+			SCx = pos.x - S.x;
+			SCy = pos.y - S.y;
 
-			if(e1y*c1x >= e1x*c1y && e2y*c2x >= e2x*c2y && e3y*c3x >= e3x*c3y){
+			lineLength = SEx * SEx + SEy * SEy;
+
+			t = std::max(0, std::min(lineLength, (SEx * SCx + SEy * SCy)));
+
+			closestPointX = S.x * lineLength + t * SEx;
+			closestPointY = S.y * lineLength + t * SEy;
+
+			distSqr = (pos.x - closestPointX / lineLength) * (pos.x - closestPointX / lineLength) + (pos.y - closestPointY / lineLength) * (pos.y - closestPointY / lineLength);
+			if(distSqr <= radius * radius){
 				powerUps.erase(it);
 				return 1;
 			}
 
-			// 
-			// Test 3: Circle intersects edge
-			// 
-			// First edge
-			int k = c1x*e1x + c1y*e1y;
-			if(k > 0){
-				int len = e1x*e1x + e1y*e1y;
-				if(k < len){
-					if(c1sqr * len <= k*k){
-						powerUps.erase(it);
-						return 1;
-					}
-				}
-			}
-			// Second edge
-			k = c2x*e2x + c2y*e2y;
-			if(k > 0){
-				int len = e2x*e2x + e2y*e2y;
-				if(k < len){
-					if(c2sqr * len <= k*k){
-						powerUps.erase(it);
-						return 1;
-					}
-				}
-			}
-			// Third edge
-			k = c3x*e3x + c3y*e3y;
-			if(k > 0){
-				int len = e3x*e3x + e3y*e3y;
-				if(k < len){
-					if(c3sqr * len <= k*k){
-						powerUps.erase(it);
-						return 1;
-					}
-				}
+			// brp -> tp
+			S = brp;
+			E = tp;
+
+			SEx = E.x - S.x;
+			SEy = E.y - S.y;
+
+			SCx = pos.x - S.x;
+			SCy = pos.y - S.y;
+
+			lineLength = SEx * SEx + SEy * SEy;
+
+			t = std::max(0, std::min(lineLength, (SEx * SCx + SEy * SCy)));
+
+			closestPointX = S.x * lineLength + t * SEx;
+			closestPointY = S.y * lineLength + t * SEy;
+
+			distSqr = (pos.x - closestPointX / lineLength) * (pos.x - closestPointX / lineLength) + (pos.y - closestPointY / lineLength) * (pos.y - closestPointY / lineLength);
+			if(distSqr <= radius * radius){
+				powerUps.erase(it);
+				return 1;
 			}
 		}
-		
+
 		return 0;
 	}
 

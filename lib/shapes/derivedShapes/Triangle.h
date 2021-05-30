@@ -1,5 +1,5 @@
-#ifndef TRIANGLE
-#define TRIANGLE
+#ifndef TRIANGLE_H
+#define TRIANGLE_H
 
 #include "..\Shape.h"
 
