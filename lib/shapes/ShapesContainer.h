@@ -3,11 +3,9 @@
 
 #include "derivedShapes\Circle.h"
 #include "derivedShapes\Triangle.h"
+#include "..\utils.h"
 
 #define square(x) ((x)*(x))
-
-// int square(int x){ return x*x; }
-
 
 struct ShapesContainer{
 	olc::PixelGameEngine* pixelGameEngine;
@@ -227,29 +225,12 @@ struct ShapesContainer{
 	// return 0 if no collision
 	// return -1 if other circle is bigger
 	// return any positive number means that the circle was smaller and thats the size
-	// int checkCollisionForCircle(const olc::vi2d& pos, const int& radius){
 	int checkCollisionForCircle(){
-		const olc::vi2d pos = mainCircle.getPosition();
-		const int radius = mainCircle.getRadius();
-
 		for(auto it = otherCircle.begin(); it != otherCircle.end(); ++it){
-			// Check the collision of the main circle
-			// Get the distances
-			olc::vi2d otherPos = it->getPosition();
-			int32_t x = otherPos.x;
-			int32_t y = otherPos.y;
-
-			// int distanceSqr = (pos.x - x) * (pos.x - x) + (pos.y - y) * (pos.y - y);
-			int distanceSqr = square(pos.x - x) + square(pos.y - y);
-
-
-			// Check if distance is less or equal to the two radius combined
 			int otherRadius = it->getRadius();
-			if(distanceSqr <= square(otherRadius + radius)){
-				// if the other circle is bigger
-				if(otherRadius > radius){
+			if(circleCircleCollision(mainCircle, *it)){
+				if(otherRadius > mainCircle.getRadius()){
 					return -1;
-				// else if the distance is less than or equal
 				}else{
 					otherCircle.erase(it);
 					return otherRadius;
@@ -264,27 +245,15 @@ struct ShapesContainer{
 	// return -1 if the other circle is bigger than the power up circle
 	// return other circle radius if it is smaller than the powerup circle
 	int checkCollisionForPowerUpCircles(){
+		int otherRadius;
 		for(auto it = otherCircle.begin(); it != otherCircle.end(); ++it){
-			olc::vi2d otherPos = it->getPosition();
-			int other_x = otherPos.x;
-			int other_y = otherPos.y;
-			int otherRadius = it->getRadius();
-
+			otherRadius = it->getRadius();
 			for(auto pit = powerUpCircles.begin(); pit != powerUpCircles.end(); ++pit){
-				olc::vi2d pwrPos = pit->second.getPosition();
-				int pwr_x = pwrPos.x;
-				int pwr_y = pwrPos.y;
-				int pwrRadius = pit->second.getRadius();
-
-				int distanceSqr = square(other_x - pwr_x) + square(other_y - pwr_y);
-				if(distanceSqr <= square(otherRadius + pwrRadius)){
-					// If the other circle is bigger than the power circle
-					if(otherRadius > pwrRadius){
-						// delete the power up circle
+				if(circleCircleCollision(*it, pit->second)){
+					if(otherRadius > pit->second.getRadius()){
 						powerUpCircles.erase(pit);
 						return -1;
 					}else{
-						// delete power up circle and the other circle
 						powerUpCircles.erase(pit);
 						otherCircle.erase(it);
 						return otherRadius;
@@ -299,84 +268,8 @@ struct ShapesContainer{
 	// Returns 1 for collision
 	// Returns 0 for no colision
 	int checkCollisionForPowerUps(){
-		olc::vi2d S, E;
-		int SEx, SEy, SCx, SCy, lineLength, t, closestPointX, closestPointY;
-		float distSqr;
-		const olc::vi2d pos = mainCircle.getPosition();
-		const int radius = mainCircle.getRadius();
-
-
 		for(auto it = powerUps.begin(); it != powerUps.end(); ++it){
-
-			olc::vi2d tp = it->topPoint();
-			olc::vi2d blp = it->botLeftPoint();
-			olc::vi2d brp = it->botRightPoint();
-
-			// tp -> blp side
-			S = tp;
-			E = blp;
-
-			SEx = E.x - S.x;
-			SEy = E.y - S.y;
-
-			SCx = pos.x - S.x;
-			SCy = pos.y - S.y;
-
-			lineLength = SEx * SEx + SEy * SEy;
-
-			t = std::max(0, std::min(lineLength, (SEx * SCx + SEy * SCy)));
-
-			closestPointX = S.x * lineLength + t * SEx;
-			closestPointY = S.y * lineLength + t * SEy;
-
-			distSqr = (pos.x - closestPointX / lineLength) * (pos.x - closestPointX / lineLength) + (pos.y - closestPointY / lineLength) * (pos.y - closestPointY / lineLength);
-			if(distSqr <= radius * radius){
-				powerUps.erase(it);
-				return 1;
-			}
-
-			// blp -> brp
-			S = blp;
-			E = brp;
-
-			SEx = E.x - S.x;
-			SEy = E.y - S.y;
-
-			SCx = pos.x - S.x;
-			SCy = pos.y - S.y;
-
-			lineLength = SEx * SEx + SEy * SEy;
-
-			t = std::max(0, std::min(lineLength, (SEx * SCx + SEy * SCy)));
-
-			closestPointX = S.x * lineLength + t * SEx;
-			closestPointY = S.y * lineLength + t * SEy;
-
-			distSqr = (pos.x - closestPointX / lineLength) * (pos.x - closestPointX / lineLength) + (pos.y - closestPointY / lineLength) * (pos.y - closestPointY / lineLength);
-			if(distSqr <= radius * radius){
-				powerUps.erase(it);
-				return 1;
-			}
-
-			// brp -> tp
-			S = brp;
-			E = tp;
-
-			SEx = E.x - S.x;
-			SEy = E.y - S.y;
-
-			SCx = pos.x - S.x;
-			SCy = pos.y - S.y;
-
-			lineLength = SEx * SEx + SEy * SEy;
-
-			t = std::max(0, std::min(lineLength, (SEx * SCx + SEy * SCy)));
-
-			closestPointX = S.x * lineLength + t * SEx;
-			closestPointY = S.y * lineLength + t * SEy;
-
-			distSqr = (pos.x - closestPointX / lineLength) * (pos.x - closestPointX / lineLength) + (pos.y - closestPointY / lineLength) * (pos.y - closestPointY / lineLength);
-			if(distSqr <= radius * radius){
+			if(circleTriangleCollision(mainCircle, *it)){
 				powerUps.erase(it);
 				return 1;
 			}
