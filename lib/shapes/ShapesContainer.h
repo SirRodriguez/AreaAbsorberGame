@@ -12,6 +12,7 @@ struct ShapesContainer{
 	olc::PixelGameEngine* pixelGameEngine;
 	int maxRadius;
 	int maxLength;
+	int initialMainCircleSize = 10;
 	// Shapes
 	Circle mainCircle;
 	std::list<Circle> otherCircle;
@@ -37,7 +38,15 @@ struct ShapesContainer{
 		maxLength = 50;
 		pixelGameEngine = &pge;
 		olc::vi2d mainPos = olc::vi2d(pixelGameEngine->ScreenWidth() / 2, pixelGameEngine->ScreenHeight() / 2);
-		mainCircle = Circle(pge, mainPos, 10);
+		mainCircle = Circle(pge, mainPos, initialMainCircleSize);
+	}
+
+	void reset(){
+		setMainCircleRadius(initialMainCircleSize);
+		deleteAllCircles();
+		deleteAllPowerUps();
+		deleteAllPowerUpCircles();
+		deleteAllNeedles();
 	}
 
 	// 
@@ -238,12 +247,12 @@ struct ShapesContainer{
 		}
 	}
 
-	void moveShapes(int pixels){
-		moveCircles(pixels);
-		movePowerUps(pixels);
-		movePowerUpCircles(pixels);
-		moveNeedles(pixels);
-	}
+	// void moveShapes(int pixels){
+	// 	moveCircles(pixels);
+	// 	movePowerUps(pixels);
+	// 	movePowerUpCircles(pixels);
+	// 	moveNeedles(pixels);
+	// }
 
 	// 
 	// Deleting Shapes
