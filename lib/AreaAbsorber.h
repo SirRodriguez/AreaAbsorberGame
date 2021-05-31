@@ -320,77 +320,13 @@ public:
 			// User input
 			checkUserInput();
 
+			// Shape Generation
 			shapeGeneration();
 
-			// // Generate Circle if needed
-			// // bool maxRateReached = false;
-			// if(likelyHoodOfCircles - (level - 1) * 5 > 0){
-			// 	if(rand() % (likelyHoodOfCircles - (level - 1) * 5) == 0){
-			// 		shapesContainer.addCircle();
-			// 	}
-			// }else{
-			// 	// This is the max rate of circle generation
-			// 	if(rand() % 5 == 0){
-			// 		shapesContainer.addCircle();
-			// 	}
-			// 	// maxRateReached = true;
-			// }
-
-			// // Generate Powerup if needed
-			// // bool maxPowerUpRateReached = false;
-			// if(likelyHoodOfPowerUps - (level - 1) * 50 > 0){
-			// 	if(rand() % (likelyHoodOfPowerUps - (level - 1) * 50) == 0){
-			// 		shapesContainer.addPowerUp();
-			// 	}
-			// }else{
-			// 	if(rand() % 50 == 0){
-			// 		shapesContainer.addPowerUp();
-			// 	}
-			// 	// maxPowerUpRateReached = true;
-			// }
-
-			// // Generate Needles if needed
-			// if(likelyHoodOfNeedles - (level - 1) * 100 > 0){
-			// 	if(rand() % (likelyHoodOfNeedles - (level - 1) * 100) == 0){
-			// 		shapesContainer.addNeedle();
-			// 	}
-			// }else{
-			// 	if(rand() % 50 == 0){
-			// 		shapesContainer.addNeedle();
-			// 	}
-			// }
-
-
 			// Move the shapes down
-			// shapesContainer.moveShapes(otherCircleSpeed);
 			moveShapesDown();
 			
-			// // Collision detection
-			// int collideNumber = shapesContainer.checkCollisionForCircle();
-			// if(collideNumber > 0){
-			// 	// Make the circle bigger and add to score
-			// 	shapesContainer.growMainCircle(collideNumber / 2);
-			// 	score += collideNumber;
-			// }
-
-			// // Power up collision detection
-			// int powerCollideNumber = shapesContainer.checkCollisionForPowerUps();
-			// if(powerCollideNumber == 1){
-			// 	// Make power up
-			// 	shapesContainer.addPowerUpCircles();
-			// }
-
-			// // Power up circle collision detection for other circles
-			// int powerCircleCollideNumber = shapesContainer.checkCollisionForPowerUpCircles();
-			// if(powerCircleCollideNumber == 0){
-			// 	// Make the circle bigger and add to the score
-			// 	shapesContainer.growMainCircle(powerCircleCollideNumber / 2);
-			// 	score += powerCircleCollideNumber;
-			// }
-
-			// // Needle Collision detection
-			// int needleCollideNumber = shapesContainer.checkCollisionForNeedles();
-
+			// Collision detection
 			bool fail = checkCollision();
 
 			// Check the size for the circle and resize if too big (ie next level)
@@ -401,14 +337,6 @@ public:
 			}
 
 			// Draw the screen.
-			// shapesContainer.drawMainCircle(mainCircleColor);
-			// // Draw the shapes
-			// shapesContainer.drawCircles(otherCircleColor);
-			// shapesContainer.drawPowerUps(powerUpColor);
-			// shapesContainer.drawPowerUpCircles(powerUpCircleColors);
-			// shapesContainer.drawNeedles(needleColor);
-			// drawScore();
-
 			drawTheScreen();
 
 			if(fail){

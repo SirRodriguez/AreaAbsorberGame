@@ -24,7 +24,11 @@ struct ShapesContainer{
 		UP,
 		DOWN,
 		LEFT,
-		RIGHT
+		RIGHT,
+		UPLEFT,
+		UPRIGHT,
+		DOWNLEFT,
+		DOWNRIGHT
 	};
 	std::list<std::pair<direction, Circle>> powerUpCircles;
 
@@ -139,6 +143,10 @@ struct ShapesContainer{
 		powerUpCircles.push_back(std::make_pair(direction::DOWN, Circle(*pixelGameEngine, pos, mainCircle.getRadius())));
 		powerUpCircles.push_back(std::make_pair(direction::LEFT, Circle(*pixelGameEngine, pos, mainCircle.getRadius())));
 		powerUpCircles.push_back(std::make_pair(direction::RIGHT, Circle(*pixelGameEngine, pos, mainCircle.getRadius())));
+		powerUpCircles.push_back(std::make_pair(direction::UPRIGHT, Circle(*pixelGameEngine, pos, mainCircle.getRadius())));
+		powerUpCircles.push_back(std::make_pair(direction::DOWNRIGHT, Circle(*pixelGameEngine, pos, mainCircle.getRadius())));
+		powerUpCircles.push_back(std::make_pair(direction::UPLEFT, Circle(*pixelGameEngine, pos, mainCircle.getRadius())));
+		powerUpCircles.push_back(std::make_pair(direction::DOWNLEFT, Circle(*pixelGameEngine, pos, mainCircle.getRadius())));
 	}
 
 	void addNeedle(){
@@ -228,6 +236,38 @@ struct ShapesContainer{
 						++it;
 					}
 					break;
+				case direction::UPRIGHT:
+					it->second.movePosition(olc::vi2d(pixels, -pixels));
+					if(!it->second.leftOfRightOfScreen() || !it->second.belowTopOfScreen()){
+						powerUpCircles.erase(it++);
+					}else{
+						++it;
+					}
+					break;
+				case direction::UPLEFT:
+					it->second.movePosition(olc::vi2d(-pixels, -pixels));
+					if(!it->second.belowTopOfScreen() || !it->second.rightOfLeftOfScreen()){
+						powerUpCircles.erase(it++);
+					}else{
+						++it;
+					}
+					break;
+				case direction::DOWNLEFT:
+					it->second.movePosition(olc::vi2d(-pixels, pixels));
+					if(!it->second.rightOfLeftOfScreen() || !it->second.aboveBottomOfScreen()){
+						powerUpCircles.erase(it++);
+					}else{
+						++it;
+					}
+					break;
+				case direction::DOWNRIGHT:
+					it->second.movePosition(olc::vi2d(pixels, pixels));
+					if(!it->second.aboveBottomOfScreen() || !it->second.leftOfRightOfScreen()){
+						powerUpCircles.erase(it++);
+					}else{
+						++it;
+					}
+					break;
 				default:
 					++it;
 					break;
@@ -246,13 +286,6 @@ struct ShapesContainer{
 			}
 		}
 	}
-
-	// void moveShapes(int pixels){
-	// 	moveCircles(pixels);
-	// 	movePowerUps(pixels);
-	// 	movePowerUpCircles(pixels);
-	// 	moveNeedles(pixels);
-	// }
 
 	// 
 	// Deleting Shapes
