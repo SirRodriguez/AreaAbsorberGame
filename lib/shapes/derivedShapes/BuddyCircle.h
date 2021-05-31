@@ -22,9 +22,7 @@ public:
 
 
 	void draw(const olc::Pixel& color) override {
-		// std::cout << (color == olc::WHITE) << std::endl;
 		if(alive() || color == olc::WHITE){
-			// std::cout << "in if" << std::endl;
 			// Draw the circle
 			pixelGameEngine->FillCircle(position, radius, color);
 
@@ -36,15 +34,7 @@ public:
 		}
 	}
 	void clear() override {
-		// std::cout << "clear" << std::endl;
 		draw(olc::WHITE);
-
-		// pixelGameEngine->FillCircle(position, radius, olc::WHITE);
-
-		// int textScale = 2;
-		// std::string lives_string = std::to_string(lives);
-		// olc::vi2d livesStringSize = pixelGameEngine->GetTextSize(lives_string);
-		// pixelGameEngine->DrawString(position.x - textScale * (livesStringSize.x / 2), position.y, lives_string, olc::GREY, textScale);
 	}	
 
 	bool alive(){

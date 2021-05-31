@@ -128,7 +128,7 @@ public:
 
 		// Set LikelyHood
 		likelyHoodOfCircles = 50;
-		likelyHoodOfPowerUps = 1000;
+		likelyHoodOfPowerUps = 500;
 		likelyHoodOfNeedles = 1000;
 		likelyHoodOfBuddyPowerUps = 1000;
 	}
@@ -232,8 +232,8 @@ public:
 		}
 
 		// Generate Powerup if needed
-		if(likelyHoodOfPowerUps - (level - 1) * 50 > 0){
-			if(rand() % (likelyHoodOfPowerUps - (level - 1) * 50) == 0){
+		if(likelyHoodOfPowerUps - (level - 1) * 25 > 0){
+			if(rand() % (likelyHoodOfPowerUps - (level - 1) * 25) == 0){
 				shapesContainer.addPowerUp();
 			}
 		}else{

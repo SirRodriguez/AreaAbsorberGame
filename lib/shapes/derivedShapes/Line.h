@@ -22,7 +22,6 @@ public:
 	}
 	void clear(){
 		draw(olc::WHITE);
-		// pixelGameEngine->DrawLine(getStartPoint(), getEndPoint(), olc::WHITE);
 	}
 
 	void setdx(int x){ dx = x; }

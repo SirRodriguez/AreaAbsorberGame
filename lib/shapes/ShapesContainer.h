@@ -55,10 +55,8 @@ struct ShapesContainer{
 	void reset(){
 		setMainCircleRadius(initialMainCircleSize);
 		deleteAllCircles();
-		deleteAllPowerUps();
 		deleteAllPowerUpCircles();
 		deleteAllNeedles();
-		deleteAllBuddyPowerUps();
 	}
 
 	// 

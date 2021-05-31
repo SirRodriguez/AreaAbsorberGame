@@ -20,7 +20,6 @@ public:
 	}
 	void clear(){
 		draw(olc::WHITE);
-		// pixelGameEngine->FillRect(getTopLeftPoint(), olc::vi2d(length, length), olc::WHITE);
 	}
 
 	void setLength(int l){ length = l; }

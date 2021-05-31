@@ -25,7 +25,6 @@ public:
 
 	void clear(){
 		draw(olc::WHITE);
-		// pixelGameEngine->FillTriangle(topPoint(), botLeftPoint(), botRightPoint(), olc::WHITE);
 	}
 
 	void setHeight(int h){ height = h; }

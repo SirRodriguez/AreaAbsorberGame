@@ -24,7 +24,6 @@ public:
 	}
 	void clear(){
 		draw(olc::WHITE);
-		// pixelGameEngine->FillCircle(position, radius, olc::WHITE);
 	}
 
 	void setRadius(int r){ radius = r; }
