@@ -4,6 +4,7 @@
 #include "..\Shape.h"
 
 class Line : public Shape {
+protected:
 	int dx, dy;
 
 public:
@@ -20,7 +21,8 @@ public:
 		pixelGameEngine->DrawLine(getStartPoint(), getEndPoint(), color);
 	}
 	void clear(){
-		pixelGameEngine->DrawLine(getStartPoint(), getEndPoint(), olc::WHITE);
+		draw(olc::WHITE);
+		// pixelGameEngine->DrawLine(getStartPoint(), getEndPoint(), olc::WHITE);
 	}
 
 	void setdx(int x){ dx = x; }

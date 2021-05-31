@@ -27,6 +27,8 @@ class AreaAbsorber : public olc::PixelGameEngine {
 	int powerUpSpeed;
 	int powerUpCircleSpeed;
 	int needleSpeed;
+	int buddyPowerUpSpeed;
+	int buddyCircleSpeed;
 	int MainCircleSpeed;
 	// Score
 	int score;
@@ -35,12 +37,15 @@ class AreaAbsorber : public olc::PixelGameEngine {
 	int likelyHoodOfCircles;
 	int likelyHoodOfPowerUps;
 	int likelyHoodOfNeedles;
+	int likelyHoodOfBuddyPowerUps;
 	// Colors
 	const olc::Pixel mainCircleColor = olc::BLACK;
 	const olc::Pixel otherCircleColor = olc::RED;
 	const olc::Pixel powerUpColor = olc::GREEN;
 	const olc::Pixel powerUpCircleColors = olc::GREY;
 	const olc::Pixel needleColor = olc::BLACK;
+	const olc::Pixel buddyPowerUpColor = olc::YELLOW;
+	const olc::Pixel buddyCircleColor = olc::DARK_GREY;
 
 
 	// Other shapes containers
@@ -117,12 +122,15 @@ public:
 		powerUpSpeed = 2;
 		powerUpCircleSpeed = 5;
 		needleSpeed = 6;
+		buddyPowerUpSpeed = 2;
+		buddyCircleSpeed = 2;
 		MainCircleSpeed = 5;
 
 		// Set LikelyHood
 		likelyHoodOfCircles = 50;
 		likelyHoodOfPowerUps = 1000;
 		likelyHoodOfNeedles = 1000;
+		likelyHoodOfBuddyPowerUps = 1000;
 	}
 
 	void checkUserInput(){
@@ -244,6 +252,17 @@ public:
 				shapesContainer.addNeedle();
 			}
 		}
+
+		// Generate budd power ups
+		if(likelyHoodOfBuddyPowerUps - (level - 1) * 100 > 0){
+			if(rand() % (likelyHoodOfBuddyPowerUps - (level - 1) * 100) == 0){
+				shapesContainer.addBuddyPowerUp();
+			}
+		}else{
+			if(rand() % 50 == 0){
+				shapesContainer.addBuddyPowerUp();
+			}
+		}
 	}
 
 	void moveShapesDown(){
@@ -251,6 +270,8 @@ public:
 		shapesContainer.movePowerUps(powerUpSpeed);
 		shapesContainer.movePowerUpCircles(powerUpCircleSpeed);
 		shapesContainer.moveNeedles(needleSpeed);
+		shapesContainer.moveBuddyPowerUps(buddyPowerUpSpeed);
+		shapesContainer.moveBuddyCircle(buddyCircleSpeed);
 	}
 
 	bool checkCollision(){
@@ -280,6 +301,22 @@ public:
 		// Needle Collision detection
 		int needleCollideNumber = shapesContainer.checkCollisionForNeedles();
 
+		// Buddy Power Up collision
+		int buddyPowerUpCollideNumber = shapesContainer.checkCollisionForBuddyPowerUps();
+		if(buddyPowerUpCollideNumber == -1){
+			shapesContainer.addLifeToBuddyCircle(5);
+		}
+
+		// Buddy Circle Collision
+		int buddyCircleCollideNumber = shapesContainer.checkCollisionForBuddyCircle();
+		if(buddyCircleCollideNumber > 0){
+			shapesContainer.growMainCircle(buddyCircleCollideNumber / 2);
+			score += buddyCircleCollideNumber;
+			shapesContainer.subtractLifeToBuddyCircle(1);
+		}else if(buddyCircleCollideNumber < 0){
+			shapesContainer.subtractLifeToBuddyCircle(2);
+		}
+
 		return collideNumber == -1 || needleCollideNumber == -1;
 	}
 
@@ -290,6 +327,8 @@ public:
 		shapesContainer.drawPowerUps(powerUpColor);
 		shapesContainer.drawPowerUpCircles(powerUpCircleColors);
 		shapesContainer.drawNeedles(needleColor);
+		shapesContainer.drawBuddyPowerUps(buddyPowerUpColor);
+		shapesContainer.drawBuddyCircle(buddyCircleColor);
 		drawScore();
 	}
 

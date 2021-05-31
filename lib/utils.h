@@ -1,4 +1,5 @@
-
+#ifndef UTILS_H
+#define UTILS_H
 
 #define square(x) ((x)*(x))
 
@@ -61,3 +62,20 @@ bool circleTriangleCollision(olc::vi2d pos, int r, olc::vi2d p1, olc::vi2d p2, o
 bool circleTriangleCollision(Circle& c, Triangle& t){
 	return circleTriangleCollision(c.getPosition(), c.getRadius(), t.topPoint(), t.botLeftPoint(), t.botRightPoint());
 }
+
+// 
+// Circle & Square Collision functions
+// 
+
+bool circleSquareCollision(olc::vi2d pos, int r, olc::vi2d tlp, olc::vi2d trp, olc::vi2d blp, olc::vi2d brp){
+	return circleLineCollision(pos, r, tlp, trp) || 
+		circleLineCollision(pos, r, trp, brp) || 
+		circleLineCollision(pos, r, brp, blp) ||
+		circleLineCollision(pos, r, blp, tlp);
+}
+
+bool circleSquareCollision(Circle& c, Square& s){
+	return circleSquareCollision(c.getPosition(), c.getRadius(), s.getTopLeftPoint(), s.getTopRightPoint(), s.getBotLeftPoint(), s.getBotRightPoint());
+}
+
+#endif

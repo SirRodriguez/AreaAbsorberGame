@@ -4,20 +4,25 @@
 #include "derivedShapes\Circle.h"
 #include "derivedShapes\Triangle.h"
 #include "derivedShapes\Line.h"
+#include "derivedShapes\Square.h"
+#include "derivedShapes\BuddyCircle.h"
 #include "..\utils.h"
-
-#define square(x) ((x)*(x))
 
 struct ShapesContainer{
 	olc::PixelGameEngine* pixelGameEngine;
 	int maxRadius;
 	int maxLength;
 	int initialMainCircleSize = 10;
+
 	// Shapes
 	Circle mainCircle;
 	std::list<Circle> otherCircle;
 	std::list<Triangle> powerUps;
 	std::list<Line> needles;
+
+	// For the buddy shapes power ups
+	std::list<Square> buddyPowerUps;
+	BuddyCircle buddyCircle;
 
 	// Direction of where the power up circles will go
 	enum direction {
@@ -38,11 +43,13 @@ struct ShapesContainer{
 		powerUps.clear();
 		powerUpCircles.clear();
 		needles.clear();
+		buddyPowerUps.clear();
 		maxRadius = 50;
 		maxLength = 50;
 		pixelGameEngine = &pge;
 		olc::vi2d mainPos = olc::vi2d(pixelGameEngine->ScreenWidth() / 2, pixelGameEngine->ScreenHeight() / 2);
 		mainCircle = Circle(pge, mainPos, initialMainCircleSize);
+		buddyCircle = BuddyCircle(pge);
 	}
 
 	void reset(){
@@ -51,6 +58,7 @@ struct ShapesContainer{
 		deleteAllPowerUps();
 		deleteAllPowerUpCircles();
 		deleteAllNeedles();
+		deleteAllBuddyPowerUps();
 	}
 
 	// 
@@ -85,40 +93,62 @@ struct ShapesContainer{
 		}
 	}
 
+	void hideBuddyPowerUps(){
+		for(auto it = buddyPowerUps.begin(); it != buddyPowerUps.end(); ++it){
+			it->clear();
+		}
+	}
+
+	void hideBuddyCircle(){
+		buddyCircle.clear();
+	}
+
 	void hideAll(){
 		hideCircles();
 		hideMainCircle();
 		hidePowerUps();
 		hidePowerUpCircles();
 		hideNeedles();
+		hideBuddyPowerUps();
+		hideBuddyCircle();
 	}
 
-	void drawMainCircle(const olc::Pixel color){
+	void drawMainCircle(const olc::Pixel& color){
 		mainCircle.draw(color);
 	}
 
-	void drawCircles(const olc::Pixel color){
+	void drawCircles(const olc::Pixel& color){
 		for(auto it = otherCircle.begin(); it != otherCircle.end(); ++it){
 			it->draw(color);
 		}
 	}
 
-	void drawPowerUps(const olc::Pixel color){
+	void drawPowerUps(const olc::Pixel& color){
 		for(auto it = powerUps.begin(); it != powerUps.end(); ++it){
 			it->draw(color);
 		}
 	}
 
-	void drawPowerUpCircles(const olc::Pixel color){
+	void drawPowerUpCircles(const olc::Pixel& color){
 		for(auto it = powerUpCircles.begin(); it != powerUpCircles.end(); ++it){
 			it->second.draw(color);
 		}
 	}
 
-	void drawNeedles(const olc::Pixel color){
+	void drawNeedles(const olc::Pixel& color){
 		for(auto it = needles.begin(); it != needles.end(); ++it){
 			it->draw(color);
 		}
+	}
+
+	void drawBuddyPowerUps(const olc::Pixel& color){
+		for(auto it = buddyPowerUps.begin(); it != buddyPowerUps.end(); ++it){
+			it->draw(color);
+		}
+	}
+
+	void drawBuddyCircle(const olc::Pixel& color){
+		buddyCircle.draw(color);
 	}
 
 	// 
@@ -154,6 +184,12 @@ struct ShapesContainer{
 		int dx = rand() % maxLength;
 		int dy = rand() % maxLength;
 		needles.push_back(Line(*pixelGameEngine, loc, dx, dy));
+	}
+
+	void addBuddyPowerUp(){
+		olc::vi2d loc = olc::vi2d(rand() % pixelGameEngine->ScreenWidth(), 0);
+		int length = 40;
+		buddyPowerUps.push_back(Square(*pixelGameEngine, loc, length));
 	}
 
 	// 
@@ -287,6 +323,22 @@ struct ShapesContainer{
 		}
 	}
 
+	void moveBuddyPowerUps(int pixels){
+		for(auto it = buddyPowerUps.begin(); it != buddyPowerUps.end();){
+			it->movePosition(olc::vi2d(0, pixels));
+			// if it reaches the bottom, delete it
+			if(!it->aboveBottomOfScreen()){
+				buddyPowerUps.erase(it++);
+			}else{
+				++it;
+			}
+		}
+	}
+
+	void moveBuddyCircle(int pixels){
+		buddyCircle.moveToCircle(mainCircle, pixels);
+	}
+
 	// 
 	// Deleting Shapes
 	// 
@@ -305,6 +357,14 @@ struct ShapesContainer{
 
 	void deleteAllNeedles(){
 		needles.clear();
+	}
+
+	void deleteAllBuddyPowerUps(){
+		buddyPowerUps.clear();
+	}
+
+	void deleteBuddyCircle(){
+		buddyCircle.kill();
 	}
 
 	// 
@@ -340,6 +400,7 @@ struct ShapesContainer{
 			for(auto pit = powerUpCircles.begin(); pit != powerUpCircles.end(); ++pit){
 				if(circleCircleCollision(*it, pit->second)){
 					if(otherRadius > pit->second.getRadius()){
+						otherCircle.erase(it);
 						powerUpCircles.erase(pit);
 						return -1;
 					}else{
@@ -397,16 +458,66 @@ struct ShapesContainer{
 		return 0;
 	}
 
+	// Returns 0 for no collision
+	// Returns -1 for collision with main circle
+	int checkCollisionForBuddyPowerUps(){
+		for(auto it = buddyPowerUps.begin(); it != buddyPowerUps.end(); ++it){
+			// Check collision with main circle
+			if(circleSquareCollision(mainCircle, *it)){
+				buddyPowerUps.erase(it);
+				return -1;
+			}
+		}
+
+		return 0;
+	}
+
+	// Return 0 for no collision
+	// Return negative number for Collision with other circle thats bigger
+	// Return positive number for collision with other circle thats smaller
+	int checkCollisionForBuddyCircle(){
+		if(buddyCircle.alive()){
+			for(auto it = otherCircle.begin(); it != otherCircle.end(); ++it){
+				// Check collision with other circles
+				if(circleCircleCollision(*it, buddyCircle)){
+					if(buddyCircle.getRadius() > it->getRadius()){
+						otherCircle.erase(it);
+						return it->getRadius();
+					}else{
+						otherCircle.erase(it);
+						return -1;
+					}
+				}
+			}
+		}
+
+		return 0;
+	}
+
 	// 
 	// Shape changes
 	// 
 
 	void growMainCircle(int amount){
 		mainCircle.addRadius(amount);
+		growBuddyCircle(amount);
+		// buddyCircle.matchSize(mainCircle);
 	}
 
 	void setMainCircleRadius(int radius){
 		mainCircle.setRadius(radius);
+	}
+
+	void growBuddyCircle(int amount){
+		buddyCircle.grow(amount);
+	}
+
+	void addLifeToBuddyCircle(int amount){
+		buddyCircle.addLife(amount);
+	}
+
+	void subtractLifeToBuddyCircle(int amount){
+		buddyCircle.subtractLife(amount);
 	}
 
 	// 

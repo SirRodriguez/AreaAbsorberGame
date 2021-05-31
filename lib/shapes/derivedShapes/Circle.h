@@ -6,6 +6,7 @@
 #define PI (355 / 113)
 #define RECPI (113 / 355)
 class Circle : public Shape{
+protected:
 	int radius;
 
 public:
@@ -22,7 +23,8 @@ public:
 		pixelGameEngine->FillCircle(position, radius, color);
 	}
 	void clear(){
-		pixelGameEngine->FillCircle(position, radius, olc::WHITE);
+		draw(olc::WHITE);
+		// pixelGameEngine->FillCircle(position, radius, olc::WHITE);
 	}
 
 	void setRadius(int r){ radius = r; }

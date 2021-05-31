@@ -6,6 +6,7 @@
 #define SQRT3 97 / 56
 #define RECSQRT3 56 / 97
 class Triangle : public Shape{
+protected:
 	int height;
 
 public:
@@ -23,7 +24,8 @@ public:
 	}
 
 	void clear(){
-		pixelGameEngine->FillTriangle(topPoint(), botLeftPoint(), botRightPoint(), olc::WHITE);
+		draw(olc::WHITE);
+		// pixelGameEngine->FillTriangle(topPoint(), botLeftPoint(), botRightPoint(), olc::WHITE);
 	}
 
 	void setHeight(int h){ height = h; }
