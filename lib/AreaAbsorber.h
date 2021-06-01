@@ -300,6 +300,9 @@ public:
 
 		// Needle Collision detection
 		int needleCollideNumber = shapesContainer.checkCollisionForNeedles();
+		if(needleCollideNumber == -2){ // Collided with buddy circle
+			shapesContainer.subtractLifeToBuddyCircle(3);
+		}
 
 		// Buddy Power Up collision
 		int buddyPowerUpCollideNumber = shapesContainer.checkCollisionForBuddyPowerUps();
@@ -314,7 +317,7 @@ public:
 			score += buddyCircleCollideNumber;
 			shapesContainer.subtractLifeToBuddyCircle(1);
 		}else if(buddyCircleCollideNumber < 0){
-			shapesContainer.subtractLifeToBuddyCircle(2);
+			shapesContainer.subtractLifeToBuddyCircle(3);
 		}
 
 		return collideNumber == -1 || needleCollideNumber == -1;

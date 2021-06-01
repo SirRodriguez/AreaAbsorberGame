@@ -430,6 +430,7 @@ struct ShapesContainer{
 	// Returns 1 for collision with other circle
 	// Returns 2 for collision with power up circles
 	// Returns -1 for collision with main circle
+	// Returns -2 for collision with buddy circle
 	int checkCollisionForNeedles(){
 		for(auto it = needles.begin(); it != needles.end(); ++it){
 			// Check collision with main circle
@@ -451,6 +452,11 @@ struct ShapesContainer{
 					powerUpCircles.erase(pit);
 					return 2;
 				}
+			}
+
+			// Check collision with buddy circle
+			if(circleLineCollision(buddyCircle, *it)){
+				return -2;
 			}
 		}
 		return 0;
