@@ -1,5 +1,8 @@
-#ifndef AREAABSORBER
-#define AREAABSORBER
+#ifndef AREAABSORBER_H
+#define AREAABSORBER_H
+
+#include "GlobalFlags.h"
+#include "InputControls.h"
 
 #include "shapes\ShapesContainer.h"
 
@@ -7,13 +10,7 @@
 // g++ -o AreaAbsorber.exe main.cpp -luser32 -lgdi32 -lopengl32 -lgdiplus -lShlwapi -ldwmapi -lstdc++fs -static -std=c++17
 
 class AreaAbsorber : public olc::PixelGameEngine {
-	// Keys to use in play
-	olc::HWButton spaceButton;
-	olc::HWButton upButton;
-	olc::HWButton downButton;
-	olc::HWButton leftButton;
-	olc::HWButton rightButton;
-	olc::HWButton escButton;
+	InputControls inputControls;
 
 	// flags
 	bool inMainMenu;
@@ -99,6 +96,9 @@ public:
 	}
 
 	void initializeGame(){
+		// Initialize the input controls class
+		inputControls = InputControls(*this);
+
 		// Set flags
 		inMainMenu = true;
 
@@ -132,12 +132,6 @@ public:
 	}
 
 	void checkUserInput(){
-		// Get the up, down, left, right buttons
-		upButton = GetKey(olc::Key::UP);
-		downButton = GetKey(olc::Key::DOWN);
-		leftButton = GetKey(olc::Key::LEFT);
-		rightButton = GetKey(olc::Key::RIGHT);
-
 		// Update the position of the circle
 		if(upButton.bHeld){
 			shapesContainer.moveMainCircleUp(MainCircleSpeed);
@@ -342,9 +336,12 @@ public:
 	}
 
 	bool OnUserUpdate(float fElapsedTime) override {
+		// Update input controls
+		inputControls.runInputFrame();
+
 		// Called Once per frame
 		if(inMainMenu){
-			spaceButton = GetKey(olc::Key::SPACE);
+			// spaceButton = GetKey(olc::Key::SPACE);
 			if(spaceButton.bPressed){
 				Clear(olc::WHITE);
 				shapesContainer.drawMainCircle(mainCircleColor);
@@ -387,7 +384,6 @@ public:
 		}
 
 		// Check the escape button to end the program
-		escButton = GetKey(olc::Key::ESCAPE);
 		if(escButton.bPressed){
 			if(inMainMenu){
 				olc_Terminate();
