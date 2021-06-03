@@ -7,18 +7,12 @@ protected:
 	olc::vi2d position;
 
 public:
-	Shape(){
-		pixelGameEngine = nullptr;
-		position = olc::vi2d(0,0);
-	}
-	Shape(olc::PixelGameEngine& pge){
-		pixelGameEngine = &pge;
-		position = olc::vi2d(0,0);
-	}
-	Shape(olc::PixelGameEngine& pge, olc::vi2d& pos){
-		pixelGameEngine = &pge;
-		position = pos;
-	}
+	Shape()
+	: pixelGameEngine(nullptr), position(olc::vi2d(0,0)){}
+	Shape(olc::PixelGameEngine& pge)
+	: pixelGameEngine(&pge), position(olc::vi2d(0,0)){}
+	Shape(olc::PixelGameEngine& pge, olc::vi2d& pos)
+	: pixelGameEngine(&pge), position(pos){}
 
 	bool belowTopOfScreen(){ return position.y > 0; }
 	bool aboveBottomOfScreen(){	return position.y < pixelGameEngine->ScreenHeight(); }

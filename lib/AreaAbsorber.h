@@ -2,8 +2,6 @@
 #define AREAABSORBER
 
 #include "shapes\ShapesContainer.h"
-#include "shapes\derivedShapes\Circle.h"
-#include "shapes\derivedShapes\Triangle.h"
 
 // Command to compile 
 // g++ -o AreaAbsorber.exe main.cpp -luser32 -lgdi32 -lopengl32 -lgdiplus -lShlwapi -ldwmapi -lstdc++fs -static -std=c++17
