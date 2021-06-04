@@ -1,13 +1,17 @@
 #ifndef SHAPEGENERATOR_H
 #define SHAPEGENERATOR_H
 
+#include "ShapesContainer.h"
+#include "ScoreContainer.h"
+
 // likelyHoodOfCircles = 50;
 // likelyHoodOfPowerUps = 500;
 // likelyHoodOfNeedles = 1000;
 // likelyHoodOfBuddyPowerUps = 1000;
 
 class ShapeGenerator{
-	ShapeContainer* shapeContainer;
+	ShapesContainer* shapesContainer;
+	ScoreContainer* scoreContainer;
 
 	// Likelyhood of shapes generated
 	int likelyHoodOfCircles = 0;
@@ -15,34 +19,49 @@ class ShapeGenerator{
 	int likelyHoodOfNeedles = 0;
 	int likelyHoodOfBuddyPowerUps = 0;
 
-	void generateCircles(){
-		if(likelyHoodOfCircles - (level - 1) * likelyHoodOfCircles / 10 > 0){
-			if(rand() % (likelyHoodOfCircles - (level - 1) * likelyHoodOfCircles / 10 == 0)){
-				shapeContainer->addCircle();
+	bool generateChecker(int likelyHood){
+		int module = likelyHood - (scoreContainer->getLevel() - 1) * likelyHood / 10;
+		if(module > 0){
+			if(rand() % module == 0){
+				return true;
 			}
 		}else{
-			if(rand() % 5 == 0){
-				shapeContainer->addCircle();
+			if(rand() % (likelyHood / 10) == 0){
+				return true;
 			}
 		}
+
+		return false;
 	}
+
+	// 
+	// Generation functions
+	// 
+	void generateCircles(){
+		if(generateChecker(likelyHoodOfCircles))
+			shapesContainer->addCircle();
+	}
+
 	void generatePowerUps(){
-
+		if(generateChecker(likelyHoodOfPowerUps))
+			shapesContainer->addPowerUp();
 	}
+
 	void generateNeedles(){
-
+		if(generateChecker(likelyHoodOfNeedles))
+			shapesContainer->addNeedle();
 	}
-	void generateBuddyPowerUps(){
 
+	void generateBuddyPowerUps(){
+		if(generateChecker(likelyHoodOfBuddyPowerUps))
+			shapesContainer->addBuddyPowerUp();
 	}
 
 public:
 	ShapeGenerator()
-	: shapeContainer(nullptr){}
-	ShapeGeerator(ShapeContainer& newShapeContainer)
-	: shapeContainer(&newShapeContainer){}
-	ShapeGeerator(ShapeContainer& newShapeContainer)
-	: shapeContainer(&newShapeContainer){}
+	: shapesContainer(nullptr), scoreContainer(nullptr){}
+	ShapeGenerator(ShapesContainer& newShapesContainer, ScoreContainer& newScoreContainer)
+	: shapesContainer(&newShapesContainer), scoreContainer(&newScoreContainer){}
 
 	void setLikelyHoodOfCircles(int value){ likelyHoodOfCircles = value; }
 	void setLikelyHoodOfPowerUps(int value){ likelyHoodOfPowerUps = value; }
@@ -50,7 +69,10 @@ public:
 	void setLikelyHoodOfBuddyPowerUps(int value){ likelyHoodOfBuddyPowerUps = value; }
 
 	void runShapeGenerationFrame(){
-
+		generateCircles();
+		generatePowerUps();
+		generateNeedles();
+		generateBuddyPowerUps();
 	}
 };
 

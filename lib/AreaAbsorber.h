@@ -4,7 +4,7 @@
 #include "GlobalFlags.h"
 #include "InputControls.h"
 #include "ScoreContainer.h"
-
+#include "ShapeGenerator.h"
 #include "ShapesContainer.h"
 
 // Command to compile 
@@ -26,13 +26,7 @@ class AreaAbsorber : public olc::PixelGameEngine {
 	int buddyPowerUpSpeed;
 	int buddyCircleSpeed;
 	int MainCircleSpeed;
-	// Score
-	ScoreContainer scoreContainer;
-	// Likelyhood of other circles generated
-	int likelyHoodOfCircles;
-	int likelyHoodOfPowerUps;
-	int likelyHoodOfNeedles;
-	int likelyHoodOfBuddyPowerUps;
+	ShapeGenerator shapeGenerator;
 	// Colors
 	const olc::Pixel mainCircleColor = olc::BLACK;
 	const olc::Pixel otherCircleColor = olc::RED;
@@ -45,6 +39,7 @@ class AreaAbsorber : public olc::PixelGameEngine {
 
 	// Other shapes containers
 	ShapesContainer shapesContainer;
+	ScoreContainer scoreContainer;
 
 public:
 	AreaAbsorber(){
@@ -95,8 +90,12 @@ public:
 	void initializeGame(){
 		// Initialize the input controls class
 		inputControls = InputControls(*this);
+		// Initialize the hape container
+		shapesContainer.initialize(*this);
 		// Initialize the scoreContainer
 		scoreContainer = ScoreContainer();
+		// Initialize the shape Generator
+		shapeGenerator = ShapeGenerator(shapesContainer, scoreContainer);
 
 		// Set flags
 		inMainMenu = true;
@@ -124,10 +123,10 @@ public:
 		MainCircleSpeed = 5;
 
 		// Set LikelyHood
-		likelyHoodOfCircles = 50;
-		likelyHoodOfPowerUps = 500;
-		likelyHoodOfNeedles = 1000;
-		likelyHoodOfBuddyPowerUps = 1000;
+		shapeGenerator.setLikelyHoodOfCircles(50);
+		shapeGenerator.setLikelyHoodOfPowerUps(500);
+		shapeGenerator.setLikelyHoodOfNeedles(1000);
+		shapeGenerator.setLikelyHoodOfBuddyPowerUps(1000);
 	}
 
 	void checkUserInput(){
@@ -207,54 +206,6 @@ public:
 		int levelRectHeight = textScale * (lvlTitSize.y + levelSize.y);
 
 		FillRect(0, scoreRectHeight, levelRectLength, levelRectHeight);
-	}
-
-	void shapeGeneration(){
-		int level = scoreContainer.getLevel();
-		// Generate Circle if needed
-		if(likelyHoodOfCircles - (level - 1) * 5 > 0){
-			if(rand() % (likelyHoodOfCircles - (level - 1) * 5) == 0){
-				shapesContainer.addCircle();
-			}
-		}else{
-			// This is the max rate of circle generation
-			if(rand() % 5 == 0){
-				shapesContainer.addCircle();
-			}
-		}
-
-		// Generate Powerup if needed
-		if(likelyHoodOfPowerUps - (level - 1) * 25 > 0){
-			if(rand() % (likelyHoodOfPowerUps - (level - 1) * 25) == 0){
-				shapesContainer.addPowerUp();
-			}
-		}else{
-			if(rand() % 50 == 0){
-				shapesContainer.addPowerUp();
-			}
-		}
-
-		// Generate Needles if needed
-		if(likelyHoodOfNeedles - (level - 1) * 100 > 0){
-			if(rand() % (likelyHoodOfNeedles - (level - 1) * 100) == 0){
-				shapesContainer.addNeedle();
-			}
-		}else{
-			if(rand() % 50 == 0){
-				shapesContainer.addNeedle();
-			}
-		}
-
-		// Generate budd power ups
-		if(likelyHoodOfBuddyPowerUps - (level - 1) * 100 > 0){
-			if(rand() % (likelyHoodOfBuddyPowerUps - (level - 1) * 100) == 0){
-				shapesContainer.addBuddyPowerUp();
-			}
-		}else{
-			if(rand() % 50 == 0){
-				shapesContainer.addBuddyPowerUp();
-			}
-		}
 	}
 
 	void moveShapesDown(){
@@ -357,7 +308,7 @@ public:
 			checkUserInput();
 
 			// Shape Generation
-			shapeGeneration();
+			shapeGenerator.runShapeGenerationFrame();
 
 			// Move the shapes down
 			moveShapesDown();
