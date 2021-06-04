@@ -4,7 +4,7 @@
 #include "GlobalFlags.h"
 #include "InputControls.h"
 
-#include "shapes\ShapesContainer.h"
+#include "ShapesContainer.h"
 
 // Command to compile 
 // g++ -o AreaAbsorber.exe main.cpp -luser32 -lgdi32 -lopengl32 -lgdiplus -lShlwapi -ldwmapi -lstdc++fs -static -std=c++17

@@ -1,12 +1,12 @@
 #ifndef SHAPESCONTAINER
 #define SHAPESCONTAINER
 
-#include "derivedShapes\Circle.h"
-#include "derivedShapes\Triangle.h"
-#include "derivedShapes\Line.h"
-#include "derivedShapes\Square.h"
-#include "derivedShapes\BuddyCircle.h"
-#include "..\utils.h"
+#include "shapes\derivedShapes\Circle.h"
+#include "shapes\derivedShapes\Triangle.h"
+#include "shapes\derivedShapes\Line.h"
+#include "shapes\derivedShapes\Square.h"
+#include "shapes\derivedShapes\BuddyCircle.h"
+#include "utils.h"
 
 struct ShapesContainer{
 	olc::PixelGameEngine* pixelGameEngine;
