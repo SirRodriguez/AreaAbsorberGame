@@ -8,7 +8,7 @@
 #include "shapes\derivedShapes\BuddyCircle.h"
 #include "utils.h"
 
-struct ShapesContainer{
+class ShapesContainer{
 	olc::PixelGameEngine* pixelGameEngine;
 	int maxRadius;
 	int maxLength;
@@ -38,6 +38,7 @@ struct ShapesContainer{
 	std::list<std::pair<direction, Circle>> powerUpCircles;
 
 
+public:
 	void initialize(olc::PixelGameEngine& pge){
 		otherCircle.clear();
 		powerUps.clear();

@@ -3,6 +3,7 @@
 
 #include "GlobalFlags.h"
 #include "InputControls.h"
+#include "ScoreContainer.h"
 
 #include "ShapesContainer.h"
 
@@ -26,8 +27,7 @@ class AreaAbsorber : public olc::PixelGameEngine {
 	int buddyCircleSpeed;
 	int MainCircleSpeed;
 	// Score
-	int score;
-	int level;
+	ScoreContainer scoreContainer;
 	// Likelyhood of other circles generated
 	int likelyHoodOfCircles;
 	int likelyHoodOfPowerUps;
@@ -49,9 +49,6 @@ class AreaAbsorber : public olc::PixelGameEngine {
 public:
 	AreaAbsorber(){
 		sAppName = "AreaAbsorber";
-
-		score = 0;
-		level = 0;
 	}
 
 	void setMainMenu(){
@@ -98,6 +95,8 @@ public:
 	void initializeGame(){
 		// Initialize the input controls class
 		inputControls = InputControls(*this);
+		// Initialize the scoreContainer
+		scoreContainer = ScoreContainer();
 
 		// Set flags
 		inMainMenu = true;
@@ -166,7 +165,7 @@ public:
 		DrawString(
 			scTitSize.x * textScale,
 			0,
-			std::to_string(score),
+			std::to_string(scoreContainer.getScore()),
 			olc::BLACK,
 			textScale
 		);
@@ -182,7 +181,7 @@ public:
 		DrawString(
 			lvlTitSize.x * textScale,
 			scTitSize.y * textScale,
-			std::to_string(level),
+			std::to_string(scoreContainer.getLevel()),
 			olc::BLACK,
 			textScale
 		);
@@ -192,7 +191,7 @@ public:
 		// Make a white rectangle white to clear the score
 		const std::string scoreTitle = "Score - ";
 		olc::vi2d scTitSize = GetTextSize(scoreTitle);
-		olc::vi2d scoreSize = GetTextSize(std::to_string(score));
+		olc::vi2d scoreSize = GetTextSize(std::to_string(scoreContainer.getScore()));
 
 		int scoreRectLength = textScale * (scTitSize.x + scoreSize.x);
 		int scoreRectHeight = textScale * (scTitSize.y + scoreSize.y);
@@ -202,7 +201,7 @@ public:
 		// Make a white rectangle white to clear the level
 		const std::string levelTitle = "Level - ";
 		olc::vi2d lvlTitSize = GetTextSize(levelTitle);
-		olc::vi2d levelSize = GetTextSize(std::to_string(level));
+		olc::vi2d levelSize = GetTextSize(std::to_string(scoreContainer.getLevel()));
 
 		int levelRectLength = textScale * (lvlTitSize.x + levelSize.x);
 		int levelRectHeight = textScale * (lvlTitSize.y + levelSize.y);
@@ -211,6 +210,7 @@ public:
 	}
 
 	void shapeGeneration(){
+		int level = scoreContainer.getLevel();
 		// Generate Circle if needed
 		if(likelyHoodOfCircles - (level - 1) * 5 > 0){
 			if(rand() % (likelyHoodOfCircles - (level - 1) * 5) == 0){
@@ -272,7 +272,7 @@ public:
 		if(collideNumber > 0){
 			// Make the circle bigger and add to score
 			shapesContainer.growMainCircle(collideNumber / 2);
-			score += collideNumber;
+			scoreContainer.addToScore(collideNumber);
 		}
 
 		// Power up collision detection
@@ -287,7 +287,7 @@ public:
 		if(powerCircleCollideNumber == 0){
 			// Make the circle bigger and add to the score
 			shapesContainer.growMainCircle(powerCircleCollideNumber / 2);
-			score += powerCircleCollideNumber;
+			scoreContainer.addToScore(powerCircleCollideNumber);
 		}
 
 		// Needle Collision detection
@@ -306,7 +306,7 @@ public:
 		int buddyCircleCollideNumber = shapesContainer.checkCollisionForBuddyCircle();
 		if(buddyCircleCollideNumber > 0){
 			shapesContainer.growMainCircle(buddyCircleCollideNumber / 2);
-			score += buddyCircleCollideNumber;
+			scoreContainer.addToScore(buddyCircleCollideNumber);
 			shapesContainer.subtractLifeToBuddyCircle(1);
 		}else if(buddyCircleCollideNumber < 0){
 			shapesContainer.subtractLifeToBuddyCircle(3);
@@ -346,8 +346,7 @@ public:
 				Clear(olc::WHITE);
 				shapesContainer.drawMainCircle(mainCircleColor);
 				inMainMenu = false;
-				score = 0;
-				level = 1;
+				scoreContainer.resetLevelAndScore();
 			}
 		}else{
 			// Clear the Screen where it needs to
@@ -370,7 +369,7 @@ public:
 			if(shapesContainer.mainCircleTooBig()){
 				// Reset main Circle size for next level
 				shapesContainer.reset();
-				++level;
+				scoreContainer.incrementLevel();
 			}
 
 			// Draw the screen.
