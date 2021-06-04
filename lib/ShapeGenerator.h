@@ -59,9 +59,13 @@ class ShapeGenerator{
 
 public:
 	ShapeGenerator()
-	: shapesContainer(nullptr), scoreContainer(nullptr){}
+	: shapesContainer(nullptr), scoreContainer(nullptr){
+		srand(time(0));
+	}
 	ShapeGenerator(ShapesContainer& newShapesContainer, ScoreContainer& newScoreContainer)
-	: shapesContainer(&newShapesContainer), scoreContainer(&newScoreContainer){}
+	: shapesContainer(&newShapesContainer), scoreContainer(&newScoreContainer){
+		srand(time(0));
+	}
 
 	void setLikelyHoodOfCircles(int value){ likelyHoodOfCircles = value; }
 	void setLikelyHoodOfPowerUps(int value){ likelyHoodOfPowerUps = value; }

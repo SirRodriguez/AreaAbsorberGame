@@ -46,6 +46,17 @@ public:
 		sAppName = "AreaAbsorber";
 	}
 
+	void constructObjects(){
+		// Initialize the input controls class
+		inputControls = InputControls(*this);
+		// Initialize the hape container
+		shapesContainer.initialize(*this);
+		// Initialize the scoreContainer
+		scoreContainer = ScoreContainer();
+		// Initialize the shape Generator
+		shapeGenerator = ShapeGenerator(shapesContainer, scoreContainer);
+	}
+
 	void setMainMenu(){
 		// Make a text saying to press space bar to start in the center of the screen
 		const std::string press = "Press";
@@ -88,23 +99,17 @@ public:
 	}
 
 	void initializeGame(){
-		// Initialize the input controls class
-		inputControls = InputControls(*this);
-		// Initialize the hape container
-		shapesContainer.initialize(*this);
-		// Initialize the scoreContainer
-		scoreContainer = ScoreContainer();
-		// Initialize the shape Generator
-		shapeGenerator = ShapeGenerator(shapesContainer, scoreContainer);
+		// // Initialize the input controls class
+		// inputControls = InputControls(*this);
+		// // Initialize the hape container
+		// shapesContainer.initialize(*this);
+		// // Initialize the scoreContainer
+		// scoreContainer = ScoreContainer();
+		// // Initialize the shape Generator
+		// shapeGenerator = ShapeGenerator(shapesContainer, scoreContainer);
 
 		// Set flags
 		inMainMenu = true;
-
-		// Initialize the random seed
-		srand(time(0));
-
-		// Initialize the struct
-		shapesContainer.initialize(*this);
 
 		// Make the background white
 		Clear(olc::WHITE);
@@ -282,6 +287,7 @@ public:
 public:
 	bool OnUserCreate() override {
 		// Called once at the start, so create things here
+		constructObjects();
 		initializeGame();
 		return true;
 	}
