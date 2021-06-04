@@ -5,6 +5,7 @@
 #include "InputControls.h"
 #include "ScoreContainer.h"
 #include "ShapeGenerator.h"
+#include "ShapeMover.h"
 #include "ShapesContainer.h"
 
 // Command to compile 
@@ -18,14 +19,8 @@ class AreaAbsorber : public olc::PixelGameEngine {
 
 	// Text
 	const int textScale = 4;
-	// Move Speeds
-	int otherCircleSpeed;
-	int powerUpSpeed;
-	int powerUpCircleSpeed;
-	int needleSpeed;
-	int buddyPowerUpSpeed;
-	int buddyCircleSpeed;
-	int MainCircleSpeed;
+	// Mover
+	ShapeMover shapeMover;
 	ShapeGenerator shapeGenerator;
 	// Colors
 	const olc::Pixel mainCircleColor = olc::BLACK;
@@ -55,6 +50,8 @@ public:
 		scoreContainer = ScoreContainer();
 		// Initialize the shape Generator
 		shapeGenerator = ShapeGenerator(shapesContainer, scoreContainer);
+		// Initialize the shape mover
+		shapeMover = ShapeMover(shapesContainer);
 	}
 
 	void setMainMenu(){
@@ -99,15 +96,6 @@ public:
 	}
 
 	void initializeGame(){
-		// // Initialize the input controls class
-		// inputControls = InputControls(*this);
-		// // Initialize the hape container
-		// shapesContainer.initialize(*this);
-		// // Initialize the scoreContainer
-		// scoreContainer = ScoreContainer();
-		// // Initialize the shape Generator
-		// shapeGenerator = ShapeGenerator(shapesContainer, scoreContainer);
-
 		// Set flags
 		inMainMenu = true;
 
@@ -119,35 +107,19 @@ public:
 		setMainMenu();
 
 		// Set speeds
-		otherCircleSpeed = 4;
-		powerUpSpeed = 2;
-		powerUpCircleSpeed = 5;
-		needleSpeed = 6;
-		buddyPowerUpSpeed = 2;
-		buddyCircleSpeed = 2;
-		MainCircleSpeed = 5;
+		shapeMover.setOtherCircleSpeed(4);
+		shapeMover.setPowerUpSpeed(2);
+		shapeMover.setPowerUpCircleSpeed(5);
+		shapeMover.setNeedleSpeed(6);
+		shapeMover.setBuddyPowerUpSpeed(2);
+		shapeMover.setBuddyCircleSpeed(2);
+		shapeMover.setMainCircleSpeed(5);
 
 		// Set LikelyHood
 		shapeGenerator.setLikelyHoodOfCircles(50);
 		shapeGenerator.setLikelyHoodOfPowerUps(500);
 		shapeGenerator.setLikelyHoodOfNeedles(1000);
 		shapeGenerator.setLikelyHoodOfBuddyPowerUps(1000);
-	}
-
-	void checkUserInput(){
-		// Update the position of the circle
-		if(upButton.bHeld){
-			shapesContainer.moveMainCircleUp(MainCircleSpeed);
-		}
-		if(downButton.bHeld){
-			shapesContainer.moveMainCircleDown(MainCircleSpeed);
-		}
-		if(leftButton.bHeld){
-			shapesContainer.moveMainCircleLeft(MainCircleSpeed);
-		}
-		if(rightButton.bHeld){
-			shapesContainer.moveMainCircleRight(MainCircleSpeed);
-		}
 	}
 
 	// Draw score and level
@@ -211,15 +183,6 @@ public:
 		int levelRectHeight = textScale * (lvlTitSize.y + levelSize.y);
 
 		FillRect(0, scoreRectHeight, levelRectLength, levelRectHeight);
-	}
-
-	void moveShapesDown(){
-		shapesContainer.moveCircles(otherCircleSpeed);
-		shapesContainer.movePowerUps(powerUpSpeed);
-		shapesContainer.movePowerUpCircles(powerUpCircleSpeed);
-		shapesContainer.moveNeedles(needleSpeed);
-		shapesContainer.moveBuddyPowerUps(buddyPowerUpSpeed);
-		shapesContainer.moveBuddyCircle(buddyCircleSpeed);
 	}
 
 	bool checkCollision(){
@@ -310,14 +273,11 @@ public:
 			clearScore();
 			shapesContainer.hideAll();
 
-			// User input
-			checkUserInput();
-
 			// Shape Generation
 			shapeGenerator.runShapeGenerationFrame();
 
-			// Move the shapes down
-			moveShapesDown();
+			// Move the shapes
+			shapeMover.runMoveShapesFrame();
 			
 			// Collision detection
 			bool fail = checkCollision();
