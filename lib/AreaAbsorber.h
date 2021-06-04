@@ -2,11 +2,13 @@
 #define AREAABSORBER_H
 
 #include "GlobalFlags.h"
-#include "InputControls.h"
-#include "ScoreContainer.h"
-#include "ShapeGenerator.h"
-#include "ShapeMover.h"
-#include "ShapesContainer.h"
+
+#include "controllers\InputControls.h"
+#include "controllers\ShapeGenerator.h"
+#include "controllers\ShapeMover.h"
+
+#include "containers\ScoreContainer.h"
+#include "containers\ShapesContainer.h"
 
 // Command to compile 
 // g++ -o AreaAbsorber.exe main.cpp -luser32 -lgdi32 -lopengl32 -lgdiplus -lShlwapi -ldwmapi -lstdc++fs -static -std=c++17

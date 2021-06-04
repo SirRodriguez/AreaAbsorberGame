@@ -1,7 +1,7 @@
 #ifndef SHAPEMOVER_H
 #define SHAPEMOVER_H
 
-#include "ShapesContainer.h"
+#include "..\containers\ShapesContainer.h"
 
 class ShapeMover{
 	ShapesContainer* shapesContainer;

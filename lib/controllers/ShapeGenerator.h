@@ -1,8 +1,8 @@
 #ifndef SHAPEGENERATOR_H
 #define SHAPEGENERATOR_H
 
-#include "ShapesContainer.h"
-#include "ScoreContainer.h"
+#include "..\containers\ShapesContainer.h"
+#include "..\containers\ScoreContainer.h"
 
 // likelyHoodOfCircles = 50;
 // likelyHoodOfPowerUps = 500;

@@ -1,12 +1,12 @@
 #ifndef SHAPESCONTAINER
 #define SHAPESCONTAINER
 
-#include "shapes\derivedShapes\Circle.h"
-#include "shapes\derivedShapes\Triangle.h"
-#include "shapes\derivedShapes\Line.h"
-#include "shapes\derivedShapes\Square.h"
-#include "shapes\derivedShapes\BuddyCircle.h"
-#include "utils.h"
+#include "..\shapes\derivedShapes\Circle.h"
+#include "..\shapes\derivedShapes\Triangle.h"
+#include "..\shapes\derivedShapes\Line.h"
+#include "..\shapes\derivedShapes\Square.h"
+#include "..\shapes\derivedShapes\BuddyCircle.h"
+#include "..\utils.h"
 
 class ShapesContainer{
 	olc::PixelGameEngine* pixelGameEngine;

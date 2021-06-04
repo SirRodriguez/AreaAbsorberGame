@@ -1,4 +1,4 @@
-#include "GlobalFlags.h"
+#include "..\GlobalFlags.h"
 
 class InputControls{
 	olc::PixelGameEngine* pixelGameEngine;
