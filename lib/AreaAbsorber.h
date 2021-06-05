@@ -109,7 +109,6 @@ public:
 		setMainMenu();
 
 		// Reset the game field
-		scoreContainer.resetLevelAndScore();
 		shapesContainer.reset();
 
 		// Set speeds

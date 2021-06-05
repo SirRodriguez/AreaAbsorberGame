@@ -6,8 +6,12 @@
 // Cup that points at you and sucks you in
 // Mech suit that will shoot other balls and destroys anything in the way.
 // A power up balloon that will raise you up from all the balls
-// There is a tower that will go over you or your pet and will block all the needles and other balls. still get score.
+// There is a towel that will go over you or your pet and will block all the needles and other balls. still get score.
 // There is a box that traps you for a certain time and the needle can break it open.
+
+// TODO: Important
+// Find what crashes the game!
+// Fix the PowerUpCircles to move and get destroyed when out of bounds
 
 #define OLC_PGE_APPLICATION
 #include "olcPixelGameEngine.h"
@@ -21,7 +25,7 @@ int main(){
 	const int pixel_width = 1;
 	const int pixel_height = 1;
 	const bool full_screen = false;
-	const bool vsync = false;
+	const bool vsync = true;
 	const bool cohesion = false;
 	if(aa.Construct(width, height, pixel_width, pixel_height, full_screen, vsync, cohesion))
 		aa.Start();

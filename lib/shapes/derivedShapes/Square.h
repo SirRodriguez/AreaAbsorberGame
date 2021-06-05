@@ -15,6 +15,7 @@ public:
 	Square(olc::PixelGameEngine& pge, olc::vi2d& pos, int newLength)
 	: Shape(pge, pos), length(newLength){}
 
+	// Drawing ---
 	void draw(const olc::Pixel& color){
 		pixelGameEngine->FillRect(getTopLeftPoint(), olc::vi2d(length, length), color);
 	}
@@ -22,10 +23,18 @@ public:
 		draw(olc::WHITE);
 	}
 
+	// Moving ---
+	void move(int pixels){
+		movePosition(olc::vi2d(0, pixels));
+	}
+	// virtual void move(int pixels) = 0;
+
+	// Lengths ---
 	void setLength(int l){ length = l; }
 	void addLength(int l){ length += l; }
 	int getLength(){ return length; }
 
+	// Points ---
 	olc::vi2d getTopLeftPoint(){ return position + olc::vi2d(-length / 2, -length / 2); }
 	olc::vi2d getTopRightPoint(){ return position + olc::vi2d(length / 2, -length / 2); }
 	olc::vi2d getBotLeftPoint(){ return position + olc::vi2d(-length / 2, length / 2); }

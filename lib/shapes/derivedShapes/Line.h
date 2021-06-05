@@ -17,6 +17,7 @@ public:
 	Line(olc::PixelGameEngine& pge, olc::vi2d& pos, int _dx, int _dy)
 	: Shape(pge, pos), dx(_dx), dy(_dy){}
 
+	// Drawing ---
 	void draw(const olc::Pixel& color){
 		pixelGameEngine->DrawLine(getStartPoint(), getEndPoint(), color);
 	}
@@ -24,6 +25,13 @@ public:
 		draw(olc::WHITE);
 	}
 
+	// Moving ---
+	void move(int pixels){
+		movePosition(olc::vi2d(0, pixels));
+	}
+	// virtual void move(int pixels) = 0;
+
+	// Setting values ---
 	void setdx(int x){ dx = x; }
 	void adddx(int x){ dx += x; }
 	int getdx(){ return dx; }
@@ -32,6 +40,7 @@ public:
 	void adddy(int y){ dy += y; }
 	int getdy(){ return dy; }
 
+	// Getters ---
 	olc::vi2d getStartPoint(){ return position + olc::vi2d(-dx, -dy); }
 	olc::vi2d getEndPoint(){ return position + olc::vi2d(dx, dy); }
 

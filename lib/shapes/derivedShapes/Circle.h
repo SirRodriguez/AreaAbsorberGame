@@ -17,8 +17,9 @@ public:
 	Circle(olc::PixelGameEngine& pge, olc::vi2d& pos)
 	: Shape(pge, pos), radius(0){}
 	Circle(olc::PixelGameEngine& pge, olc::vi2d& pos, int newRadius)
-	: Shape(pge, pos), radius(newRadius) {}
+	: Shape(pge, pos), radius(newRadius){}
 
+	// Drawing ---
 	void draw(const olc::Pixel& color){
 		pixelGameEngine->FillCircle(position, radius, color);
 	}
@@ -26,9 +27,16 @@ public:
 		draw(olc::WHITE);
 	}
 
+	// Size ---
 	void setRadius(int r){ radius = r; }
 	void addRadius(int r){ radius += r; }
 	int getRadius(){ return radius; }
+
+	// Moving
+	void move(int pixels){
+		movePosition(olc::vi2d(0, pixels));
+	}
+	// virtual void move(int pixels) = 0;
 
 	~Circle(){}
 };

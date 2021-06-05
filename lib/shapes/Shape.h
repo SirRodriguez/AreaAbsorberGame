@@ -26,6 +26,8 @@ public:
 	virtual void draw(const olc::Pixel& color) = 0;
 	virtual void clear() = 0;
 
+	virtual void move(int pixels) = 0;
+
 	virtual ~Shape(){}
 };
 

@@ -26,18 +26,19 @@ class ShapeMover{
 	void moveMainCircle(){
 		// Uses user input
 		// Update the position of the circle
-		if(upButton.bHeld){
-			shapesContainer->moveMainCircleUp(MainCircleSpeed);
-		}
-		if(downButton.bHeld){
-			shapesContainer->moveMainCircleDown(MainCircleSpeed);
-		}
-		if(leftButton.bHeld){
-			shapesContainer->moveMainCircleLeft(MainCircleSpeed);
-		}
-		if(rightButton.bHeld){
-			shapesContainer->moveMainCircleRight(MainCircleSpeed);
-		}
+		// if(upButton.bHeld){
+		// 	shapesContainer->moveMainCircleUp(MainCircleSpeed);
+		// }
+		// if(downButton.bHeld){
+		// 	shapesContainer->moveMainCircleDown(MainCircleSpeed);
+		// }
+		// if(leftButton.bHeld){
+		// 	shapesContainer->moveMainCircleLeft(MainCircleSpeed);
+		// }
+		// if(rightButton.bHeld){
+		// 	shapesContainer->moveMainCircleRight(MainCircleSpeed);
+		// }
+		shapesContainer->moveMainCircle(MainCircleSpeed);
 	}
 
 public:
