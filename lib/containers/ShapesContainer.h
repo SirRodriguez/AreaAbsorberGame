@@ -25,18 +25,13 @@ class ShapesContainer{
 	int initialMainCircleSize = 10;
 
 	// Shapes
-	// Circle mainCircle;
 	MainCircle mainCircle;
-	// std::list<Circle> otherCircle;
 	std::list<OtherCircle> otherCircle;
-	// std::list<Triangle> powerUps;
 	std::list<PowerUp> powerUps;
-	// std::list<Line> needles;
 	std::list<Needle> needles;
 	// std::list<Box> trapBoxes;
 
 	// For the buddy shapes power ups
-	// std::list<Square> buddyPowerUps;
 	std::list<BuddyPowerUp> buddyPowerUps;
 	BuddyCircle buddyCircle;
 
@@ -51,7 +46,6 @@ class ShapesContainer{
 		DOWNLEFT,
 		DOWNRIGHT
 	};
-	// std::list<std::pair<direction, Circle>> powerUpCircles;
 	std::list<PowerUpCircle> powerUpCircles;
 
 
@@ -236,33 +230,14 @@ public:
 	// 
 	// Moving Shapes
 	// 
-
-	// void moveMainCircleUp(int pixels){
-	// 	if(mainCircle.belowTopOfScreen())
-	// 		mainCircle.movePosition(olc::vi2d(0, -pixels));
-	// }
-	// void moveMainCircleDown(int pixels){
-	// 	if(mainCircle.aboveBottomOfScreen())
-	// 		mainCircle.movePosition(olc::vi2d(0, pixels));
-	// }
-	// void moveMainCircleLeft(int pixels){
-	// 	if(mainCircle.rightOfLeftOfScreen())
-	// 		mainCircle.movePosition(olc::vi2d(-pixels, 0));
-	// }
-	// void moveMainCircleRight(int pixels){
-	// 	if(mainCircle.leftOfRightOfScreen())
-	// 		mainCircle.movePosition(olc::vi2d(pixels, 0));
-	// }
 	void moveMainCircle(int pixels){
 		mainCircle.move(pixels);
 	}
 
 	void moveCircles(int pixels){
 		for(auto it = otherCircle.begin(); it != otherCircle.end();){
-			// it->movePosition(olc::vi2d(0, pixels));
 			it->move(pixels);
-			// if it reaches the bottom, delete it
-			if(!it->aboveBottomOfScreen()){
+			if(it->outOfBounds()){
 				otherCircle.erase(it++);
 			}else{
 				++it;
@@ -272,10 +247,8 @@ public:
 
 	void movePowerUps(int pixels){
 		for(auto it = powerUps.begin(); it != powerUps.end();){
-			// it->movePosition(olc::vi2d(0, pixels));
 			it->move(pixels);
-			// if it reaches the bottom, delete it
-			if(!it->aboveBottomOfScreen()){
+			if(it->outOfBounds()){
 				powerUps.erase(it++);
 			}else{
 				++it;
@@ -285,86 +258,19 @@ public:
 
 	void movePowerUpCircles(int pixels){
 		for(auto it = powerUpCircles.begin(); it != powerUpCircles.end();){
-			++it;
-			// TODO: Change
-			// switch(it->first){
-			// 	case direction::UP:
-			// 		it->second.movePosition(olc::vi2d(0, -pixels));
-			// 		if(!it->second.belowTopOfScreen()){
-			// 			powerUpCircles.erase(it++);
-			// 		}else{
-			// 			++it;
-			// 		}
-			// 		break;
-			// 	case direction::DOWN:
-			// 		it->second.movePosition(olc::vi2d(0, pixels));
-			// 		if(!it->second.aboveBottomOfScreen()){
-			// 			powerUpCircles.erase(it++);
-			// 		}else{
-			// 			++it;
-			// 		}
-			// 		break;
-			// 	case direction::LEFT:
-			// 		it->second.movePosition(olc::vi2d(-pixels, 0));
-			// 		if(!it->second.rightOfLeftOfScreen()){
-			// 			powerUpCircles.erase(it++);
-			// 		}else{
-			// 			++it;
-			// 		}
-			// 		break;
-			// 	case direction::RIGHT:
-			// 		it->second.movePosition(olc::vi2d(pixels, 0));
-			// 		if(!it->second.leftOfRightOfScreen()){
-			// 			powerUpCircles.erase(it++);
-			// 		}else{
-			// 			++it;
-			// 		}
-			// 		break;
-			// 	case direction::UPRIGHT:
-			// 		it->second.movePosition(olc::vi2d(pixels, -pixels));
-			// 		if(!it->second.leftOfRightOfScreen() || !it->second.belowTopOfScreen()){
-			// 			powerUpCircles.erase(it++);
-			// 		}else{
-			// 			++it;
-			// 		}
-			// 		break;
-			// 	case direction::UPLEFT:
-			// 		it->second.movePosition(olc::vi2d(-pixels, -pixels));
-			// 		if(!it->second.belowTopOfScreen() || !it->second.rightOfLeftOfScreen()){
-			// 			powerUpCircles.erase(it++);
-			// 		}else{
-			// 			++it;
-			// 		}
-			// 		break;
-			// 	case direction::DOWNLEFT:
-			// 		it->second.movePosition(olc::vi2d(-pixels, pixels));
-			// 		if(!it->second.rightOfLeftOfScreen() || !it->second.aboveBottomOfScreen()){
-			// 			powerUpCircles.erase(it++);
-			// 		}else{
-			// 			++it;
-			// 		}
-			// 		break;
-			// 	case direction::DOWNRIGHT:
-			// 		it->second.movePosition(olc::vi2d(pixels, pixels));
-			// 		if(!it->second.aboveBottomOfScreen() || !it->second.leftOfRightOfScreen()){
-			// 			powerUpCircles.erase(it++);
-			// 		}else{
-			// 			++it;
-			// 		}
-			// 		break;
-			// 	default:
-			// 		++it;
-			// 		break;
-			// }
+			it->move(pixels);
+			if(it->outOfBounds()){
+				powerUpCircles.erase(it++);
+			}else{
+				++it;
+			}
 		}
 	}
 
 	void moveNeedles(int pixels){
 		for(auto it = needles.begin(); it != needles.end();){
-			// it->movePosition(olc::vi2d(0, pixels));
 			it->move(pixels);
-			// if it reaches the bottom, delete it
-			if(!it->aboveBottomOfScreen()){
+			if(it->outOfBounds()){
 				needles.erase(it++);
 			}else{
 				++it;
@@ -374,10 +280,8 @@ public:
 
 	void moveBuddyPowerUps(int pixels){
 		for(auto it = buddyPowerUps.begin(); it != buddyPowerUps.end();){
-			// it->movePosition(olc::vi2d(0, pixels));
 			it->move(pixels);
-			// if it reaches the bottom, delete it
-			if(!it->aboveBottomOfScreen()){
+			if(it->outOfBounds()){
 				buddyPowerUps.erase(it++);
 			}else{
 				++it;

@@ -24,7 +24,7 @@ int main(){
 	const int height = 1000;
 	const int pixel_width = 1;
 	const int pixel_height = 1;
-	const bool full_screen = false;
+	const bool full_screen = true;
 	const bool vsync = true;
 	const bool cohesion = false;
 	if(aa.Construct(width, height, pixel_width, pixel_height, full_screen, vsync, cohesion))

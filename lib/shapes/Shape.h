@@ -18,6 +18,12 @@ public:
 	bool aboveBottomOfScreen(){	return position.y < pixelGameEngine->ScreenHeight(); }
 	bool rightOfLeftOfScreen(){	return position.x > 0; }
 	bool leftOfRightOfScreen(){	return position.x < pixelGameEngine->ScreenWidth();	}
+	bool outOfBounds(){
+		return !belowTopOfScreen() ||
+			!aboveBottomOfScreen() ||
+			!rightOfLeftOfScreen() ||
+			!leftOfRightOfScreen();
+	}
 
 	void setPosition(olc::vi2d point){ position = point; }
 	void movePosition(olc::vi2d otherPoint){ position += otherPoint; }
