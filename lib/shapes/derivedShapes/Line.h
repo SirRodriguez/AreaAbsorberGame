@@ -18,17 +18,14 @@ public:
 	: Shape(pge, pos), dx(_dx), dy(_dy){}
 
 	// Drawing ---
-	void draw(const olc::Pixel& color){
+	virtual void draw(const olc::Pixel& color){
 		pixelGameEngine->DrawLine(getStartPoint(), getEndPoint(), color);
 	}
-	void clear(){
+	virtual void clear(){
 		draw(olc::WHITE);
 	}
 
 	// Moving ---
-	// void move(int pixels){
-	// 	movePosition(olc::vi2d(0, pixels));
-	// }
 	virtual void move(int pixels) = 0;
 
 	// Setting values ---

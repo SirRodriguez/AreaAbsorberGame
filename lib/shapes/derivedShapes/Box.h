@@ -13,11 +13,11 @@ public:
 	: Square(pge, pos, newLength){}
 
 	// Drawing ---
-	void draw(const olc::Pixel& color) override{
+	virtual void draw(const olc::Pixel& color) override{
 		pixelGameEngine->DrawRect(getTopLeftPoint(), olc::vi2d(length, length), color);
 	}
 
-	void clear(){
+	virtual void clear(){
 		draw(olc::WHITE);
 	}
 

@@ -38,9 +38,6 @@ public:
 		// }
 		pixelGameEngine->FillCircle(position, radius, color);
 	}
-	void clear() override {
-		draw(olc::WHITE);
-	}
 
 	// Lives
 	bool alive(){ return lives > 0; }

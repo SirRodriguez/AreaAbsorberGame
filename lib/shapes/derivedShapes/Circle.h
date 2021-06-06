@@ -20,10 +20,10 @@ public:
 	: Shape(pge, pos), radius(newRadius){}
 
 	// Drawing ---
-	void draw(const olc::Pixel& color){
+	virtual void draw(const olc::Pixel& color){
 		pixelGameEngine->FillCircle(position, radius, color);
 	}
-	void clear(){
+	virtual void clear(){
 		draw(olc::WHITE);
 	}
 

@@ -45,9 +45,6 @@ public:
 			pixelGameEngine->DrawString(position.x - textScale * (livesStringSize.x / 2), position.y, lives_string, color == olc::WHITE ? olc::WHITE : olc::GREY, textScale);
 		}
 	}
-	void clear() override {
-		draw(olc::WHITE);
-	}	
 
 	// Life ---
 	bool alive(){

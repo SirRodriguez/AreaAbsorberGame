@@ -6,6 +6,21 @@
 #define square(x) ((x)*(x))
 
 // 
+// Circle & Point Collision detection functions
+// 
+bool circlePointCillision(int cx, int cy, int r, int px, int py){
+	return square(cx - px) + square(cy - py) <= square(r);
+}
+
+bool circlePointCillision(olc::vi2d pos, int r, olc::vi2d p){
+	return circlePointCillision(pos.x, pos.y, r, p.x, p.y);
+}
+
+bool circlePointCillision(Circle& c, olc::vi2d p){
+	return circlePointCillision(c.getPosition(), c.getRadius(), p);
+}
+
+// 
 // Circle & Circle Collision detection functions
 // 
 
@@ -26,7 +41,10 @@ bool circleCircleCollision(Circle& c, Circle& c2){
 // 
 
 bool circleLineCollision(int x, int y, int r, int sx, int sy, int ex, int ey){
-	// TODO Check if points arethe same ie sx = ex and sy = ey
+	// Check if points are the same ie sx = ex and sy = ey
+	if(sx == ex && sy == ey){
+		return circlePointCillision(x, y, r, sx, sy);
+	}
 
 	int SEx = ex - sx;
 	int SEy = ey - sy;

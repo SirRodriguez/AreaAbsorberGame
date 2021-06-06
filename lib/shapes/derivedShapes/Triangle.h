@@ -20,18 +20,15 @@ public:
 	: Shape(pge, pos), height(newHeight){}
 
 	// Drawing ---
-	void draw(const olc::Pixel& color){
+	virtual void draw(const olc::Pixel& color){
 		pixelGameEngine->FillTriangle(topPoint(), botLeftPoint(), botRightPoint(), color);
 	}
 
-	void clear(){
+	virtual void clear(){
 		draw(olc::WHITE);
 	}
 
 	// Moving ---
-	// void move(int pixels){
-	// 	movePosition(olc::vi2d(0, pixels));
-	// }
 	virtual void move(int pixels) = 0;
 
 	// Height ---

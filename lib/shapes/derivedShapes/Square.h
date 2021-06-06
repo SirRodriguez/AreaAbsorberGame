@@ -16,17 +16,14 @@ public:
 	: Shape(pge, pos), length(newLength){}
 
 	// Drawing ---
-	void draw(const olc::Pixel& color){
+	virtual void draw(const olc::Pixel& color){
 		pixelGameEngine->FillRect(getTopLeftPoint(), olc::vi2d(length, length), color);
 	}
-	void clear(){
+	virtual void clear(){
 		draw(olc::WHITE);
 	}
 
 	// Moving ---
-	// void move(int pixels){
-	// 	movePosition(olc::vi2d(0, pixels));
-	// }
 	virtual void move(int pixels) = 0;
 
 	// Lengths ---

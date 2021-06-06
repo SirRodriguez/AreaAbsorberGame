@@ -18,7 +18,7 @@ public:
 	bool aboveBottomOfScreen(){	return position.y < pixelGameEngine->ScreenHeight(); }
 	bool rightOfLeftOfScreen(){	return position.x > 0; }
 	bool leftOfRightOfScreen(){	return position.x < pixelGameEngine->ScreenWidth();	}
-	bool outOfBounds(){
+	virtual bool outOfBounds(){
 		return !belowTopOfScreen() ||
 			!aboveBottomOfScreen() ||
 			!rightOfLeftOfScreen() ||
