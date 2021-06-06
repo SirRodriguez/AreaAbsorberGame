@@ -110,6 +110,8 @@ public:
 
 		// Reset the game field
 		shapesContainer.reset();
+		shapesContainer.resetMainCirclePosition();
+		shapesContainer.resetBuddyCircle();
 
 		// Set speeds
 		shapeMover.setOtherCircleSpeed(4);
@@ -266,7 +268,6 @@ public:
 
 		// Called Once per frame
 		if(inMainMenu){
-			// spaceButton = GetKey(olc::Key::SPACE);
 			if(spaceButton.bPressed){
 				Clear(olc::WHITE);
 				shapesContainer.drawMainCircle(mainCircleColor);

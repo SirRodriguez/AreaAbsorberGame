@@ -29,10 +29,10 @@ public:
 	}
 
 	// Moving ---
-	void move(int pixels){
-		movePosition(olc::vi2d(0, pixels));
-	}
-	// virtual void move(int pixels) = 0;
+	// void move(int pixels){
+	// 	movePosition(olc::vi2d(0, pixels));
+	// }
+	virtual void move(int pixels) = 0;
 
 	// Height ---
 	void setHeight(int h){ height = h; }

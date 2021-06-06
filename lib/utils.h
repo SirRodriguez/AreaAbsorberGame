@@ -26,6 +26,8 @@ bool circleCircleCollision(Circle& c, Circle& c2){
 // 
 
 bool circleLineCollision(int x, int y, int r, int sx, int sy, int ex, int ey){
+	// TODO Check if points arethe same ie sx = ex and sy = ey
+
 	int SEx = ex - sx;
 	int SEy = ey - sy;
 

@@ -15,6 +15,10 @@ public:
 	PowerUp(olc::PixelGameEngine& pge, olc::vi2d& pos, int newHeight)
 	: Triangle(pge, pos, newHeight){}
 
+	void move(int pixels){
+		movePosition(olc::vi2d(0, pixels));
+	}
+
 };
 
 #endif

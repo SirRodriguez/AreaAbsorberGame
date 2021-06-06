@@ -22,10 +22,7 @@ public:
 	}
 
 	// Moving ---
-	void move(int pixels){
-		// TODO
-	}
-	// virtual void move(int pixels) = 0;
+	virtual void move(int pixels) = 0;
 };
 
 #endif

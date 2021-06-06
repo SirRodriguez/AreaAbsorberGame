@@ -70,7 +70,7 @@ public:
 
 	void reset(){
 		setMainCircleRadius(initialMainCircleSize);
-		resetMainCirclePosition();
+		// resetMainCirclePosition();
 		deleteAllCircles();
 		deleteAllPowerUpCircles();
 		deleteAllNeedles();
@@ -461,6 +461,10 @@ public:
 	// 
 	// Shape changes
 	// 
+
+	void resetBuddyCircle(){
+		buddyCircle.kill();
+	}
 
 	void resetMainCirclePosition(){
 		mainCircle.setPosition(olc::vi2d(pixelGameEngine->ScreenWidth() / 2, pixelGameEngine->ScreenHeight() / 2));

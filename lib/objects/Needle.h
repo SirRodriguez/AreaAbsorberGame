@@ -13,6 +13,10 @@ public:
 	: Line(pge, pos){}
 	Needle(olc::PixelGameEngine& pge, olc::vi2d& pos, int _dx, int _dy)
 	: Line(pge, pos, _dx, _dy){}
+
+	void move(int pixels){
+		movePosition(olc::vi2d(0, pixels));
+	}
 };
 
 #endif

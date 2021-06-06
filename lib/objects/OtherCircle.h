@@ -14,6 +14,10 @@ public:
 	: Circle(pge, pos){}
 	OtherCircle(olc::PixelGameEngine& pge, olc::vi2d& pos, int newRadius)
 	: Circle(pge, pos, newRadius){}
+
+	void move(int pixels){
+		movePosition(olc::vi2d(0, pixels));
+	}
 };
 
 #endif

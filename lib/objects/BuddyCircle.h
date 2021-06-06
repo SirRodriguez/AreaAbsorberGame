@@ -5,6 +5,8 @@
 #include "..\shapes\derivedShapes\Circle.h"
 
 class BuddyCircle: public Circle{
+	Shape* shapeToFollow;
+
 protected:
 	int lives;
 
@@ -18,15 +20,17 @@ protected:
 
 public:
 	BuddyCircle()
-	: Circle(), lives(0){}
+	: Circle(), lives(0), shapeToFollow(nullptr){}
 	BuddyCircle(olc::PixelGameEngine& pge)
-	: Circle(pge), lives(0){}
+	: Circle(pge), lives(0), shapeToFollow(nullptr){}
 	BuddyCircle(olc::PixelGameEngine& pge, olc::vi2d& pos)
-	: Circle(pge, pos), lives(0){}
+	: Circle(pge, pos), lives(0), shapeToFollow(nullptr){}
 	BuddyCircle(olc::PixelGameEngine& pge, olc::vi2d& pos, int newRadius)
-	: Circle(pge, pos, newRadius), lives(0){}
+	: Circle(pge, pos, newRadius), lives(0), shapeToFollow(nullptr){}
 	BuddyCircle(olc::PixelGameEngine& pge, olc::vi2d& pos, int newRadius, int newLives)
-	: Circle(pge, pos, newRadius), lives(newLives){}
+	: Circle(pge, pos, newRadius), lives(newLives), shapeToFollow(nullptr){}
+	BuddyCircle(olc::PixelGameEngine& pge, Shape& _shapeToFollow, olc::vi2d& pos, int newRadius, int newLives)
+	: Circle(pge, pos, newRadius), shapeToFollow(&_shapeToFollow), lives(newLives){}
 
 	// Drawing ---
 	void draw(const olc::Pixel& color) override {
@@ -51,6 +55,7 @@ public:
 	}
 	void kill(){
 		lives = 0;
+		setRadius(0);
 	}
 	void addLife(int amount){
 		lives += amount;

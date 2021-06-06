@@ -33,10 +33,7 @@ public:
 	int getRadius(){ return radius; }
 
 	// Moving
-	void move(int pixels){
-		movePosition(olc::vi2d(0, pixels));
-	}
-	// virtual void move(int pixels) = 0;
+	virtual void move(int pixels) = 0;
 
 	~Circle(){}
 };

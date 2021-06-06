@@ -24,10 +24,10 @@ public:
 	}
 
 	// Moving ---
-	void move(int pixels){
-		movePosition(olc::vi2d(0, pixels));
-	}
-	// virtual void move(int pixels) = 0;
+	// void move(int pixels){
+	// 	movePosition(olc::vi2d(0, pixels));
+	// }
+	virtual void move(int pixels) = 0;
 
 	// Lengths ---
 	void setLength(int l){ length = l; }

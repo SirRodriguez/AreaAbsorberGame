@@ -12,7 +12,11 @@ public:
 	BuddyPowerUp(olc::PixelGameEngine& pge, olc::vi2d& pos)
 	: Square(pge, pos){}
 	BuddyPowerUp(olc::PixelGameEngine& pge, olc::vi2d& pos, int newLength)
-	: Square(pge, pos){}
+	: Square(pge, pos, newLength){}
+
+	void move(int pixels){
+		movePosition(olc::vi2d(0, pixels));
+	}
 };
 
 #endif
