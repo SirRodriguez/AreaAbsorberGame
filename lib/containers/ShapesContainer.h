@@ -35,17 +35,6 @@ class ShapesContainer{
 	std::list<BuddyPowerUp> buddyPowerUps;
 	BuddyCircle buddyCircle;
 
-	// Direction of where the power up circles will go
-	enum direction {
-		UP,
-		DOWN,
-		LEFT,
-		RIGHT,
-		UPLEFT,
-		UPRIGHT,
-		DOWNLEFT,
-		DOWNRIGHT
-	};
 	std::list<PowerUpCircle> powerUpCircles;
 
 
@@ -62,7 +51,7 @@ public:
 		olc::vi2d mainPos = olc::vi2d(pixelGameEngine->ScreenWidth() / 2, pixelGameEngine->ScreenHeight() / 2);
 		mainCircle = MainCircle(pge, mainPos, initialMainCircleSize);
 
-		buddyCircle = BuddyCircle(pge);
+		buddyCircle = BuddyCircle(pge, mainCircle);
 
 		maxRadius = 50;
 		maxLength = 50;
@@ -290,7 +279,8 @@ public:
 	}
 
 	void moveBuddyCircle(int pixels){
-		buddyCircle.moveToCircle(mainCircle, pixels);
+		// buddyCircle.moveToCircle(mainCircle, pixels);
+		buddyCircle.move(pixels);
 	}
 
 	// void moveTrapBoxes(int pixels){

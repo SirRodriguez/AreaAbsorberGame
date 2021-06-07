@@ -5,7 +5,7 @@
 #include "..\shapes\derivedShapes\Circle.h"
 
 class BuddyCircle: public Circle{
-	Shape* shapeToFollow;
+	MainCircle* shapeToFollow;
 
 protected:
 	int lives;
@@ -23,13 +23,15 @@ public:
 	: Circle(), lives(0), shapeToFollow(nullptr){}
 	BuddyCircle(olc::PixelGameEngine& pge)
 	: Circle(pge), lives(0), shapeToFollow(nullptr){}
+	BuddyCircle(olc::PixelGameEngine& pge, MainCircle& _shapeToFollow)
+	: Circle(pge), lives(0), shapeToFollow(&_shapeToFollow){}
 	BuddyCircle(olc::PixelGameEngine& pge, olc::vi2d& pos)
 	: Circle(pge, pos), lives(0), shapeToFollow(nullptr){}
 	BuddyCircle(olc::PixelGameEngine& pge, olc::vi2d& pos, int newRadius)
 	: Circle(pge, pos, newRadius), lives(0), shapeToFollow(nullptr){}
 	BuddyCircle(olc::PixelGameEngine& pge, olc::vi2d& pos, int newRadius, int newLives)
 	: Circle(pge, pos, newRadius), lives(newLives), shapeToFollow(nullptr){}
-	BuddyCircle(olc::PixelGameEngine& pge, Shape& _shapeToFollow, olc::vi2d& pos, int newRadius, int newLives)
+	BuddyCircle(olc::PixelGameEngine& pge, MainCircle& _shapeToFollow, olc::vi2d& pos, int newRadius, int newLives)
 	: Circle(pge, pos, newRadius), shapeToFollow(&_shapeToFollow), lives(newLives){}
 
 	// Drawing ---
@@ -68,12 +70,10 @@ public:
 	}
 
 	// Moving ---
-	void moveToCircle(Circle& c, int pixels){
-		if(!circleCircleCollision(c, *this))
-			moveToPos(c.getPosition(), pixels);
-	}
 	void move(int pixels){
-		// TODO -- It moved to circle
+		if(!circleCircleCollision(*shapeToFollow, *this)){
+			moveToPos(shapeToFollow->getPosition(), pixels);
+		}
 	}
 
 	// Size ---
