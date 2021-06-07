@@ -16,7 +16,12 @@ public:
 	: Circle(pge, pos, newRadius){}
 
 	void move(int pixels){
+		// Moves down
 		movePosition(olc::vi2d(0, pixels));
+	}
+
+	bool outOfBounds() override {
+		return !aboveBottomOfScreen();
 	}
 };
 

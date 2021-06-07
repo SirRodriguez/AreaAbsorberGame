@@ -15,7 +15,12 @@ public:
 	: Line(pge, pos, _dx, _dy){}
 
 	void move(int pixels){
+		// Moves down
 		movePosition(olc::vi2d(0, pixels));
+	}
+
+	bool outOfBounds() override {
+		return !aboveBottomOfScreen();
 	}
 };
 

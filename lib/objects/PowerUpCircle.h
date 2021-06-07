@@ -90,6 +90,44 @@ public:
 				break;
 		}
 	}
+
+	bool outOfBounds() override {
+		switch(dir){
+			case Direction::UP:
+				return !belowTopOfScreen();
+				
+			case Direction::DOWN:
+				return !aboveBottomOfScreen();
+				
+			case Direction::LEFT:
+				return !rightOfLeftOfScreen();
+				
+			case Direction::RIGHT:
+				return !leftOfRightOfScreen();
+				
+			case Direction::UPRIGHT:
+				return !belowTopOfScreen() ||
+					!leftOfRightOfScreen();
+					
+			case Direction::UPLEFT:
+				return !belowTopOfScreen() ||
+					!rightOfLeftOfScreen();
+					
+			case Direction::DOWNLEFT:
+				return !aboveBottomOfScreen() ||
+					!rightOfLeftOfScreen();
+					
+			case Direction::DOWNRIGHT:
+				return !aboveBottomOfScreen() ||
+					!leftOfRightOfScreen();
+					
+			default:
+				return !belowTopOfScreen() ||
+					!aboveBottomOfScreen() ||
+					!rightOfLeftOfScreen() ||
+					!leftOfRightOfScreen();
+		}
+	}
 };
 
 #endif

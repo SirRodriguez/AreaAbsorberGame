@@ -73,7 +73,7 @@ public:
 			moveToPos(c.getPosition(), pixels);
 	}
 	void move(int pixels){
-		// TODO
+		// TODO -- It moved to circle
 	}
 
 	// Size ---

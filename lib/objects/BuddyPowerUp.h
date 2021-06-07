@@ -15,7 +15,12 @@ public:
 	: Square(pge, pos, newLength){}
 
 	void move(int pixels){
+		// It moves down
 		movePosition(olc::vi2d(0, pixels));
+	}
+
+	bool outOfBounds() override {
+		return !aboveBottomOfScreen();
 	}
 };
 

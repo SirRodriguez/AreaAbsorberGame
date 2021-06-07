@@ -10,7 +10,6 @@
 // There is a box that traps you for a certain time and the needle can break it open.
 
 // TODO: Important
-// Find what crashes the game!
 // Fix the PowerUpCircles to move and get destroyed when out of bounds
 
 #define OLC_PGE_APPLICATION
