@@ -1,12 +1,6 @@
 #ifndef SHAPESCONTAINER
 #define SHAPESCONTAINER
 
-// #include "..\shapes\derivedShapes\Circle.h"
-// #include "..\shapes\derivedShapes\Triangle.h"
-// #include "..\shapes\derivedShapes\Line.h"
-// #include "..\shapes\derivedShapes\Square.h"
-// #include "..\shapes\derivedShapes\BuddyCircle.h"
-
 #include "..\objects\MainCircle.h"
 #include "..\objects\OtherCircle.h"
 #include "..\objects\PowerUp.h"
@@ -15,8 +9,25 @@
 #include "..\objects\BuddyPowerUp.h"
 #include "..\objects\BuddyCircle.h"
 
-// #include "..\shapes\derivedShapes\Box.h"
 #include "..\utils.h"
+
+// Colors
+const olc::Pixel mainCircleColor = olc::BLACK;
+const olc::Pixel otherCircleColor = olc::RED;
+const olc::Pixel powerUpColor = olc::GREEN;
+const olc::Pixel powerUpCircleColor = olc::GREY;
+const olc::Pixel needleColor = olc::BLACK;
+const olc::Pixel buddyPowerUpColor = olc::YELLOW;
+const olc::Pixel buddyCircleColor = olc::DARK_GREY;
+
+// Speeds
+const uint8_t otherCircleSpeed = 4;
+const uint8_t powerUpSpeed = 2;
+const uint8_t powerUpCircleSpeed = 5;
+const uint8_t needleSpeed = 6;
+const uint8_t buddyPowerUpSpeed = 2;
+const uint8_t buddyCircleSpeed = 2;
+const uint8_t mainCircleSpeed = 5;
 
 class ShapesContainer{
 	olc::PixelGameEngine* pixelGameEngine;
@@ -49,9 +60,9 @@ public:
 
 		pixelGameEngine = &pge;
 		olc::vi2d mainPos = olc::vi2d(pixelGameEngine->ScreenWidth() / 2, pixelGameEngine->ScreenHeight() / 2);
-		mainCircle = MainCircle(pge, mainPos, initialMainCircleSize);
+		mainCircle = MainCircle(pge, mainPos, mainCircleSpeed, mainCircleColor, initialMainCircleSize, 0);
 
-		buddyCircle = BuddyCircle(pge, mainCircle);
+		buddyCircle = BuddyCircle(pge, mainCircle, mainPos, buddyCircleSpeed, buddyCircleColor, 0, 0);
 
 		maxRadius = 50;
 		maxLength = 50;
@@ -176,38 +187,38 @@ public:
 	void addCircle(){
 		olc::vi2d loc = olc::vi2d(rand() % pixelGameEngine->ScreenWidth(), 0);
 		int radius = rand() % maxRadius;
-		otherCircle.push_back(OtherCircle(*pixelGameEngine, loc, radius));
+		otherCircle.push_back(OtherCircle(*pixelGameEngine, loc, otherCircleSpeed, otherCircleColor, radius));
 	}
 
 	void addPowerUp(){
 		olc::vi2d loc = olc::vi2d(rand() % pixelGameEngine->ScreenWidth(), 0);
 		int height = 50;
-		powerUps.push_back(PowerUp(*pixelGameEngine, loc, height));
+		powerUps.push_back(PowerUp(*pixelGameEngine, loc, powerUpSpeed, powerUpColor, height));
 	}
 
 	void addPowerUpCircles(){
 		olc::vi2d pos = mainCircle.getPosition();
-		powerUpCircles.push_back(PowerUpCircle(*pixelGameEngine, pos, mainCircle.getRadius(), 0));
-		powerUpCircles.push_back(PowerUpCircle(*pixelGameEngine, pos, mainCircle.getRadius(), 1));
-		powerUpCircles.push_back(PowerUpCircle(*pixelGameEngine, pos, mainCircle.getRadius(), 2));
-		powerUpCircles.push_back(PowerUpCircle(*pixelGameEngine, pos, mainCircle.getRadius(), 3));
-		powerUpCircles.push_back(PowerUpCircle(*pixelGameEngine, pos, mainCircle.getRadius(), 4));
-		powerUpCircles.push_back(PowerUpCircle(*pixelGameEngine, pos, mainCircle.getRadius(), 5));
-		powerUpCircles.push_back(PowerUpCircle(*pixelGameEngine, pos, mainCircle.getRadius(), 6));
-		powerUpCircles.push_back(PowerUpCircle(*pixelGameEngine, pos, mainCircle.getRadius(), 7));
+		powerUpCircles.push_back(PowerUpCircle(*pixelGameEngine, pos, powerUpCircleSpeed, powerUpCircleColor, mainCircle.getRadius(), 0));
+		powerUpCircles.push_back(PowerUpCircle(*pixelGameEngine, pos, powerUpCircleSpeed, powerUpCircleColor, mainCircle.getRadius(), 1));
+		powerUpCircles.push_back(PowerUpCircle(*pixelGameEngine, pos, powerUpCircleSpeed, powerUpCircleColor, mainCircle.getRadius(), 2));
+		powerUpCircles.push_back(PowerUpCircle(*pixelGameEngine, pos, powerUpCircleSpeed, powerUpCircleColor, mainCircle.getRadius(), 3));
+		powerUpCircles.push_back(PowerUpCircle(*pixelGameEngine, pos, powerUpCircleSpeed, powerUpCircleColor, mainCircle.getRadius(), 4));
+		powerUpCircles.push_back(PowerUpCircle(*pixelGameEngine, pos, powerUpCircleSpeed, powerUpCircleColor, mainCircle.getRadius(), 5));
+		powerUpCircles.push_back(PowerUpCircle(*pixelGameEngine, pos, powerUpCircleSpeed, powerUpCircleColor, mainCircle.getRadius(), 6));
+		powerUpCircles.push_back(PowerUpCircle(*pixelGameEngine, pos, powerUpCircleSpeed, powerUpCircleColor, mainCircle.getRadius(), 7));
 	}
 
 	void addNeedle(){
 		olc::vi2d loc = olc::vi2d(rand() % pixelGameEngine->ScreenWidth(), 0);
 		int dx = rand() % maxLength;
 		int dy = rand() % maxLength;
-		needles.push_back(Needle(*pixelGameEngine, loc, dx, dy));
+		needles.push_back(Needle(*pixelGameEngine, loc, needleSpeed, needleColor, dx, dy));
 	}
 
 	void addBuddyPowerUp(){
 		olc::vi2d loc = olc::vi2d(rand() % pixelGameEngine->ScreenWidth(), 0);
 		int length = 40;
-		buddyPowerUps.push_back(BuddyPowerUp(*pixelGameEngine, loc, length));
+		buddyPowerUps.push_back(BuddyPowerUp(*pixelGameEngine, loc, buddyCircleSpeed, buddyPowerUpColor, length));
 	}
 
 	// void addTrapBox(){

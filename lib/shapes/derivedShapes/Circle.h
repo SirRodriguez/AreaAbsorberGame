@@ -16,12 +16,16 @@ public:
 	: Shape(pge), radius(0){}
 	Circle(olc::PixelGameEngine& pge, olc::vi2d& pos)
 	: Shape(pge, pos), radius(0){}
-	Circle(olc::PixelGameEngine& pge, olc::vi2d& pos, int newRadius)
-	: Shape(pge, pos), radius(newRadius){}
+	Circle(olc::PixelGameEngine& pge, olc::vi2d& pos, int _speed)
+	: Shape(pge, pos, _speed), radius(0){}
+	Circle(olc::PixelGameEngine& pge, olc::vi2d& pos, int _speed, const olc::Pixel& _color)
+	: Shape(pge, pos, _speed, _color), radius(0){}
+	Circle(olc::PixelGameEngine& pge, olc::vi2d& pos, int _speed, const olc::Pixel& _color, int newRadius)
+	: Shape(pge, pos, _speed, _color), radius(newRadius){}
 
 	// Drawing ---
-	virtual void draw(const olc::Pixel& color){
-		pixelGameEngine->FillCircle(position, radius, color);
+	virtual void draw(const olc::Pixel& colorToDraw){
+		pixelGameEngine->FillCircle(position, radius, colorToDraw);
 	}
 	virtual void clear(){
 		draw(olc::WHITE);

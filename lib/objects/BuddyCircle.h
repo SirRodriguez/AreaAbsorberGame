@@ -25,26 +25,29 @@ public:
 	: Circle(pge), lives(0), shapeToFollow(nullptr){}
 	BuddyCircle(olc::PixelGameEngine& pge, MainCircle& _shapeToFollow)
 	: Circle(pge), lives(0), shapeToFollow(&_shapeToFollow){}
-	BuddyCircle(olc::PixelGameEngine& pge, olc::vi2d& pos)
-	: Circle(pge, pos), lives(0), shapeToFollow(nullptr){}
-	BuddyCircle(olc::PixelGameEngine& pge, olc::vi2d& pos, int newRadius)
-	: Circle(pge, pos, newRadius), lives(0), shapeToFollow(nullptr){}
-	BuddyCircle(olc::PixelGameEngine& pge, olc::vi2d& pos, int newRadius, int newLives)
-	: Circle(pge, pos, newRadius), lives(newLives), shapeToFollow(nullptr){}
-	BuddyCircle(olc::PixelGameEngine& pge, MainCircle& _shapeToFollow, olc::vi2d& pos, int newRadius, int newLives)
-	: Circle(pge, pos, newRadius), shapeToFollow(&_shapeToFollow), lives(newLives){}
+	BuddyCircle(olc::PixelGameEngine& pge, MainCircle& _shapeToFollow, olc::vi2d& pos)
+	: Circle(pge, pos), lives(0), shapeToFollow(&_shapeToFollow){}
+	BuddyCircle(olc::PixelGameEngine& pge, MainCircle& _shapeToFollow, olc::vi2d& pos, int _speed)
+	: Circle(pge, pos, _speed), lives(0), shapeToFollow(&_shapeToFollow){}
+	BuddyCircle(olc::PixelGameEngine& pge, MainCircle& _shapeToFollow, olc::vi2d& pos, int _speed, const olc::Pixel& _color)
+	: Circle(pge, pos, _speed, _color), lives(0), shapeToFollow(&_shapeToFollow){}
+	BuddyCircle(olc::PixelGameEngine& pge, MainCircle& _shapeToFollow, olc::vi2d& pos, int _speed, const olc::Pixel& _color, int newRadius)
+	: Circle(pge, pos, _speed, _color, newRadius), lives(0), shapeToFollow(&_shapeToFollow){}
+	BuddyCircle(olc::PixelGameEngine& pge, MainCircle& _shapeToFollow, olc::vi2d& pos, int _speed, const olc::Pixel& _color, int newRadius, int newLives)
+	: Circle(pge, pos, _speed, _color, newRadius), lives(newLives), shapeToFollow(&_shapeToFollow){}
+
 
 	// Drawing ---
-	void draw(const olc::Pixel& color) override {
-		if(alive() || color == olc::WHITE){
+	void draw(const olc::Pixel& colorToDraw) override {
+		if(alive() || colorToDraw == olc::WHITE){
 			// Draw the circle
-			pixelGameEngine->FillCircle(position, radius, color);
+			pixelGameEngine->FillCircle(position, radius, colorToDraw);
 
 			// Draw the amount of life
 			int textScale = 2;
 			std::string lives_string = std::to_string(lives);
 			olc::vi2d livesStringSize = pixelGameEngine->GetTextSize(lives_string);
-			pixelGameEngine->DrawString(position.x - textScale * (livesStringSize.x / 2), position.y, lives_string, color == olc::WHITE ? olc::WHITE : olc::GREY, textScale);
+			pixelGameEngine->DrawString(position.x - textScale * (livesStringSize.x / 2), position.y, lives_string, colorToDraw == olc::WHITE ? olc::WHITE : olc::GREY, textScale);
 		}
 	}
 
@@ -70,7 +73,7 @@ public:
 	}
 
 	// Moving ---
-	void move(int pixels){
+	void move(int pixels) override {
 		if(!circleCircleCollision(*shapeToFollow, *this)){
 			moveToPos(shapeToFollow->getPosition(), pixels);
 		}

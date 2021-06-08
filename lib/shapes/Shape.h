@@ -5,14 +5,20 @@ class Shape{
 protected:
 	olc::PixelGameEngine* pixelGameEngine;
 	olc::vi2d position;
+	int speed;
+	olc::Pixel color;
 
 public:
 	Shape()
-	: pixelGameEngine(nullptr), position(olc::vi2d(0,0)){}
+	: pixelGameEngine(nullptr), position(olc::vi2d(0,0)), speed(0), color(olc::WHITE){}
 	Shape(olc::PixelGameEngine& pge)
-	: pixelGameEngine(&pge), position(olc::vi2d(0,0)){}
+	: pixelGameEngine(&pge), position(olc::vi2d(0,0)), speed(0), color(olc::WHITE){}
 	Shape(olc::PixelGameEngine& pge, olc::vi2d& pos)
-	: pixelGameEngine(&pge), position(pos){}
+	: pixelGameEngine(&pge), position(pos), speed(0), color(olc::WHITE){}
+	Shape(olc::PixelGameEngine& pge, olc::vi2d& pos, int _speed)
+	: pixelGameEngine(&pge), position(pos), speed(_speed), color(olc::WHITE){}
+	Shape(olc::PixelGameEngine& pge, olc::vi2d& pos, int _speed, const olc::Pixel& _color)
+	: pixelGameEngine(&pge), position(pos), speed(_speed), color(_color){}
 
 	bool belowTopOfScreen(){ return position.y > 0; }
 	bool aboveBottomOfScreen(){	return position.y < pixelGameEngine->ScreenHeight(); }
@@ -29,7 +35,10 @@ public:
 	void movePosition(olc::vi2d otherPoint){ position += otherPoint; }
 	const olc::vi2d& getPosition(){ return position; }
 
-	virtual void draw(const olc::Pixel& color) = 0;
+	virtual void draw(){
+		draw(color);
+	};
+	virtual void draw(const olc::Pixel& colorToDraw) = 0;
 	virtual void clear() = 0;
 
 	virtual void move(int pixels) = 0;
