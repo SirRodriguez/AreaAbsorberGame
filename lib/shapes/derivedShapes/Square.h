@@ -5,6 +5,10 @@ class Square: public Shape{
 protected:
 	int length;
 
+	virtual void draw(const olc::Pixel& colorToDraw){
+		pixelGameEngine->FillRect(getTopLeftPoint(), olc::vi2d(length, length), colorToDraw);
+	}
+
 public:
 	Square()
 	: Shape(), length(0){}
@@ -19,14 +23,10 @@ public:
 	Square(olc::PixelGameEngine& pge, olc::vi2d& pos, int _speed, const olc::Pixel& _color, int newLength)
 	: Shape(pge, pos, _speed, _color), length(newLength){}
 
-	// Drawing ---
-	virtual void draw(const olc::Pixel& colorToDraw){
-		pixelGameEngine->FillRect(getTopLeftPoint(), olc::vi2d(length, length), colorToDraw);
+	virtual void draw(){
+		draw(color);
 	}
-	virtual void clear(){
-		draw(olc::WHITE);
-	}
-
+	
 	// Moving ---
 	virtual void move(int pixels) = 0;
 

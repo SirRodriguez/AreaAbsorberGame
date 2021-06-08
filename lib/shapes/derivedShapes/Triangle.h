@@ -9,6 +9,11 @@ class Triangle : public Shape{
 protected:
 	int height;
 
+	// Drawing ---
+	virtual void draw(const olc::Pixel& colorToDraw){
+		pixelGameEngine->FillTriangle(topPoint(), botLeftPoint(), botRightPoint(), colorToDraw);
+	}
+
 public:
 	Triangle()
 	: Shape(), height(0){}
@@ -23,14 +28,10 @@ public:
 	Triangle(olc::PixelGameEngine& pge, olc::vi2d& pos, int _speed, const olc::Pixel& _color, int newHeight)
 	: Shape(pge, pos, _speed, _color), height(newHeight){}
 
-	// Drawing ---
-	virtual void draw(const olc::Pixel& colorToDraw){
-		pixelGameEngine->FillTriangle(topPoint(), botLeftPoint(), botRightPoint(), colorToDraw);
+	virtual void draw(){
+		draw(color);
 	}
-	virtual void clear(){
-		draw(olc::WHITE);
-	}
-
+	
 	// Moving ---
 	virtual void move(int pixels) = 0;
 

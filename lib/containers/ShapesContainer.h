@@ -137,46 +137,46 @@ public:
 	}
 
 	void drawMainCircle(const olc::Pixel& color){
-		mainCircle.draw(color);
+		mainCircle.draw();
 	}
 
 	void drawCircles(const olc::Pixel& color){
 		for(auto it = otherCircle.begin(); it != otherCircle.end(); ++it){
-			it->draw(color);
+			it->draw();
 		}
 	}
 
 	void drawPowerUps(const olc::Pixel& color){
 		for(auto it = powerUps.begin(); it != powerUps.end(); ++it){
-			it->draw(color);
+			it->draw();
 		}
 	}
 
 	void drawPowerUpCircles(const olc::Pixel& color){
 		for(auto it = powerUpCircles.begin(); it != powerUpCircles.end(); ++it){
-			it->draw(color);
+			it->draw();
 		}
 	}
 
 	void drawNeedles(const olc::Pixel& color){
 		for(auto it = needles.begin(); it != needles.end(); ++it){
-			it->draw(color);
+			it->draw();
 		}
 	}
 
 	void drawBuddyPowerUps(const olc::Pixel& color){
 		for(auto it = buddyPowerUps.begin(); it != buddyPowerUps.end(); ++it){
-			it->draw(color);
+			it->draw();
 		}
 	}
 
 	void drawBuddyCircle(const olc::Pixel& color){
-		buddyCircle.draw(color);
+		buddyCircle.draw();
 	}
 
 	// void drawTrapBoxes(const olc::Pixel& color){
 	// 	for(auto it = trapBoxes.begin(); it != trapBoxes.end(); ++it){
-	// 		it->draw(color);
+	// 		it->draw();
 	// 	}
 	// }
 

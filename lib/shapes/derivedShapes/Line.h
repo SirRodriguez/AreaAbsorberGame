@@ -7,6 +7,10 @@ class Line : public Shape {
 protected:
 	int dx, dy;
 
+	virtual void draw(const olc::Pixel& colorToDraw){
+		pixelGameEngine->DrawLine(getStartPoint(), getEndPoint(), colorToDraw);
+	}
+
 public:
 	Line()
 	: Shape(), dx(0), dy(0){}
@@ -21,14 +25,10 @@ public:
 	Line(olc::PixelGameEngine& pge, olc::vi2d& pos, int _speed, const olc::Pixel& _color, int _dx, int _dy)
 	: Shape(pge, pos, _speed, _color), dx(_dx), dy(_dy){}
 
-	// Drawing ---
-	virtual void draw(const olc::Pixel& colorToDraw){
-		pixelGameEngine->DrawLine(getStartPoint(), getEndPoint(), colorToDraw);
+	virtual void draw(){
+		draw(color);
 	}
-	virtual void clear(){
-		draw(olc::WHITE);
-	}
-
+	
 	// Moving ---
 	virtual void move(int pixels) = 0;
 

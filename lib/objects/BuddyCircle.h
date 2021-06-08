@@ -18,6 +18,20 @@ protected:
 		moveToCord(pos.x, pos.y, pixels);
 	}
 
+	// Drawing ---
+	void draw(const olc::Pixel& colorToDraw) override {
+		if(alive() || colorToDraw == olc::WHITE){
+			// Draw the circle
+			pixelGameEngine->FillCircle(position, radius, colorToDraw);
+
+			// Draw the amount of life
+			int textScale = 2;
+			std::string lives_string = std::to_string(lives);
+			olc::vi2d livesStringSize = pixelGameEngine->GetTextSize(lives_string);
+			pixelGameEngine->DrawString(position.x - textScale * (livesStringSize.x / 2), position.y, lives_string, colorToDraw == olc::WHITE ? olc::WHITE : olc::GREY, textScale);
+		}
+	}
+
 public:
 	BuddyCircle()
 	: Circle(), lives(0), shapeToFollow(nullptr){}
@@ -36,19 +50,8 @@ public:
 	BuddyCircle(olc::PixelGameEngine& pge, MainCircle& _shapeToFollow, olc::vi2d& pos, int _speed, const olc::Pixel& _color, int newRadius, int newLives)
 	: Circle(pge, pos, _speed, _color, newRadius), lives(newLives), shapeToFollow(&_shapeToFollow){}
 
-
-	// Drawing ---
-	void draw(const olc::Pixel& colorToDraw) override {
-		if(alive() || colorToDraw == olc::WHITE){
-			// Draw the circle
-			pixelGameEngine->FillCircle(position, radius, colorToDraw);
-
-			// Draw the amount of life
-			int textScale = 2;
-			std::string lives_string = std::to_string(lives);
-			olc::vi2d livesStringSize = pixelGameEngine->GetTextSize(lives_string);
-			pixelGameEngine->DrawString(position.x - textScale * (livesStringSize.x / 2), position.y, lives_string, colorToDraw == olc::WHITE ? olc::WHITE : olc::GREY, textScale);
-		}
+	void draw() override {
+		draw(color);
 	}
 
 	// Life ---

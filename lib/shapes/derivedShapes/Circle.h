@@ -9,6 +9,10 @@ class Circle : public Shape{
 protected:
 	int radius;
 
+	virtual void draw(const olc::Pixel& colorToDraw) override {
+		pixelGameEngine->FillCircle(position, radius, colorToDraw);
+	}
+
 public:
 	Circle()
 	: Shape(), radius(0){}
@@ -23,12 +27,8 @@ public:
 	Circle(olc::PixelGameEngine& pge, olc::vi2d& pos, int _speed, const olc::Pixel& _color, int newRadius)
 	: Shape(pge, pos, _speed, _color), radius(newRadius){}
 
-	// Drawing ---
-	virtual void draw(const olc::Pixel& colorToDraw){
-		pixelGameEngine->FillCircle(position, radius, colorToDraw);
-	}
-	virtual void clear(){
-		draw(olc::WHITE);
+	virtual void draw(){
+		draw(color);
 	}
 
 	// Size ---

@@ -8,6 +8,8 @@ protected:
 	int speed;
 	olc::Pixel color;
 
+	virtual void draw(const olc::Pixel& colorToDraw) = 0;
+
 public:
 	Shape()
 	: pixelGameEngine(nullptr), position(olc::vi2d(0,0)), speed(0), color(olc::WHITE){}
@@ -35,11 +37,8 @@ public:
 	void movePosition(olc::vi2d otherPoint){ position += otherPoint; }
 	const olc::vi2d& getPosition(){ return position; }
 
-	virtual void draw(){
-		draw(color);
-	};
-	virtual void draw(const olc::Pixel& colorToDraw) = 0;
-	virtual void clear() = 0;
+	virtual void draw() = 0;
+	void clear(){ draw(olc::WHITE); }
 
 	virtual void move(int pixels) = 0;
 
