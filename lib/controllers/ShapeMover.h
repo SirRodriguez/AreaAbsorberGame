@@ -21,6 +21,7 @@ class ShapeMover{
 		shapesContainer->moveNeedles(needleSpeed);
 		shapesContainer->moveBuddyPowerUps(buddyPowerUpSpeed);
 		shapesContainer->moveBuddyCircle(buddyCircleSpeed);
+		shapesContainer->moveTraps(4);
 	}
 
 	void moveMainCircle(){

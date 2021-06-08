@@ -18,6 +18,7 @@ class ShapeGenerator{
 	int likelyHoodOfPowerUps = 0;
 	int likelyHoodOfNeedles = 0;
 	int likelyHoodOfBuddyPowerUps = 0;
+	int likelyHoodOfTraps = 0;
 
 	bool generateChecker(int likelyHood){
 		int module = likelyHood - (scoreContainer->getLevel() - 1) * likelyHood / 10;
@@ -57,6 +58,11 @@ class ShapeGenerator{
 			shapesContainer->addBuddyPowerUp();
 	}
 
+	void generateTraps(){
+		if(generateChecker(likelyHoodOfTraps))
+			shapesContainer->addTrap();
+	}
+
 public:
 	ShapeGenerator()
 	: shapesContainer(nullptr), scoreContainer(nullptr){
@@ -71,12 +77,14 @@ public:
 	void setLikelyHoodOfPowerUps(int value){ likelyHoodOfPowerUps = value; }
 	void setLikelyHoodOfNeedles(int value){ likelyHoodOfNeedles = value; }
 	void setLikelyHoodOfBuddyPowerUps(int value){ likelyHoodOfBuddyPowerUps = value; }
+	void setLikelyHoodOfTraps(int value){ likelyHoodOfTraps = value; }
 
 	void runShapeGenerationFrame(){
 		generateCircles();
 		generatePowerUps();
 		generateNeedles();
 		generateBuddyPowerUps();
+		generateTraps();
 	}
 };
 

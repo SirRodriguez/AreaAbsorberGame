@@ -47,7 +47,7 @@ public:
 		// Initialize the input controls class
 		inputControls = InputControls(*this);
 		// Initialize the hape container
-		shapesContainer.initialize(*this);
+		shapesContainer = ShapesContainer(*this);
 		// Initialize the scoreContainer
 		scoreContainer = ScoreContainer();
 		// Initialize the shape Generator
@@ -127,6 +127,7 @@ public:
 		shapeGenerator.setLikelyHoodOfPowerUps(500);
 		shapeGenerator.setLikelyHoodOfNeedles(1000);
 		shapeGenerator.setLikelyHoodOfBuddyPowerUps(1000);
+		shapeGenerator.setLikelyHoodOfTraps(500);
 	}
 
 	// Draw score and level
@@ -242,14 +243,7 @@ public:
 	}
 
 	void drawTheScreen(){
-		shapesContainer.drawMainCircle(mainCircleColor);
-		// Draw the shapes
-		shapesContainer.drawCircles(otherCircleColor);
-		shapesContainer.drawPowerUps(powerUpColor);
-		shapesContainer.drawPowerUpCircles(powerUpCircleColors);
-		shapesContainer.drawNeedles(needleColor);
-		shapesContainer.drawBuddyPowerUps(buddyPowerUpColor);
-		shapesContainer.drawBuddyCircle(buddyCircleColor);
+		shapesContainer.drawAllShapes();
 		drawScore();
 	}
 
@@ -270,7 +264,7 @@ public:
 		if(inMainMenu){
 			if(spaceButton.bPressed){
 				Clear(olc::WHITE);
-				shapesContainer.drawMainCircle(mainCircleColor);
+				shapesContainer.drawMainCircle();
 				inMainMenu = false;
 				scoreContainer.resetLevelAndScore();
 			}

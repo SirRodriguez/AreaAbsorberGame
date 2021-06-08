@@ -8,6 +8,7 @@
 #include "..\objects\Needle.h"
 #include "..\objects\BuddyPowerUp.h"
 #include "..\objects\BuddyCircle.h"
+#include "..\objects\Trap.h"
 
 #include "..\utils.h"
 
@@ -19,6 +20,7 @@ const olc::Pixel powerUpCircleColor = olc::GREY;
 const olc::Pixel needleColor = olc::BLACK;
 const olc::Pixel buddyPowerUpColor = olc::YELLOW;
 const olc::Pixel buddyCircleColor = olc::DARK_GREY;
+const olc::Pixel trapColor = olc::BLUE;
 
 // Speeds
 const uint8_t otherCircleSpeed = 4;
@@ -28,11 +30,12 @@ const uint8_t needleSpeed = 6;
 const uint8_t buddyPowerUpSpeed = 2;
 const uint8_t buddyCircleSpeed = 2;
 const uint8_t mainCircleSpeed = 5;
+const uint8_t trapSpeed = 4;
 
 class ShapesContainer{
 	olc::PixelGameEngine* pixelGameEngine;
-	int maxRadius;
-	int maxLength;
+	int maxRadius = 50;
+	int maxLength = 50;
 	int initialMainCircleSize = 10;
 
 	// Shapes
@@ -40,7 +43,7 @@ class ShapesContainer{
 	std::list<OtherCircle> otherCircle;
 	std::list<PowerUp> powerUps;
 	std::list<Needle> needles;
-	// std::list<Box> trapBoxes;
+	std::list<Trap> traps;
 
 	// For the buddy shapes power ups
 	std::list<BuddyPowerUp> buddyPowerUps;
@@ -50,31 +53,31 @@ class ShapesContainer{
 
 
 public:
-	void initialize(olc::PixelGameEngine& pge){
+	ShapesContainer()
+	: pixelGameEngine(nullptr){}
+	ShapesContainer(olc::PixelGameEngine& pge)
+	: pixelGameEngine(&pge){
+		olc::vi2d centerPos = olc::vi2d(pixelGameEngine->ScreenWidth() / 2, pixelGameEngine->ScreenHeight() / 2);
+
+		// Initialize the main circle and buddy circle
+		mainCircle = MainCircle(pge, centerPos, mainCircleSpeed, mainCircleColor, initialMainCircleSize, 0);
+		buddyCircle = BuddyCircle(pge, mainCircle, centerPos, buddyCircleSpeed, buddyCircleColor, 0, 0);
+
+		// Make sure that the lists are cleared
 		otherCircle.clear();
 		powerUps.clear();
 		powerUpCircles.clear();
 		needles.clear();
 		buddyPowerUps.clear();
-		// trapBoxes.clear();
-
-		pixelGameEngine = &pge;
-		olc::vi2d mainPos = olc::vi2d(pixelGameEngine->ScreenWidth() / 2, pixelGameEngine->ScreenHeight() / 2);
-		mainCircle = MainCircle(pge, mainPos, mainCircleSpeed, mainCircleColor, initialMainCircleSize, 0);
-
-		buddyCircle = BuddyCircle(pge, mainCircle, mainPos, buddyCircleSpeed, buddyCircleColor, 0, 0);
-
-		maxRadius = 50;
-		maxLength = 50;
+		traps.clear();
 	}
 
 	void reset(){
 		setMainCircleRadius(initialMainCircleSize);
-		// resetMainCirclePosition();
 		deleteAllCircles();
 		deleteAllPowerUpCircles();
 		deleteAllNeedles();
-		// deleteAllTrapBoxes();
+		deleteAllTraps();
 	}
 
 	// 
@@ -119,11 +122,11 @@ public:
 		buddyCircle.clear();
 	}
 
-	// void hideTrapBoxes(){
-	// 	for(auto it = trapBoxes.begin(); it != trapBoxes.end(); ++it){
-	// 		it->clear();
-	// 	}
-	// }
+	void hideTraps(){
+		for(auto it = traps.begin(); it != traps.end(); ++it){
+			it->clear();
+		}
+	}
 
 	void hideAll(){
 		hideCircles();
@@ -133,52 +136,63 @@ public:
 		hideNeedles();
 		hideBuddyPowerUps();
 		hideBuddyCircle();
-		// hideTrapBoxes();
+		hideTraps();
 	}
 
-	void drawMainCircle(const olc::Pixel& color){
+	void drawMainCircle(){
 		mainCircle.draw();
 	}
 
-	void drawCircles(const olc::Pixel& color){
+	void drawCircles(){
 		for(auto it = otherCircle.begin(); it != otherCircle.end(); ++it){
 			it->draw();
 		}
 	}
 
-	void drawPowerUps(const olc::Pixel& color){
+	void drawPowerUps(){
 		for(auto it = powerUps.begin(); it != powerUps.end(); ++it){
 			it->draw();
 		}
 	}
 
-	void drawPowerUpCircles(const olc::Pixel& color){
+	void drawPowerUpCircles(){
 		for(auto it = powerUpCircles.begin(); it != powerUpCircles.end(); ++it){
 			it->draw();
 		}
 	}
 
-	void drawNeedles(const olc::Pixel& color){
+	void drawNeedles(){
 		for(auto it = needles.begin(); it != needles.end(); ++it){
 			it->draw();
 		}
 	}
 
-	void drawBuddyPowerUps(const olc::Pixel& color){
+	void drawBuddyPowerUps(){
 		for(auto it = buddyPowerUps.begin(); it != buddyPowerUps.end(); ++it){
 			it->draw();
 		}
 	}
 
-	void drawBuddyCircle(const olc::Pixel& color){
+	void drawBuddyCircle(){
 		buddyCircle.draw();
 	}
 
-	// void drawTrapBoxes(const olc::Pixel& color){
-	// 	for(auto it = trapBoxes.begin(); it != trapBoxes.end(); ++it){
-	// 		it->draw();
-	// 	}
-	// }
+	void drawTraps(){
+		for(auto it = traps.begin(); it != traps.end(); ++it){
+			it->draw();
+		}
+	}
+
+	void drawAllShapes(){
+		drawMainCircle();
+		drawCircles();
+		drawPowerUps();
+		drawPowerUpCircles();
+		drawNeedles();
+		drawBuddyPowerUps();
+		drawBuddyCircle();
+		drawTraps();
+	}
 
 	// 
 	// List additions
@@ -221,11 +235,11 @@ public:
 		buddyPowerUps.push_back(BuddyPowerUp(*pixelGameEngine, loc, buddyCircleSpeed, buddyPowerUpColor, length));
 	}
 
-	// void addTrapBox(){
-	// 	olc::vi2d loc = olc::vi2d(rand() % pixelGameEngine->ScreenWidth(), 0);
-	// 	int radius = rand() % maxRadius;
-	// 	trapBoxes.push_back(Circle(*pixelGameEngine, loc, radius));
-	// }
+	void addTrap(){
+		olc::vi2d loc = olc::vi2d(rand() % pixelGameEngine->ScreenWidth(), 0);
+		int length = 40;
+		traps.push_back(Trap(*pixelGameEngine, loc, trapSpeed, trapColor, length));
+	}
 
 	// 
 	// Moving Shapes
@@ -290,13 +304,19 @@ public:
 	}
 
 	void moveBuddyCircle(int pixels){
-		// buddyCircle.moveToCircle(mainCircle, pixels);
 		buddyCircle.move(pixels);
 	}
 
-	// void moveTrapBoxes(int pixels){
-	// 	trapBoxes
-	// }
+	void moveTraps(int pixels){
+		for(auto it = traps.begin(); it != traps.end();){
+			it->move(pixels);
+			if(it->outOfBounds()){
+				traps.erase(it++);
+			}else{
+				++it;
+			}
+		}
+	}
 
 	// 
 	// Deleting Shapes
@@ -324,6 +344,10 @@ public:
 
 	void deleteBuddyCircle(){
 		buddyCircle.kill();
+	}
+
+	void deleteAllTraps(){
+		traps.clear();
 	}
 
 	// 
