@@ -35,12 +35,16 @@ public:
 
 	void setPosition(olc::vi2d point){ position = point; }
 	void movePosition(olc::vi2d otherPoint){ position += otherPoint; }
-	const olc::vi2d& getPosition(){ return position; }
+	const olc::vi2d& getPosition(bool test = false){
+		if(test) 
+			std::cout << "called this get position" << std::endl;
+		return position; 
+	}
 
 	virtual void draw() = 0;
 	void clear(){ draw(olc::WHITE); }
 
-	virtual void move(int pixels) = 0;
+	virtual void move() = 0;
 
 	virtual ~Shape(){}
 };

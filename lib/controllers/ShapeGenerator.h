@@ -14,11 +14,11 @@ class ShapeGenerator{
 	ScoreContainer* scoreContainer;
 
 	// Likelyhood of shapes generated
-	int likelyHoodOfCircles = 0;
-	int likelyHoodOfPowerUps = 0;
-	int likelyHoodOfNeedles = 0;
-	int likelyHoodOfBuddyPowerUps = 0;
-	int likelyHoodOfTraps = 0;
+	int likelyHoodOfCircles = 50;
+	int likelyHoodOfPowerUps = 500;
+	int likelyHoodOfNeedles = 1000;
+	int likelyHoodOfBuddyPowerUps = 1000;
+	int likelyHoodOfTraps = 500;
 
 	bool generateChecker(int likelyHood){
 		int module = likelyHood - (scoreContainer->getLevel() - 1) * likelyHood / 10;
@@ -72,12 +72,6 @@ public:
 	: shapesContainer(&newShapesContainer), scoreContainer(&newScoreContainer){
 		srand(time(0));
 	}
-
-	void setLikelyHoodOfCircles(int value){ likelyHoodOfCircles = value; }
-	void setLikelyHoodOfPowerUps(int value){ likelyHoodOfPowerUps = value; }
-	void setLikelyHoodOfNeedles(int value){ likelyHoodOfNeedles = value; }
-	void setLikelyHoodOfBuddyPowerUps(int value){ likelyHoodOfBuddyPowerUps = value; }
-	void setLikelyHoodOfTraps(int value){ likelyHoodOfTraps = value; }
 
 	void runShapeGenerationFrame(){
 		generateCircles();

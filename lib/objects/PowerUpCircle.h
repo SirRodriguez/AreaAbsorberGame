@@ -65,31 +65,31 @@ public:
 	}
 
 	// moving
-	void move(int pixels) override {
+	void move() override {
 		switch(dir){
 			case Direction::UP:
-				movePosition(olc::vi2d(0, -pixels));
+				movePosition(olc::vi2d(0, -speed));
 				break;
 			case Direction::DOWN:
-				movePosition(olc::vi2d(0, pixels));
+				movePosition(olc::vi2d(0, speed));
 				break;
 			case Direction::LEFT:
-				movePosition(olc::vi2d(-pixels, 0));
+				movePosition(olc::vi2d(-speed, 0));
 				break;
 			case Direction::RIGHT:
-				movePosition(olc::vi2d(pixels, 0));
+				movePosition(olc::vi2d(speed, 0));
 				break;
 			case Direction::UPRIGHT:
-				movePosition(olc::vi2d(pixels, -pixels));
+				movePosition(olc::vi2d(speed, -speed));
 				break;
 			case Direction::UPLEFT:
-				movePosition(olc::vi2d(-pixels, -pixels));
+				movePosition(olc::vi2d(-speed, -speed));
 				break;
 			case Direction::DOWNLEFT:
-				movePosition(olc::vi2d(-pixels, pixels));
+				movePosition(olc::vi2d(-speed, speed));
 				break;
 			case Direction::DOWNRIGHT:
-				movePosition(olc::vi2d(pixels, pixels));
+				movePosition(olc::vi2d(speed, speed));
 				break;
 			default:
 				break;

@@ -19,9 +19,9 @@ public:
 	OtherCircle(olc::PixelGameEngine& pge, olc::vi2d& pos, int _speed, const olc::Pixel& _color, int newRadius)
 	: Circle(pge, pos, _speed, _color, newRadius){}
 
-	void move(int pixels){
+	void move(){
 		// Moves down
-		movePosition(olc::vi2d(0, pixels));
+		movePosition(olc::vi2d(0, speed));
 	}
 
 	bool outOfBounds() override {

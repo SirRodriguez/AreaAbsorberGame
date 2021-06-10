@@ -18,9 +18,9 @@ public:
 	Trap(olc::PixelGameEngine& pge, olc::vi2d& pos, int _speed, const olc::Pixel& _color, int newLength)
 	: Box(pge, pos, _speed, _color, newLength){}
 
-	void move(int pixels){
+	void move(){
 		// Moves down
-		movePosition(olc::vi2d(0, pixels));
+		movePosition(olc::vi2d(0, speed));
 	}
 
 	bool outOfBounds() override {

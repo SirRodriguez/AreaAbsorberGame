@@ -51,18 +51,18 @@ public:
 	bool alive(){ return lives > 0; }
 
 	// Movement
-	void move(int pixels) override {
+	void move() override {
 		if(upButton.bHeld && belowTopOfScreen()){
-			moveUp(pixels);
+			moveUp(speed);
 		}
 		if(downButton.bHeld && aboveBottomOfScreen()){
-			moveDown(pixels);
+			moveDown(speed);
 		}
 		if(leftButton.bHeld && rightOfLeftOfScreen()){
-			moveLeft(pixels);
+			moveLeft(speed);
 		}
 		if(rightButton.bHeld && leftOfRightOfScreen()){
-			moveRight(pixels);
+			moveRight(speed);
 		}
 	}
 

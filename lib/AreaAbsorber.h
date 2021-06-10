@@ -5,7 +5,6 @@
 
 #include "controllers\InputControls.h"
 #include "controllers\ShapeGenerator.h"
-#include "controllers\ShapeMover.h"
 
 #include "containers\ScoreContainer.h"
 #include "containers\ShapesContainer.h"
@@ -21,8 +20,7 @@ class AreaAbsorber : public olc::PixelGameEngine {
 
 	// Text
 	const int textScale = 4;
-	// Mover
-	ShapeMover shapeMover;
+	// Shape generator
 	ShapeGenerator shapeGenerator;
 	// Colors
 	const olc::Pixel mainCircleColor = olc::BLACK;
@@ -52,8 +50,6 @@ public:
 		scoreContainer = ScoreContainer();
 		// Initialize the shape Generator
 		shapeGenerator = ShapeGenerator(shapesContainer, scoreContainer);
-		// Initialize the shape mover
-		shapeMover = ShapeMover(shapesContainer);
 	}
 
 	void setMainMenu(){
@@ -112,22 +108,6 @@ public:
 		shapesContainer.reset();
 		shapesContainer.resetMainCirclePosition();
 		shapesContainer.resetBuddyCircle();
-
-		// Set speeds
-		shapeMover.setOtherCircleSpeed(4);
-		shapeMover.setPowerUpSpeed(2);
-		shapeMover.setPowerUpCircleSpeed(5);
-		shapeMover.setNeedleSpeed(6);
-		shapeMover.setBuddyPowerUpSpeed(2);
-		shapeMover.setBuddyCircleSpeed(2);
-		shapeMover.setMainCircleSpeed(5);
-
-		// Set LikelyHood
-		shapeGenerator.setLikelyHoodOfCircles(50);
-		shapeGenerator.setLikelyHoodOfPowerUps(500);
-		shapeGenerator.setLikelyHoodOfNeedles(1000);
-		shapeGenerator.setLikelyHoodOfBuddyPowerUps(1000);
-		shapeGenerator.setLikelyHoodOfTraps(500);
 	}
 
 	// Draw score and level
@@ -277,7 +257,7 @@ public:
 			shapeGenerator.runShapeGenerationFrame();
 
 			// Move the shapes
-			shapeMover.runMoveShapesFrame();
+			shapesContainer.moveAllShapes();
 			
 			// Collision detection
 			bool fail = checkCollision();

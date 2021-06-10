@@ -51,7 +51,6 @@ class ShapesContainer{
 
 	std::list<PowerUpCircle> powerUpCircles;
 
-
 public:
 	ShapesContainer()
 	: pixelGameEngine(nullptr){}
@@ -61,7 +60,7 @@ public:
 
 		// Initialize the main circle and buddy circle
 		mainCircle = MainCircle(pge, centerPos, mainCircleSpeed, mainCircleColor, initialMainCircleSize, 0);
-		buddyCircle = BuddyCircle(pge, mainCircle, centerPos, buddyCircleSpeed, buddyCircleColor, 0, 0);
+		buddyCircle = BuddyCircle(pge, centerPos, buddyCircleSpeed, buddyCircleColor, 0, 0);
 
 		// Make sure that the lists are cleared
 		otherCircle.clear();
@@ -244,13 +243,13 @@ public:
 	// 
 	// Moving Shapes
 	// 
-	void moveMainCircle(int pixels){
-		mainCircle.move(pixels);
+	void moveMainCircle(){
+		mainCircle.move();
 	}
 
-	void moveCircles(int pixels){
+	void moveCircles(){
 		for(auto it = otherCircle.begin(); it != otherCircle.end();){
-			it->move(pixels);
+			it->move();
 			if(it->outOfBounds()){
 				otherCircle.erase(it++);
 			}else{
@@ -259,9 +258,9 @@ public:
 		}
 	}
 
-	void movePowerUps(int pixels){
+	void movePowerUps(){
 		for(auto it = powerUps.begin(); it != powerUps.end();){
-			it->move(pixels);
+			it->move();
 			if(it->outOfBounds()){
 				powerUps.erase(it++);
 			}else{
@@ -270,9 +269,9 @@ public:
 		}
 	}
 
-	void movePowerUpCircles(int pixels){
+	void movePowerUpCircles(){
 		for(auto it = powerUpCircles.begin(); it != powerUpCircles.end();){
-			it->move(pixels);
+			it->move();
 			if(it->outOfBounds()){
 				powerUpCircles.erase(it++);
 			}else{
@@ -281,9 +280,9 @@ public:
 		}
 	}
 
-	void moveNeedles(int pixels){
+	void moveNeedles(){
 		for(auto it = needles.begin(); it != needles.end();){
-			it->move(pixels);
+			it->move();
 			if(it->outOfBounds()){
 				needles.erase(it++);
 			}else{
@@ -292,9 +291,9 @@ public:
 		}
 	}
 
-	void moveBuddyPowerUps(int pixels){
+	void moveBuddyPowerUps(){
 		for(auto it = buddyPowerUps.begin(); it != buddyPowerUps.end();){
-			it->move(pixels);
+			it->move();
 			if(it->outOfBounds()){
 				buddyPowerUps.erase(it++);
 			}else{
@@ -303,19 +302,30 @@ public:
 		}
 	}
 
-	void moveBuddyCircle(int pixels){
-		buddyCircle.move(pixels);
+	void moveBuddyCircle(){
+		buddyCircle.move(mainCircle);
 	}
 
-	void moveTraps(int pixels){
+	void moveTraps(){
 		for(auto it = traps.begin(); it != traps.end();){
-			it->move(pixels);
+			it->move();
 			if(it->outOfBounds()){
 				traps.erase(it++);
 			}else{
 				++it;
 			}
 		}
+	}
+
+	void moveAllShapes(){
+		moveMainCircle();
+		moveCircles();
+		movePowerUps();
+		movePowerUpCircles();
+		moveNeedles();
+		moveBuddyPowerUps();
+		moveBuddyCircle();
+		moveTraps();
 	}
 
 	// 

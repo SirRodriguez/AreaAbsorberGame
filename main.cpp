@@ -9,7 +9,8 @@
 // There is a towel that will go over you or your pet and will block all the needles and other balls. still get score.
 // There is a box that traps you for a certain time and the needle can break it open.
 
-// TODO: Fix the color problem in the shapes
+// TODO: Fix the move functions in the shapes to not have the variable pixels
+// Also buddy circle does not move
 
 #define OLC_PGE_APPLICATION
 #include "olcPixelGameEngine.h"

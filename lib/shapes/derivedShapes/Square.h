@@ -28,7 +28,7 @@ public:
 	}
 	
 	// Moving ---
-	virtual void move(int pixels) = 0;
+	virtual void move() = 0;
 
 	// Lengths ---
 	void setLength(int l){ length = l; }

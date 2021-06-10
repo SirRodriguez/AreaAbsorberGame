@@ -33,7 +33,7 @@ public:
 	}
 	
 	// Moving ---
-	virtual void move(int pixels) = 0;
+	virtual void move() = 0;
 
 	// Height ---
 	void setHeight(int h){ height = h; }

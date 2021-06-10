@@ -18,9 +18,9 @@ public:
 	Needle(olc::PixelGameEngine& pge, olc::vi2d& pos, int _speed, const olc::Pixel& _color, int _dx, int _dy)
 	: Line(pge, pos, _speed, _color, _dx, _dy){}
 
-	void move(int pixels){
+	void move(){
 		// Moves down
-		movePosition(olc::vi2d(0, pixels));
+		movePosition(olc::vi2d(0, speed));
 	}
 
 	bool outOfBounds() override {
