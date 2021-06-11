@@ -17,7 +17,7 @@ protected:
 	}
 
 	// Drawing ---
-	void draw(const olc::Pixel& colorToDraw) override {
+	void drawWithColor(const olc::Pixel& colorToDraw) override {
 		if(alive() || colorToDraw == olc::WHITE){
 			// Draw the circle
 			pixelGameEngine->FillCircle(position, radius, colorToDraw);
@@ -45,10 +45,6 @@ public:
 	: Circle(pge, pos, _speed, _color, newRadius), lives(0){}
 	BuddyCircle(olc::PixelGameEngine& pge, olc::vi2d& pos, int _speed, const olc::Pixel& _color, int newRadius, int newLives)
 	: Circle(pge, pos, _speed, _color, newRadius), lives(newLives){}
-
-	void draw() override {
-		draw(color);
-	}
 
 	// Life ---
 	bool alive(){
@@ -81,7 +77,9 @@ public:
 	}
 
 	void move() override {
-		// Do nothing. Need a shape to follow
+		// Move to center. Need a shape to follow.
+		olc::vi2d center = olc::vi2d(pixelGameEngine->ScreenWidth() / 2, pixelGameEngine->ScreenHeight() / 2);
+		moveToPos(center, speed);
 	}
 
 	// Size ---

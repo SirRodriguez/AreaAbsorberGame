@@ -13,7 +13,7 @@ protected:
 	void moveRight(int pixels){ movePosition(olc::vi2d(pixels, 0)); }
 
 	// Drawing
-	void draw(const olc::Pixel& colorToDraw) override {
+	void drawWithColor(const olc::Pixel& colorToDraw) override {
 		// if(alive() || colorToDraw == olc::WHITE){
 		// 	// Draw the circle
 		// 	pixelGameEngine->FillCircle(position, radius, colorToDraw);
@@ -42,10 +42,6 @@ public:
 	: Circle(pge, pos, _speed, _color, newRadius), lives(0){}
 	MainCircle(olc::PixelGameEngine& pge, olc::vi2d& pos, int _speed, const olc::Pixel& _color, int newRadius, int newLives)
 	: Circle(pge, pos, _speed, _color, newRadius), lives(newLives){}
-
-	void draw() override {
-		draw(color);
-	}
 
 	// Lives
 	bool alive(){ return lives > 0; }

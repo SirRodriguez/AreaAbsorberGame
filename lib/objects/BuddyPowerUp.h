@@ -18,7 +18,7 @@ public:
 	BuddyPowerUp(olc::PixelGameEngine& pge, olc::vi2d& pos, int _speed, const olc::Pixel& _color, int newLength)
 	: Square(pge, pos, _speed, _color, newLength){}
 
-	void move(){
+	void move() override {
 		// It moves down
 		movePosition(olc::vi2d(0, speed));
 	}

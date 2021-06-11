@@ -7,7 +7,7 @@ class Line : public Shape {
 protected:
 	int dx, dy;
 
-	virtual void draw(const olc::Pixel& colorToDraw){
+	virtual void drawWithColor(const olc::Pixel& colorToDraw) override {
 		pixelGameEngine->DrawLine(getStartPoint(), getEndPoint(), colorToDraw);
 	}
 
@@ -25,10 +25,6 @@ public:
 	Line(olc::PixelGameEngine& pge, olc::vi2d& pos, int _speed, const olc::Pixel& _color, int _dx, int _dy)
 	: Shape(pge, pos, _speed, _color), dx(_dx), dy(_dy){}
 
-	virtual void draw(){
-		draw(color);
-	}
-	
 	// Moving ---
 	virtual void move() = 0;
 

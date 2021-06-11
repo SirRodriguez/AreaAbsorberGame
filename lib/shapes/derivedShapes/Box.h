@@ -3,7 +3,7 @@
 
 class Box: public Square{
 protected:
-	virtual void draw(const olc::Pixel& colorToDraw) override{
+	virtual void drawWithColor(const olc::Pixel& colorToDraw) override{
 		pixelGameEngine->DrawRect(getTopLeftPoint(), olc::vi2d(length, length), colorToDraw);
 	}
 
@@ -21,10 +21,6 @@ public:
 	Box(olc::PixelGameEngine& pge, olc::vi2d& pos, int _speed, const olc::Pixel& _color, int newLength)
 	: Square(pge, pos, _speed, _color, newLength){}
 
-	virtual void draw(){
-		draw(color);
-	}
-	
 	// Moving ---
 	virtual void move() = 0;
 };

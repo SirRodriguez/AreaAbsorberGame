@@ -493,6 +493,18 @@ public:
 		return 0;
 	}
 
+	int checkCollisionForTraps(){
+		for(auto it = traps.begin(); it != traps.end(); ++it){
+			// Check collision with main circle
+			if(circleSquareCollision(mainCircle, *it)){
+				traps.erase(it);
+				return -1;
+			}
+		}
+
+		return 0;
+	}
+
 	// 
 	// Shape changes
 	// 

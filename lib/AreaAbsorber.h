@@ -191,7 +191,7 @@ public:
 
 		// Power up circle collision detection for other circles
 		int powerCircleCollideNumber = shapesContainer.checkCollisionForPowerUpCircles();
-		if(powerCircleCollideNumber == 0){
+		if(powerCircleCollideNumber > 0){
 			// Make the circle bigger and add to the score
 			shapesContainer.growMainCircle(powerCircleCollideNumber / 2);
 			scoreContainer.addToScore(powerCircleCollideNumber);
@@ -217,6 +217,12 @@ public:
 			shapesContainer.subtractLifeToBuddyCircle(1);
 		}else if(buddyCircleCollideNumber < 0){
 			shapesContainer.subtractLifeToBuddyCircle(3);
+		}
+
+		// Check for Trap Collision
+		int trapCollideNumber = shapesContainer.checkCollisionForTraps();
+		if(trapCollideNumber == -1){
+			// DO somethings
 		}
 
 		return collideNumber == -1 || needleCollideNumber == -1;

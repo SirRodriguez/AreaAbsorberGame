@@ -10,7 +10,7 @@ protected:
 	int height;
 
 	// Drawing ---
-	virtual void draw(const olc::Pixel& colorToDraw){
+	virtual void drawWithColor(const olc::Pixel& colorToDraw) override {
 		pixelGameEngine->FillTriangle(topPoint(), botLeftPoint(), botRightPoint(), colorToDraw);
 	}
 
@@ -27,10 +27,6 @@ public:
 	: Shape(pge, pos, _speed, _color), height(0){}
 	Triangle(olc::PixelGameEngine& pge, olc::vi2d& pos, int _speed, const olc::Pixel& _color, int newHeight)
 	: Shape(pge, pos, _speed, _color), height(newHeight){}
-
-	virtual void draw(){
-		draw(color);
-	}
 	
 	// Moving ---
 	virtual void move() = 0;

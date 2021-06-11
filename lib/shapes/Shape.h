@@ -8,7 +8,7 @@ protected:
 	int speed;
 	olc::Pixel color;
 
-	virtual void draw(const olc::Pixel& colorToDraw) = 0;
+	virtual void drawWithColor(const olc::Pixel& colorToDraw) = 0;
 
 public:
 	Shape()
@@ -41,8 +41,8 @@ public:
 		return position; 
 	}
 
-	virtual void draw() = 0;
-	void clear(){ draw(olc::WHITE); }
+	void draw(){ drawWithColor(color); }
+	void clear(){ drawWithColor(olc::WHITE); }
 
 	virtual void move() = 0;
 

@@ -19,7 +19,7 @@ public:
 	PowerUp(olc::PixelGameEngine& pge, olc::vi2d& pos, int _speed, const olc::Pixel& _color, int newHeight)
 	: Triangle(pge, pos, _speed, _color, newHeight){}
 
-	void move(){
+	void move() override {
 		// Moves down
 		movePosition(olc::vi2d(0, speed));
 	}
