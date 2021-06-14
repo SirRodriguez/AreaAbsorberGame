@@ -1,7 +1,7 @@
 #ifndef SHAPESCONTAINER
 #define SHAPESCONTAINER
 
-#include "..\objects\MainCircle.h"
+#include "..\objects\mainCircle\MainCircle.h"
 #include "..\objects\OtherCircle.h"
 #include "..\objects\PowerUp.h"
 #include "..\objects\PowerUpCircle.h"
@@ -74,6 +74,8 @@ public:
 	void reset(){
 		setMainCircleRadius(initialMainCircleSize);
 		deleteAllCircles();
+		deleteAllPowerUps();
+		deleteAllBuddyPowerUps();
 		deleteAllPowerUpCircles();
 		deleteAllNeedles();
 		deleteAllTraps();
@@ -493,10 +495,14 @@ public:
 		return 0;
 	}
 
+	// Return 0 for no collisions
+	// Return -1 for collision
 	int checkCollisionForTraps(){
 		for(auto it = traps.begin(); it != traps.end(); ++it){
 			// Check collision with main circle
 			if(circleSquareCollision(mainCircle, *it)){
+				// Activate trap for main circle
+				mainCircle.activateTrap();
 				traps.erase(it);
 				return -1;
 			}

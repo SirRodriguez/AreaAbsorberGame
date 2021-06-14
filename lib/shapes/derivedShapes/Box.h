@@ -1,6 +1,8 @@
 #ifndef BOX_H
 #define BOX_H
 
+#include "Square.h"
+
 class Box: public Square{
 protected:
 	virtual void drawWithColor(const olc::Pixel& colorToDraw) override{

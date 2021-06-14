@@ -22,6 +22,7 @@ public:
 	Shape(olc::PixelGameEngine& pge, olc::vi2d& pos, int _speed, const olc::Pixel& _color)
 	: pixelGameEngine(&pge), position(pos), speed(_speed), color(_color){}
 
+	// Out of bounds
 	bool belowTopOfScreen(){ return position.y > 0; }
 	bool aboveBottomOfScreen(){	return position.y < pixelGameEngine->ScreenHeight(); }
 	bool rightOfLeftOfScreen(){	return position.x > 0; }
@@ -33,17 +34,16 @@ public:
 			!leftOfRightOfScreen();
 	}
 
+	// Position
 	void setPosition(olc::vi2d point){ position = point; }
 	void movePosition(olc::vi2d otherPoint){ position += otherPoint; }
-	const olc::vi2d& getPosition(bool test = false){
-		if(test) 
-			std::cout << "called this get position" << std::endl;
-		return position; 
-	}
+	const olc::vi2d& getPosition(){ return position; }
 
+	// Drawing
 	void draw(){ drawWithColor(color); }
-	void clear(){ drawWithColor(olc::WHITE); }
+	virtual void clear(){ drawWithColor(olc::WHITE); }
 
+	// Moving
 	virtual void move() = 0;
 
 	virtual ~Shape(){}

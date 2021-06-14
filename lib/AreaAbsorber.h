@@ -221,9 +221,6 @@ public:
 
 		// Check for Trap Collision
 		int trapCollideNumber = shapesContainer.checkCollisionForTraps();
-		if(trapCollideNumber == -1){
-			// DO somethings
-		}
 
 		return collideNumber == -1 || needleCollideNumber == -1;
 	}
