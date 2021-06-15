@@ -22,15 +22,6 @@ protected:
 public:
 	PowerUpCircle()
 	: Circle(){}
-	PowerUpCircle(olc::PixelGameEngine& pge)
-	: Circle(pge){}
-	PowerUpCircle(olc::PixelGameEngine& pge, olc::vi2d& pos)
-	: Circle(pge, pos){}
-	PowerUpCircle(olc::PixelGameEngine& pge, olc::vi2d& pos, int _speed)
-	: Circle(pge, pos, _speed){}
-	PowerUpCircle(olc::PixelGameEngine& pge, olc::vi2d& pos, int _speed, const olc::Pixel& _color)
-	: Circle(pge, pos, _speed, _color){}
-
 	PowerUpCircle(olc::PixelGameEngine& pge, olc::vi2d& pos, int _speed, const olc::Pixel& _color, int newRadius, int directionCode)
 	: Circle(pge, pos, _speed, _color, newRadius){
 		switch(directionCode){

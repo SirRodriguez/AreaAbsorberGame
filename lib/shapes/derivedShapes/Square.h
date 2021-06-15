@@ -12,14 +12,6 @@ protected:
 public:
 	Square()
 	: Shape(), length(0){}
-	Square(olc::PixelGameEngine& pge)
-	: Shape(pge), length(0){}
-	Square(olc::PixelGameEngine& pge, olc::vi2d& pos)
-	: Shape(pge, pos), length(0){}
-	Square(olc::PixelGameEngine& pge, olc::vi2d& pos, int _speed)
-	: Shape(pge, pos, _speed), length(0){}
-	Square(olc::PixelGameEngine& pge, olc::vi2d& pos, int _speed, const olc::Pixel& _color)
-	: Shape(pge, pos, _speed, _color), length(0){}
 	Square(olc::PixelGameEngine& pge, olc::vi2d& pos, int _speed, const olc::Pixel& _color, int newLength)
 	: Shape(pge, pos, _speed, _color), length(newLength){}
 	

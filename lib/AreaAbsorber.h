@@ -20,17 +20,9 @@ class AreaAbsorber : public olc::PixelGameEngine {
 
 	// Text
 	const int textScale = 4;
+	
 	// Shape generator
 	ShapeGenerator shapeGenerator;
-	// Colors
-	const olc::Pixel mainCircleColor = olc::BLACK;
-	const olc::Pixel otherCircleColor = olc::RED;
-	const olc::Pixel powerUpColor = olc::GREEN;
-	const olc::Pixel powerUpCircleColors = olc::GREY;
-	const olc::Pixel needleColor = olc::BLACK;
-	const olc::Pixel buddyPowerUpColor = olc::YELLOW;
-	const olc::Pixel buddyCircleColor = olc::DARK_GREY;
-
 
 	// Other shapes containers
 	ShapesContainer shapesContainer;

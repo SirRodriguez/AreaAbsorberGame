@@ -17,14 +17,6 @@ protected:
 public:
 	Triangle()
 	: Shape(), height(0){}
-	Triangle(olc::PixelGameEngine& pge)
-	: Shape(pge), height(0){}
-	Triangle(olc::PixelGameEngine& pge, olc::vi2d& pos)
-	: Shape(pge, pos), height(0){}
-	Triangle(olc::PixelGameEngine& pge, olc::vi2d& pos, int _speed)
-	: Shape(pge, pos, _speed), height(0){}
-	Triangle(olc::PixelGameEngine& pge, olc::vi2d& pos, int _speed, const olc::Pixel& _color)
-	: Shape(pge, pos, _speed, _color), height(0){}
 	Triangle(olc::PixelGameEngine& pge, olc::vi2d& pos, int _speed, const olc::Pixel& _color, int newHeight)
 	: Shape(pge, pos, _speed, _color), height(newHeight){}
 	

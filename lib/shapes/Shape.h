@@ -13,12 +13,6 @@ protected:
 public:
 	Shape()
 	: pixelGameEngine(nullptr), position(olc::vi2d(0,0)), speed(0), color(olc::WHITE){}
-	Shape(olc::PixelGameEngine& pge)
-	: pixelGameEngine(&pge), position(olc::vi2d(0,0)), speed(0), color(olc::WHITE){}
-	Shape(olc::PixelGameEngine& pge, olc::vi2d& pos)
-	: pixelGameEngine(&pge), position(pos), speed(0), color(olc::WHITE){}
-	Shape(olc::PixelGameEngine& pge, olc::vi2d& pos, int _speed)
-	: pixelGameEngine(&pge), position(pos), speed(_speed), color(olc::WHITE){}
 	Shape(olc::PixelGameEngine& pge, olc::vi2d& pos, int _speed, const olc::Pixel& _color)
 	: pixelGameEngine(&pge), position(pos), speed(_speed), color(_color){}
 

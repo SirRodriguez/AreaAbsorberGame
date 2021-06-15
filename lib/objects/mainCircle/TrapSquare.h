@@ -18,14 +18,6 @@ protected:
 public:
 	TrapSquare()
 	: Box(), lifeTimeInFrames(0){}
-	TrapSquare(olc::PixelGameEngine& pge)
-	: Box(pge), lifeTimeInFrames(0){}
-	TrapSquare(olc::PixelGameEngine& pge, olc::vi2d& pos)
-	: Box(pge, pos), lifeTimeInFrames(0){}
-	TrapSquare(olc::PixelGameEngine& pge, olc::vi2d& pos, int _speed)
-	: Box(pge, pos, _speed), lifeTimeInFrames(0){}
-	TrapSquare(olc::PixelGameEngine& pge, olc::vi2d& pos, int _speed, const olc::Pixel& _color)
-	: Box(pge, pos, _speed, _color), lifeTimeInFrames(0){}
 	TrapSquare(olc::PixelGameEngine& pge, olc::vi2d& pos, int _speed, const olc::Pixel& _color, int newLength)
 	: Box(pge, pos, _speed, _color, newLength), lifeTimeInFrames(0){}
 

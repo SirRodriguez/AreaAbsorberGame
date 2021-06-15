@@ -33,16 +33,6 @@ protected:
 public:
 	BuddyCircle()
 	: Circle(), lives(0){}
-	BuddyCircle(olc::PixelGameEngine& pge)
-	: Circle(pge), lives(0){}
-	BuddyCircle(olc::PixelGameEngine& pge, olc::vi2d& pos)
-	: Circle(pge, pos), lives(0){}
-	BuddyCircle(olc::PixelGameEngine& pge, olc::vi2d& pos, int _speed)
-	: Circle(pge, pos, _speed), lives(0){}
-	BuddyCircle(olc::PixelGameEngine& pge, olc::vi2d& pos, int _speed, const olc::Pixel& _color)
-	: Circle(pge, pos, _speed, _color), lives(0){}
-	BuddyCircle(olc::PixelGameEngine& pge, olc::vi2d& pos, int _speed, const olc::Pixel& _color, int newRadius)
-	: Circle(pge, pos, _speed, _color, newRadius), lives(0){}
 	BuddyCircle(olc::PixelGameEngine& pge, olc::vi2d& pos, int _speed, const olc::Pixel& _color, int newRadius, int newLives)
 	: Circle(pge, pos, _speed, _color, newRadius), lives(newLives){}
 

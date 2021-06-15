@@ -16,14 +16,6 @@ protected:
 public:
 	Circle()
 	: Shape(), radius(0){}
-	Circle(olc::PixelGameEngine& pge)
-	: Shape(pge), radius(0){}
-	Circle(olc::PixelGameEngine& pge, olc::vi2d& pos)
-	: Shape(pge, pos), radius(0){}
-	Circle(olc::PixelGameEngine& pge, olc::vi2d& pos, int _speed)
-	: Shape(pge, pos, _speed), radius(0){}
-	Circle(olc::PixelGameEngine& pge, olc::vi2d& pos, int _speed, const olc::Pixel& _color)
-	: Shape(pge, pos, _speed, _color), radius(0){}
 	Circle(olc::PixelGameEngine& pge, olc::vi2d& pos, int _speed, const olc::Pixel& _color, int newRadius)
 	: Shape(pge, pos, _speed, _color), radius(newRadius){}
 

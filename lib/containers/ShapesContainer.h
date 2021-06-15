@@ -34,9 +34,9 @@ const uint8_t trapSpeed = 4;
 
 class ShapesContainer{
 	olc::PixelGameEngine* pixelGameEngine;
-	int maxRadius = 50;
-	int maxLength = 50;
-	int initialMainCircleSize = 10;
+	uint8_t maxRadius = 50;
+	uint8_t maxLength = 50;
+	uint8_t initialMainCircleSize = 10;
 
 	// Shapes
 	MainCircle mainCircle;

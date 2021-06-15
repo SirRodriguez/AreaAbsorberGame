@@ -14,14 +14,6 @@ protected:
 public:
 	Line()
 	: Shape(), dx(0), dy(0){}
-	Line(olc::PixelGameEngine& pge)
-	: Shape(pge), dx(0), dy(0){}
-	Line(olc::PixelGameEngine& pge, olc::vi2d& pos)
-	: Shape(pge, pos), dx(0), dy(0){}
-	Line(olc::PixelGameEngine& pge, olc::vi2d& pos, int _speed)
-	: Shape(pge, pos, _speed), dx(0), dy(0){}
-	Line(olc::PixelGameEngine& pge, olc::vi2d& pos, int _speed, const olc::Pixel& _color)
-	: Shape(pge, pos, _speed, _color), dx(0), dy(0){}
 	Line(olc::PixelGameEngine& pge, olc::vi2d& pos, int _speed, const olc::Pixel& _color, int _dx, int _dy)
 	: Shape(pge, pos, _speed, _color), dx(_dx), dy(_dy){}
 
