@@ -100,4 +100,68 @@ bool circleSquareCollision(Circle& c, Square& s){
 	return circleSquareCollision(c.getPosition(), c.getRadius(), s.getTopLeftPoint(), s.getTopRightPoint(), s.getBotLeftPoint(), s.getBotRightPoint());
 }
 
+// 
+// Line & Line Collision functions
+// 
+
+bool lineLineCollision(int sx, int sy, int ex, int ey, int sx2, int sy2, int ex2, int ey2){
+	// FROM: http://paulbourke.net/geometry/pointlineplane/
+
+
+	float denom = (((float)ey2 - (float)sy2)*((float)ex - (float)sx)) -
+                      (((float)ex2 - (float)sx2)*((float)ey - (float)sy));
+
+    float nume_a = (((float)ex2 - (float)sx2)*((float)sy - (float)sy2)) -
+                   (((float)ey2 - (float)sy2)*((float)sx - (float)sx2));
+
+    float nume_b = (((float)ex - (float)sx)*((float)sy - (float)sy2)) -
+                   (((float)ey - (float)sy)*((float)sx - (float)sx2));
+
+    if(denom == 0.0f)
+    {
+        if(nume_a == 0.0f && nume_b == 0.0f)
+        {
+            return true; // COINCIDENT
+        }
+        return false; // PARALLEL
+    }
+
+    float ua = nume_a / denom;
+    float ub = nume_b / denom;
+
+    if(ua >= 0.0f && ua <= 1.0f && ub >= 0.0f && ub <= 1.0f)
+    {
+        // Get the intersection point.
+        // intersection.x_ = begin_.x_ + ua*(end_.x_ - begin_.x_);
+        // intersection.y_ = begin_.y_ + ua*(end_.y_ - begin_.y_);
+
+        return true; // INTERESECTING
+    }
+
+    return false; // NOT_INTERESECTING
+}
+
+bool lineLineCollision(olc::vi2d s, olc::vi2d e, olc::vi2d s2, olc::vi2d e2){
+	return lineLineCollision(s.x, s.y, e.x, e.y, s2.x, s2.y, e2.x, e2.y);
+}
+
+bool lineLineCollision(Line& l, Line& l2){
+	return lineLineCollision(l.getStartPoint(), l.getEndPoint(), l2.getStartPoint(), l2.getEndPoint());
+}
+
+// 
+// Line Square Collision Functions
+// 
+
+bool lineSquareCollision(olc::vi2d ls, olc::vi2d le, olc::vi2d stl, olc::vi2d str, olc::vi2d sbl, olc::vi2d sbr){
+	return lineLineCollision(ls, le, stl, str) ||
+		lineLineCollision(ls, le, str, sbr) ||
+		lineLineCollision(ls, le, sbr, sbl) ||
+		lineLineCollision(ls, le, sbl, stl);
+}
+
+bool lineSquareCollision(Line& l, Square& s){
+	return lineSquareCollision(l.getStartPoint(), l.getEndPoint(), s.getTopLeftPoint(), s.getTopRightPoint(), s.getBotLeftPoint(), s.getBotRightPoint());
+}
+
 #endif

@@ -10,9 +10,7 @@ protected:
 
 	int lives;
 
-	int getTrappedSpeed(){
-		speed / 2;
-	}
+	int getTrappedSpeed(){ return speed / 2; }
 
 	void moveUp(int pixels){ movePosition(olc::vi2d(0, -pixels)); }
 	void moveDown(int pixels){ movePosition(olc::vi2d(0, pixels)); }
@@ -96,6 +94,19 @@ public:
 	void activateTrap(){
 		trapSquare.setLength(getRadius() * 2 + getRadius() / 2);
 		trapSquare.activate();	
+	}
+	void inactivateTrap(){
+		trapSquare.inactivate();
+	}
+	bool isTrapped(){
+		return trapSquare.isActive();
+	}
+	bool isNotTrapped(){
+		return !isTrapped();
+	}
+
+	TrapSquare& getTrapSquare(){
+		return trapSquare;
 	}
 
 	// Drawing

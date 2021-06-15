@@ -428,11 +428,19 @@ public:
 	// Returns 2 for collision with power up circles
 	// Returns -1 for collision with main circle
 	// Returns -2 for collision with buddy circle
+	// Returns -3 for collision with trap on main circle
 	int checkCollisionForNeedles(){
 		for(auto it = needles.begin(); it != needles.end(); ++it){
 			// Check collision with main circle
 			if(circleLineCollision(mainCircle, *it)){
 				return -1;
+			}
+
+			// Check collision for trapped box
+			if(mainCircle.isTrapped()){
+				if(lineSquareCollision(*it, mainCircle.getTrapSquare())){
+					return -3;
+				}
 			}
 
 			// Check collision with other circles
