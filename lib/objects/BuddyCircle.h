@@ -4,6 +4,8 @@
 #include "..\utils.h"
 #include "..\shapes\derivedShapes\Circle.h"
 
+#define MAXRADIUS 50
+
 class BuddyCircle: public Circle{
 protected:
 	int lives;
@@ -74,8 +76,12 @@ public:
 
 	// Size ---
 	void grow(int amount){
-		if(getRadius() < 50){
+		if(getRadius() < MAXRADIUS){
 			addRadius(amount);
+
+			if(getRadius() > MAXRADIUS){
+				setRadius(MAXRADIUS);
+			}
 		}
 	}
 };

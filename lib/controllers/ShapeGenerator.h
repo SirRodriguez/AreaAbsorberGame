@@ -61,8 +61,30 @@ class ShapeGenerator{
 	}
 
 	void generatePowerUps(){
-		if(generateChecker(likelyHoodOfPowerUps))
-			shapesContainer->addPowerUp();
+		if(generateChecker(likelyHoodOfPowerUps)){
+			uint8_t code = 0x01;
+			int level = scoreContainer->getLevel();
+
+			if(level <= 10){
+				// Code does not change
+			}else if(level <= 15){
+				code = code << rand() % 2;
+			}else if(level <= 20){
+				code = code << rand() % 3;
+			}else if(level <= 25){
+				code = code << rand() % 4;
+			}else if(level <= 30){
+				code = code << rand() % 5;
+			}else if(level <= 35){
+				code = code << rand() % 6;
+			}else if(level <= 40){
+				code = code << rand() % 7;
+			}else{
+				code = code << rand() % 8;
+			} // for if statements if there is more
+			
+			shapesContainer->addPowerUp(code);
+		}
 	}
 
 	void generateNeedles(){

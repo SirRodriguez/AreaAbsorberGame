@@ -260,7 +260,7 @@ public:
 			// Check the size for the circle and resize if too big (ie next level)
 			if(shapesContainer.mainCircleTooBig()){
 				// Reset main Circle size for next level
-				shapesContainer.reset();
+				shapesContainer.clearForNextLevel();
 				scoreContainer.incrementLevel();
 			}
 
