@@ -199,10 +199,74 @@ public:
 	// List additions
 	// 
 
-	void addCircle(){
-		olc::vi2d loc = olc::vi2d(rand() % pixelGameEngine->ScreenWidth(), 0);
-		int radius = rand() % maxRadius;
-		otherCircle.push_back(OtherCircle(*pixelGameEngine, loc, otherCircleSpeed, otherCircleColor, radius));
+	// Direction code tells the direction where the circle is comming from on the screen
+	// It is a bitwise code, so:
+	// 0000 0000 <- from right to left, if the bit is a 1 it means:
+	// - From Top
+	// - From Bottom
+	// - From Left
+	// - From Right
+	// - From Top Left
+	// - From Top Right
+	// - Form Bottom Left
+	// - From Bottom Right
+	// If multiple bits are one, them multiple circles will pop out
+	void addCircle(uint8_t dirFromCode){
+		auto makeCircle = [&](olc::vi2d _loc, int dirCode){
+			otherCircle.push_back(OtherCircle(*pixelGameEngine, _loc, otherCircleSpeed, otherCircleColor, rand() % maxRadius, dirCode));
+		};
+
+		if(dirFromCode & 0x01){ // FROM TOP
+			makeCircle(olc::vi2d(rand() % pixelGameEngine->ScreenWidth(), 0), 1);
+		}
+
+		if(dirFromCode & 0x02){ // FROM BOTTOM
+			makeCircle(olc::vi2d(rand() % pixelGameEngine->ScreenWidth(), pixelGameEngine->ScreenHeight()), 0);
+		}
+
+		if(dirFromCode & 0x04){ // FROM LEFT
+			makeCircle(olc::vi2d(0, rand() % pixelGameEngine->ScreenHeight()), 3);
+		}
+
+		if(dirFromCode & 0x08){ // FROM RIGHT
+			makeCircle(olc::vi2d(pixelGameEngine->ScreenWidth(), rand() % pixelGameEngine->ScreenHeight()), 2);
+		}
+
+		if(dirFromCode & 0x10){ // FROM TOP LEFT
+			if(rand() % 2 == 0){ // FROM TOP ON LEFT HALF
+				makeCircle(olc::vi2d(rand() % pixelGameEngine->ScreenWidth() / 2, 0), 7);
+			}else{ // FROM LEFT ON TOP HALF
+				makeCircle(olc::vi2d(0, rand() % pixelGameEngine->ScreenHeight() / 2), 7);
+			}
+		}
+
+		if(dirFromCode & 0x20){ // FROM TOP RIGHT
+			if(rand() % 2 == 0){ // FROM TOP ON RIGHT HALF
+				makeCircle(olc::vi2d((rand() % pixelGameEngine->ScreenWidth() / 2 ) + pixelGameEngine->ScreenWidth() / 2, 0), 6);
+			}else{ // FROM RIGHT ON TOP HALF
+				makeCircle(olc::vi2d(pixelGameEngine->ScreenWidth(), (rand() % pixelGameEngine->ScreenHeight() / 2 )), 6);
+			}
+		}
+
+		if(dirFromCode & 0x40){ // FROM BOTTOM LEFT
+			if(rand() % 2 == 0){ // FROM BOTTOM ON LEFT HALF
+				makeCircle(olc::vi2d(rand() % pixelGameEngine->ScreenWidth() / 2, pixelGameEngine->ScreenHeight()), 5);
+			}else{ // FROM LEFT ON BOTTOM HALF
+				makeCircle(olc::vi2d(0, (rand() % pixelGameEngine->ScreenHeight() / 2) + pixelGameEngine->ScreenHeight() / 2), 5);
+			}
+		}
+
+		if(dirFromCode & 0x80){ // FROM BOTTOM RIGHT
+			if(rand() % 2 == 0){ // FROM BOTTOM ON RIGHT HALF
+				makeCircle(olc::vi2d((rand() % pixelGameEngine->ScreenWidth() / 2) + pixelGameEngine->ScreenWidth() / 2, pixelGameEngine->ScreenHeight()), 4);
+			}else{ // FROM RIGHT ON BOTTOM HALF
+				makeCircle(olc::vi2d(pixelGameEngine->ScreenWidth(), (rand() % pixelGameEngine->ScreenHeight() / 2) + pixelGameEngine->ScreenHeight() / 2), 4);
+			}
+		}
+
+		// olc::vi2d loc = olc::vi2d(rand() % pixelGameEngine->ScreenWidth(), 0);
+		// int radius = rand() % maxRadius;
+		// otherCircle.push_back(OtherCircle(*pixelGameEngine, loc, otherCircleSpeed, otherCircleColor, radius));
 	}
 
 	void addPowerUp(){

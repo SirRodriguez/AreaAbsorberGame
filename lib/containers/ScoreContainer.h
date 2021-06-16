@@ -1,15 +1,17 @@
 #ifndef SCORECONTAINER_H
 #define SCORECONTAINER_H
 
+#define BASELEVEL 50
+
 class ScoreContainer{
-	int level = 1;
+	int level = BASELEVEL;
 	int score = 0;
 
 public:
 	ScoreContainer(){}
 
 	void resetLevelAndScore(){
-		level = 1;
+		level = BASELEVEL;
 		score = 0;
 	}
 

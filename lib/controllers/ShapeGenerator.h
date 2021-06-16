@@ -4,11 +4,6 @@
 #include "..\containers\ShapesContainer.h"
 #include "..\containers\ScoreContainer.h"
 
-// likelyHoodOfCircles = 50;
-// likelyHoodOfPowerUps = 500;
-// likelyHoodOfNeedles = 1000;
-// likelyHoodOfBuddyPowerUps = 1000;
-
 class ShapeGenerator{
 	ShapesContainer* shapesContainer;
 	ScoreContainer* scoreContainer;
@@ -39,8 +34,30 @@ class ShapeGenerator{
 	// Generation functions
 	// 
 	void generateCircles(){
-		if(generateChecker(likelyHoodOfCircles))
-			shapesContainer->addCircle();
+		if(generateChecker(likelyHoodOfCircles)){
+			uint8_t code = 0x01;
+			int level = scoreContainer->getLevel();
+
+			if(level <= 10){
+				// Code does not change
+			}else if(level <= 15){
+				code = code << rand() % 2;
+			}else if(level <= 20){
+				code = code << rand() % 3;
+			}else if(level <= 25){
+				code = code << rand() % 4;
+			}else if(level <= 30){
+				code = code << rand() % 5;
+			}else if(level <= 35){
+				code = code << rand() % 6;
+			}else if(level <= 40){
+				code = code << rand() % 7;
+			}else{
+				code = code << rand() % 8;
+			} // for if statements if there is more
+
+			shapesContainer->addCircle(code);
+		}
 	}
 
 	void generatePowerUps(){
