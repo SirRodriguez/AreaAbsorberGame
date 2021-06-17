@@ -429,10 +429,6 @@ public:
 	// - From Bottom Right
 	// If multiple bits are one, them multiple circles will pop out
 	void addBuddyPowerUp(uint8_t dirFromCode){
-		// olc::vi2d loc = olc::vi2d(rand() % pixelGameEngine->ScreenWidth(), 0);
-		// int length = 40;
-		// buddyPowerUps.push_back(BuddyPowerUp(*pixelGameEngine, loc, buddyCircleSpeed, buddyPowerUpColor, length));
-
 		auto makeBuddyPowerUp = [&](olc::vi2d _loc, int dirCode){
 			buddyPowerUps.push_back(BuddyPowerUp(*pixelGameEngine, _loc, buddyCircleSpeed, buddyPowerUpColor, 40, dirCode));
 		};
@@ -486,10 +482,74 @@ public:
 		}
 	}
 
-	void addTrap(){
-		olc::vi2d loc = olc::vi2d(rand() % pixelGameEngine->ScreenWidth(), 0);
-		int length = 40;
-		traps.push_back(Trap(*pixelGameEngine, loc, trapSpeed, trapColor, length));
+	// Direction code tells the direction where the power up is comming from on the screen
+	// It is a bitwise code, so:
+	// 0000 0000 <- from right to left, if the bit is a 1 it means:
+	// - From Top
+	// - From Bottom
+	// - From Left
+	// - From Right
+	// - From Top Left
+	// - From Top Right
+	// - Form Bottom Left
+	// - From Bottom Right
+	// If multiple bits are one, them multiple circles will pop out
+	void addTrap(uint8_t dirFromCode){
+		// olc::vi2d loc = olc::vi2d(rand() % pixelGameEngine->ScreenWidth(), 0);
+		// int length = 40;
+		// traps.push_back(Trap(*pixelGameEngine, loc, trapSpeed, trapColor, length));
+
+		auto makeTrap = [&](olc::vi2d _loc, int dirCode){
+			traps.push_back(Trap(*pixelGameEngine, _loc, trapSpeed, trapColor, 40, dirCode));
+		};
+
+		if(dirFromCode & 0x01){ // FROM TOP
+			makeTrap(olc::vi2d(rand() % pixelGameEngine->ScreenWidth(), 0), 1);
+		}
+
+		if(dirFromCode & 0x02){ // FROM BOTTOM
+			makeTrap(olc::vi2d(rand() % pixelGameEngine->ScreenWidth(), pixelGameEngine->ScreenHeight()), 0);
+		}
+
+		if(dirFromCode & 0x04){ // FROM LEFT
+			makeTrap(olc::vi2d(0, rand() % pixelGameEngine->ScreenHeight()), 3);
+		}
+
+		if(dirFromCode & 0x08){ // FROM RIGHT
+			makeTrap(olc::vi2d(pixelGameEngine->ScreenWidth(), rand() % pixelGameEngine->ScreenHeight()), 2);
+		}
+
+		if(dirFromCode & 0x10){ // FROM TOP LEFT
+			if(rand() % 2 == 0){ // FROM TOP ON LEFT HALF
+				makeTrap(olc::vi2d(rand() % pixelGameEngine->ScreenWidth() / 2, 0), 7);
+			}else{ // FROM LEFT ON TOP HALF
+				makeTrap(olc::vi2d(0, rand() % pixelGameEngine->ScreenHeight() / 2), 7);
+			}
+		}
+
+		if(dirFromCode & 0x20){ // FROM TOP RIGHT
+			if(rand() % 2 == 0){ // FROM TOP ON RIGHT HALF
+				makeTrap(olc::vi2d((rand() % pixelGameEngine->ScreenWidth() / 2 ) + pixelGameEngine->ScreenWidth() / 2, 0), 6);
+			}else{ // FROM RIGHT ON TOP HALF
+				makeTrap(olc::vi2d(pixelGameEngine->ScreenWidth(), (rand() % pixelGameEngine->ScreenHeight() / 2 )), 6);
+			}
+		}
+
+		if(dirFromCode & 0x40){ // FROM BOTTOM LEFT
+			if(rand() % 2 == 0){ // FROM BOTTOM ON LEFT HALF
+				makeTrap(olc::vi2d(rand() % pixelGameEngine->ScreenWidth() / 2, pixelGameEngine->ScreenHeight()), 5);
+			}else{ // FROM LEFT ON BOTTOM HALF
+				makeTrap(olc::vi2d(0, (rand() % pixelGameEngine->ScreenHeight() / 2) + pixelGameEngine->ScreenHeight() / 2), 5);
+			}
+		}
+
+		if(dirFromCode & 0x80){ // FROM BOTTOM RIGHT
+			if(rand() % 2 == 0){ // FROM BOTTOM ON RIGHT HALF
+				makeTrap(olc::vi2d((rand() % pixelGameEngine->ScreenWidth() / 2) + pixelGameEngine->ScreenWidth() / 2, pixelGameEngine->ScreenHeight()), 4);
+			}else{ // FROM RIGHT ON BOTTOM HALF
+				makeTrap(olc::vi2d(pixelGameEngine->ScreenWidth(), (rand() % pixelGameEngine->ScreenHeight() / 2) + pixelGameEngine->ScreenHeight() / 2), 4);
+			}
+		}
 	}
 
 	// 
@@ -760,7 +820,7 @@ public:
 			// Check collision with main circle
 			if(circleSquareCollision(mainCircle, *it)){
 				// Activate trap for main circle
-				mainCircle.activateTrap();
+				mainCircle.activateTrap(it->getDirectionCode());
 				traps.erase(it);
 				return -1;
 			}

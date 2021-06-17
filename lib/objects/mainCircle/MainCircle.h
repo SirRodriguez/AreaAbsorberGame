@@ -5,17 +5,45 @@
 #include "TrapSquare.h"
 
 class MainCircle: public Circle{
+private:
+	enum Direction{
+		UP,
+		DOWN,
+		LEFT,
+		RIGHT,
+		UPLEFT,
+		UPRIGHT,
+		DOWNLEFT,
+		DOWNRIGHT
+	};
+
 protected:
 	TrapSquare trapSquare;
+	Direction dir;
 
 	int lives;
 
 	int getTrappedSpeed(){ return speed / 2; }
 
+	// Move at certain speed
 	void moveUp(int pixels){ movePosition(olc::vi2d(0, -pixels)); }
 	void moveDown(int pixels){ movePosition(olc::vi2d(0, pixels)); }
 	void moveLeft(int pixels){ movePosition(olc::vi2d(-pixels, 0)); }
 	void moveRight(int pixels){ movePosition(olc::vi2d(pixels, 0)); }
+	void moveUpLeft(int pixels){ movePosition(olc::vi2d(-pixels, -pixels)); }
+	void moveUpRight(int pixels){ movePosition(olc::vi2d(pixels, -pixels)); }
+	void moveDownLeft(int pixels){ movePosition(olc::vi2d(-pixels, pixels)); }
+	void moveDownRight(int pixels){ movePosition(olc::vi2d(pixels, pixels)); }
+
+	// Move at default speed
+	void moveUp(){ moveUp(speed); }
+	void moveDown(){ moveDown(speed); }
+	void moveLeft(){ moveLeft(speed); }
+	void moveRight(){ moveRight(speed); }
+	void moveUpLeft(){ moveUpLeft(speed); }
+	void moveUpRight(){ moveUpRight(speed); }
+	void moveDownLeft(){ moveDownLeft(speed); }
+	void moveDownRight(){ moveDownRight(speed); }
 
 	// Drawing
 	void drawWithColor(const olc::Pixel& colorToDraw) override {
@@ -40,7 +68,7 @@ public:
 	MainCircle()
 	: Circle(), lives(0), trapSquare(TrapSquare()){}
 	MainCircle(olc::PixelGameEngine& pge, olc::vi2d& pos, int _speed, const olc::Pixel& _color, int newRadius, int newLives)
-	: Circle(pge, pos, _speed, _color, newRadius), lives(newLives), trapSquare(TrapSquare(pge, pos, _speed, _color, newRadius)){}
+	: Circle(pge, pos, _speed, _color, newRadius), lives(newLives), trapSquare(TrapSquare(pge, pos, _speed, _color, newRadius)), dir(Direction::DOWN){}
 
 	// Lives
 	bool alive(){ return lives > 0; }
@@ -50,16 +78,16 @@ public:
 		if(trapSquare.isNotActive()){
 			// Move the main circle
 			if(upButton.bHeld && belowTopOfScreen()){
-				moveUp(speed);
+				moveUp();
 			}
 			if(downButton.bHeld && aboveBottomOfScreen()){
-				moveDown(speed);
+				moveDown();
 			}
 			if(leftButton.bHeld && rightOfLeftOfScreen()){
-				moveLeft(speed);
+				moveLeft();
 			}
 			if(rightButton.bHeld && leftOfRightOfScreen()){
-				moveRight(speed);
+				moveRight();
 			}
 
 			// Move the trap to the main circle
@@ -67,7 +95,19 @@ public:
 
 		}else if(aboveBottomOfScreen()){
 			// Move the main circle
-			moveDown(getTrappedSpeed());
+			// moveDown(getTrappedSpeed());
+			// Direction the trap was going
+			switch(dir){
+				case 0: moveUp(getTrappedSpeed()); break;
+				case 1: moveDown(getTrappedSpeed()); break;
+				case 2: moveLeft(getTrappedSpeed()); break;
+				case 3: moveRight(getTrappedSpeed()); break;
+				case 4: moveUpLeft(getTrappedSpeed()); break;
+				case 5: moveUpRight(getTrappedSpeed()); break;
+				case 6: moveDownLeft(getTrappedSpeed()); break;
+				case 7: moveDownRight(getTrappedSpeed()); break;
+				default: break;
+			}
 
 			// Move the trap to the main circle
 			trapSquare.setPosition(getPosition());
@@ -81,7 +121,20 @@ public:
 	void grow(int amount){ addRadius(amount); }
 
 	// Trap Square functions
-	void activateTrap(){
+	void activateTrap(int directionCode){
+		// Direction the trap was going
+		switch(directionCode){
+			case 0: dir = Direction::UP; break;
+			case 1: dir = Direction::DOWN; break;
+			case 2: dir = Direction::LEFT; break;
+			case 3: dir = Direction::RIGHT; break;
+			case 4: dir = Direction::UPLEFT; break;
+			case 5: dir = Direction::UPRIGHT; break;
+			case 6: dir = Direction::DOWNLEFT; break;
+			case 7: dir = Direction::DOWNRIGHT; break;
+			default: dir = Direction::DOWN; break;
+		}
+
 		trapSquare.setLength(getRadius() * 2 + getRadius() / 2);
 		trapSquare.activate();	
 	}
