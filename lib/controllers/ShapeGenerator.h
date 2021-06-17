@@ -30,142 +30,57 @@ class ShapeGenerator{
 		return false;
 	}
 
+	uint8_t makeDirectionCode(){
+		uint8_t code = 0x01;
+		int level = scoreContainer->getLevel();
+
+		if(level <= 10){
+			// Code does not change
+		}else if(level <= 15){
+			code = code << rand() % 2;
+		}else if(level <= 20){
+			code = code << rand() % 3;
+		}else if(level <= 25){
+			code = code << rand() % 4;
+		}else if(level <= 30){
+			code = code << rand() % 5;
+		}else if(level <= 35){
+			code = code << rand() % 6;
+		}else if(level <= 40){
+			code = code << rand() % 7;
+		}else{
+			code = code << rand() % 8;
+		} // for if statements if there is more
+
+		return code;
+	}
+
 	// 
 	// Generation functions
 	// 
 	void generateCircles(){
-		if(generateChecker(likelyHoodOfCircles)){
-			uint8_t code = 0x01;
-			int level = scoreContainer->getLevel();
-
-			if(level <= 10){
-				// Code does not change
-			}else if(level <= 15){
-				code = code << rand() % 2;
-			}else if(level <= 20){
-				code = code << rand() % 3;
-			}else if(level <= 25){
-				code = code << rand() % 4;
-			}else if(level <= 30){
-				code = code << rand() % 5;
-			}else if(level <= 35){
-				code = code << rand() % 6;
-			}else if(level <= 40){
-				code = code << rand() % 7;
-			}else{
-				code = code << rand() % 8;
-			} // for if statements if there is more
-
-			shapesContainer->addCircle(code);
-		}
+		if(generateChecker(likelyHoodOfCircles))
+			shapesContainer->addCircle(makeDirectionCode());
 	}
 
 	void generatePowerUps(){
-		if(generateChecker(likelyHoodOfPowerUps)){
-			uint8_t code = 0x01;
-			int level = scoreContainer->getLevel();
-
-			if(level <= 10){
-				// Code does not change
-			}else if(level <= 15){
-				code = code << rand() % 2;
-			}else if(level <= 20){
-				code = code << rand() % 3;
-			}else if(level <= 25){
-				code = code << rand() % 4;
-			}else if(level <= 30){
-				code = code << rand() % 5;
-			}else if(level <= 35){
-				code = code << rand() % 6;
-			}else if(level <= 40){
-				code = code << rand() % 7;
-			}else{
-				code = code << rand() % 8;
-			} // for if statements if there is more
-			
-			shapesContainer->addPowerUp(code);
-		}
+		if(generateChecker(likelyHoodOfPowerUps))
+			shapesContainer->addPowerUp(makeDirectionCode());
 	}
 
 	void generateNeedles(){
-		if(generateChecker(likelyHoodOfNeedles)){
-			uint8_t code = 0x01;
-			int level = scoreContainer->getLevel();
-
-			if(level <= 10){
-				// Code does not change
-			}else if(level <= 15){
-				code = code << rand() % 2;
-			}else if(level <= 20){
-				code = code << rand() % 3;
-			}else if(level <= 25){
-				code = code << rand() % 4;
-			}else if(level <= 30){
-				code = code << rand() % 5;
-			}else if(level <= 35){
-				code = code << rand() % 6;
-			}else if(level <= 40){
-				code = code << rand() % 7;
-			}else{
-				code = code << rand() % 8;
-			} // for if statements if there is more
-
-			shapesContainer->addNeedle(code);
-		}
+		if(generateChecker(likelyHoodOfNeedles))
+			shapesContainer->addNeedle(makeDirectionCode());
 	}
 
 	void generateBuddyPowerUps(){
-		if(generateChecker(likelyHoodOfBuddyPowerUps)){
-			uint8_t code = 0x01;
-			int level = scoreContainer->getLevel();
-
-			if(level <= 10){
-				// Code does not change
-			}else if(level <= 15){
-				code = code << rand() % 2;
-			}else if(level <= 20){
-				code = code << rand() % 3;
-			}else if(level <= 25){
-				code = code << rand() % 4;
-			}else if(level <= 30){
-				code = code << rand() % 5;
-			}else if(level <= 35){
-				code = code << rand() % 6;
-			}else if(level <= 40){
-				code = code << rand() % 7;
-			}else{
-				code = code << rand() % 8;
-			} // for if statements if there is more
-
-			shapesContainer->addBuddyPowerUp(code);
-		}
+		if(generateChecker(likelyHoodOfBuddyPowerUps))
+			shapesContainer->addBuddyPowerUp(makeDirectionCode());
 	}
 
 	void generateTraps(){
-		if(generateChecker(likelyHoodOfTraps)){
-			uint8_t code = 0x01;
-			int level = scoreContainer->getLevel();
-
-			if(level <= 10){
-				// Code does not change
-			}else if(level <= 15){
-				code = code << rand() % 2;
-			}else if(level <= 20){
-				code = code << rand() % 3;
-			}else if(level <= 25){
-				code = code << rand() % 4;
-			}else if(level <= 30){
-				code = code << rand() % 5;
-			}else if(level <= 35){
-				code = code << rand() % 6;
-			}else if(level <= 40){
-				code = code << rand() % 7;
-			}else{
-				code = code << rand() % 8;
-			} // for if statements if there is more
-
-			shapesContainer->addTrap(code);
-		}
+		if(generateChecker(likelyHoodOfTraps))
+			shapesContainer->addTrap(makeDirectionCode());
 	}
 
 public:

@@ -1,7 +1,7 @@
 #ifndef SCORECONTAINER_H
 #define SCORECONTAINER_H
 
-#define BASELEVEL 100
+#define BASELEVEL 1
 
 class ScoreContainer{
 	int level = BASELEVEL;
