@@ -21,7 +21,7 @@ int main(){
 	const int pixel_width = 1;
 	const int pixel_height = 1;
 	const bool full_screen = true;
-	const bool vsync = true;
+	const bool vsync = true; // Game made to run at 60 fps
 	const bool cohesion = false;
 	if(aa.Construct(width, height, pixel_width, pixel_height, full_screen, vsync, cohesion))
 		aa.Start();

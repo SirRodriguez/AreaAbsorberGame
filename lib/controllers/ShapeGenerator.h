@@ -4,6 +4,8 @@
 #include "..\containers\ShapesContainer.h"
 #include "..\containers\ScoreContainer.h"
 
+typedef void (*voidFunct) ();
+
 class ShapeGenerator{
 	ShapesContainer* shapesContainer;
 	ScoreContainer* scoreContainer;
@@ -14,6 +16,7 @@ class ShapeGenerator{
 	int likelyHoodOfNeedles = 1000;
 	int likelyHoodOfBuddyPowerUps = 1000;
 	int likelyHoodOfTraps = 500;
+	int likelyHoodOfCircleCars = 50;
 
 	bool generateChecker(int likelyHood){
 		int module = likelyHood - (scoreContainer->getLevel() - 1) * likelyHood / 10;
@@ -83,6 +86,11 @@ class ShapeGenerator{
 			shapesContainer->addTrap(makeDirectionCode());
 	}
 
+	void generateCircleCars(){
+		if(generateChecker(likelyHoodOfCircleCars))
+			shapesContainer->addCircleCar(makeDirectionCode());
+	}
+
 public:
 	ShapeGenerator()
 	: shapesContainer(nullptr), scoreContainer(nullptr){
@@ -99,6 +107,7 @@ public:
 		generateNeedles();
 		generateBuddyPowerUps();
 		generateTraps();
+		generateCircleCars();
 	}
 };
 

@@ -3,8 +3,6 @@
 
 #include "..\Shape.h"
 
-#define PI (355 / 113)
-#define RECPI (113 / 355)
 class Circle : public Shape{
 protected:
 	int radius;
@@ -18,6 +16,10 @@ public:
 	: Shape(), radius(0){}
 	Circle(olc::PixelGameEngine& pge, olc::vi2d& pos, int _speed, const olc::Pixel& _color, int newRadius)
 	: Shape(pge, pos, _speed, _color), radius(newRadius){}
+
+	// PI
+	double PI(){ return 355.0 / 113.0; }
+	double RECPI(){ return 113.0 / 335.0; }
 
 	// Size ---
 	void setRadius(int r){ radius = r; }
