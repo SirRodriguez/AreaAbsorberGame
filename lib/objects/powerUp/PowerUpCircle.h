@@ -1,7 +1,7 @@
 #ifndef POWERUPCIRCLE_H
 #define POWERUPCIRCLE_H
 
-#include "..\..\shapes\derivedShapes\Circle.h"
+#include "../../shapes/derivedShapes/Circle.h"
 
 class PowerUpCircle: public Circle{
 private:

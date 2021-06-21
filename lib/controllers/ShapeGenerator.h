@@ -1,8 +1,8 @@
 #ifndef SHAPEGENERATOR_H
 #define SHAPEGENERATOR_H
 
-#include "..\containers\ShapesContainer.h"
-#include "..\containers\ScoreContainer.h"
+#include "../containers/ShapesContainer.h"
+#include "../containers/ScoreContainer.h"
 
 typedef void (*voidFunct) ();
 

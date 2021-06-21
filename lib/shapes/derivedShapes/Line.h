@@ -1,7 +1,7 @@
 #ifndef LINE_H
 #define LINE_H
 
-#include "..\Shape.h"
+#include "../Shape.h"
 
 class Line : public Shape {
 protected:

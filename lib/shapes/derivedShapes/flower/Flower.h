@@ -1,7 +1,7 @@
 #ifndef FLOWER_H
 #define FLOWER_H
 
-#include "..\Circle.h"
+#include "../Circle.h"
 #include "Pedal.h"
 
 

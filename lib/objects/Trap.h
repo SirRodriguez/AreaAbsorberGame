@@ -1,7 +1,7 @@
 #ifndef TRAP_H
 #define TRAP_H
 
-#include "..\shapes\derivedShapes\Box.h"
+#include "../shapes/derivedShapes/Box.h"
 
 class Trap: public Box{
 private:

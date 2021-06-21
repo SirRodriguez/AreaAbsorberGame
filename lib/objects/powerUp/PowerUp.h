@@ -1,7 +1,7 @@
 #ifndef POWERUP_H
 #define POWERUP_H
 
-#include "..\..\shapes\derivedShapes\Triangle.h"
+#include "../../shapes/derivedShapes/Triangle.h"
 
 class PowerUp: public Triangle{
 private:

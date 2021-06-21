@@ -1,7 +1,7 @@
 #ifndef TRIANGLE_H
 #define TRIANGLE_H
 
-#include "..\Shape.h"
+#include "../Shape.h"
 
 #define SQRT3 97 / 56
 #define RECSQRT3 56 / 97

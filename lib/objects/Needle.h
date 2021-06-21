@@ -1,7 +1,7 @@
 #ifndef NEEDLE_H
 #define NEEDLE_H
 
-#include "..\shapes\derivedShapes\Line.h"
+#include "../shapes/derivedShapes/Line.h"
 
 class Needle: public Line{
 private:

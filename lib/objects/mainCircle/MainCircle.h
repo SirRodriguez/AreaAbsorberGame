@@ -1,7 +1,7 @@
 #ifndef MAINCIRCLE_H
 #define MAINCIRCLE_H
 
-#include "..\..\shapes\derivedShapes\Circle.h"
+#include "../../shapes/derivedShapes/Circle.h"
 #include "TrapSquare.h"
 
 class MainCircle: public Circle{

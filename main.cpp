@@ -12,7 +12,7 @@
 #define OLC_PGE_APPLICATION
 #include "olcPixelGameEngine.h"
 
-#include "lib\AreaAbsorber.h"
+#include "lib/AreaAbsorber.h"
 
 int main(){
 	AreaAbsorber aa;

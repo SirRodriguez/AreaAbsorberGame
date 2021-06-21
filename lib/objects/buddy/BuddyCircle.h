@@ -1,8 +1,8 @@
 #ifndef BUDDYCIRCLE_H
 #define BUDDYCIRCLE_H
 
-#include "..\..\utils.h"
-#include "..\..\shapes\derivedShapes\Circle.h"
+#include "../../utils.h"
+#include "../../shapes/derivedShapes/Circle.h"
 
 #define MAXRADIUS 50
 

@@ -1,7 +1,7 @@
 #ifndef CIRCLE_H
 #define CIRCLE_H
 
-#include "..\Shape.h"
+#include "../Shape.h"
 
 class Circle : public Shape{
 protected:

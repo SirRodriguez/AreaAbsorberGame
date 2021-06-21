@@ -1,17 +1,17 @@
 #ifndef SHAPESCONTAINER
 #define SHAPESCONTAINER
 
-#include "..\objects\mainCircle\MainCircle.h"
-#include "..\objects\OtherCircle.h"
-#include "..\objects\powerUp\PowerUp.h"
-#include "..\objects\powerUp\PowerUpCircle.h"
-#include "..\objects\Needle.h"
-#include "..\objects\buddy\BuddyPowerUp.h"
-#include "..\objects\buddy\BuddyCircle.h"
-#include "..\objects\Trap.h"
-#include "..\objects\CircleCar.h"
+#include "../objects/mainCircle/MainCircle.h"
+#include "../objects/OtherCircle.h"
+#include "../objects/powerUp/PowerUp.h"
+#include "../objects/powerUp/PowerUpCircle.h"
+#include "../objects/Needle.h"
+#include "../objects/buddy/BuddyPowerUp.h"
+#include "../objects/buddy/BuddyCircle.h"
+#include "../objects/Trap.h"
+#include "../objects/CircleCar.h"
 
-#include "..\utils.h"
+#include "../utils.h"
 
 // Colors
 const olc::Pixel mainCircleColor = olc::BLACK;

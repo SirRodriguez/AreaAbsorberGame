@@ -3,11 +3,11 @@
 
 #include "GlobalFlags.h"
 
-#include "controllers\InputControls.h"
-#include "controllers\ShapeGenerator.h"
+#include "controllers/InputControls.h"
+#include "controllers/ShapeGenerator.h"
 
-#include "containers\ScoreContainer.h"
-#include "containers\ShapesContainer.h"
+#include "containers/ScoreContainer.h"
+#include "containers/ShapesContainer.h"
 
 // Command to compile 
 // g++ -o AreaAbsorber.exe main.cpp -luser32 -lgdi32 -lopengl32 -lgdiplus -lShlwapi -ldwmapi -lstdc++fs -static -std=c++17

@@ -1,7 +1,7 @@
 #ifndef UTILS_H
 #define UTILS_H
 
-#include ".\shapes\derivedShapes\Square.h"
+#include "./shapes/derivedShapes/Square.h"
 
 #define square(x) ((x)*(x))
 

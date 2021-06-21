@@ -1,7 +1,7 @@
 #ifndef PEDAL_H
 #define PEDAL_H
 
-#include "..\Circle.h"
+#include "../Circle.h"
 
 class Pedal: public Circle{
 public:

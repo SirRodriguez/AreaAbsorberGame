@@ -1,7 +1,7 @@
 #ifndef TRAPSQUARE_H
 #define TRAPSQUARE_H
 
-#include "..\..\shapes\derivedShapes\Box.h"
+#include "../../shapes/derivedShapes/Box.h"
 
 #define MAXLIFETIME 60
 

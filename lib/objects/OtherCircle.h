@@ -1,7 +1,7 @@
 #ifndef OTHERCIRCLE_H
 #define OTHERCIRCLE_H
 
-#include "..\shapes\derivedShapes\Circle.h"
+#include "../shapes/derivedShapes/Circle.h"
 
 class OtherCircle: public Circle{
 private:
