@@ -214,6 +214,9 @@ public:
 		// Check for Trap Collision
 		int trapCollideNumber = shapesContainer.checkCollisionForTraps();
 
+		// Check Circle Car Collisions
+		int circleCarCollidenumber = shapesContainer.checkCollisionForCircleCars();
+
 		return collideNumber == -1 || needleCollideNumber == -1;
 	}
 

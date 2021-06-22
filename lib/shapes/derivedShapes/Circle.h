@@ -22,9 +22,9 @@ public:
 	double RECPI(){ return 113.0 / 335.0; }
 
 	// Size ---
-	void setRadius(int r){ radius = r; }
-	void addRadius(int r){ radius += r; }
-	int getRadius(){ return radius; }
+	virtual void setRadius(int r){ radius = r; }
+	virtual void addRadius(int r){ radius += r; }
+	virtual int getRadius(){ return radius; }
 
 	// Moving
 	virtual void move() = 0;

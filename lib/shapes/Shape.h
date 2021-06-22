@@ -17,10 +17,10 @@ public:
 	: pixelGameEngine(&pge), position(pos), speed(_speed), color(_color){}
 
 	// Out of bounds
-	bool belowTopOfScreen(){ return position.y > 0; }
-	bool aboveBottomOfScreen(){	return position.y < pixelGameEngine->ScreenHeight(); }
-	bool rightOfLeftOfScreen(){	return position.x > 0; }
-	bool leftOfRightOfScreen(){	return position.x < pixelGameEngine->ScreenWidth();	}
+	virtual bool belowTopOfScreen(){ return position.y > 0; }
+	virtual bool aboveBottomOfScreen(){	return position.y < pixelGameEngine->ScreenHeight(); }
+	virtual bool rightOfLeftOfScreen(){	return position.x > 0; }
+	virtual bool leftOfRightOfScreen(){	return position.x < pixelGameEngine->ScreenWidth();	}
 	virtual bool outOfBounds(){
 		return !belowTopOfScreen() ||
 			!aboveBottomOfScreen() ||
@@ -29,12 +29,12 @@ public:
 	}
 
 	// Position
-	void setPosition(olc::vi2d point){ position = point; }
-	void movePosition(olc::vi2d otherPoint){ position += otherPoint; }
-	const olc::vi2d& getPosition(){ return position; }
+	virtual void setPosition(olc::vi2d point){ position = point; }
+	virtual void movePosition(olc::vi2d otherPoint){ position += otherPoint; }
+	virtual const olc::vi2d& getPosition(){ return position; }
 
 	// Drawing
-	void draw(){ drawWithColor(color); }
+	virtual void draw(){ drawWithColor(color); }
 	virtual void clear(){ drawWithColor(olc::WHITE); }
 
 	// Moving

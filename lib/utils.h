@@ -2,6 +2,8 @@
 #define UTILS_H
 
 #include "./shapes/derivedShapes/Square.h"
+#include "./shapes/derivedShapes/flower/Flower.h"
+#include "./shapes/derivedShapes/flower/Pedal.h"
 
 #define square(x) ((x)*(x))
 
@@ -162,6 +164,24 @@ bool lineSquareCollision(olc::vi2d ls, olc::vi2d le, olc::vi2d stl, olc::vi2d st
 
 bool lineSquareCollision(Line& l, Square& s){
 	return lineSquareCollision(l.getStartPoint(), l.getEndPoint(), s.getTopLeftPoint(), s.getTopRightPoint(), s.getBotLeftPoint(), s.getBotRightPoint());
+}
+
+// 
+// Circle Flower Collision Functions
+// 
+
+bool circlePedalsCollision(Circle& c, std::vector<Pedal>& pedals){
+	for(auto it = pedals.begin(); it != pedals.end(); ++it){
+		if(circleCircleCollision(c, *it)){
+			return true;
+		}
+	}
+
+	return false;
+}
+
+bool circleFlowerCollision(Circle& c, Flower& f){
+	return circlePedalsCollision(c, f.getPedals()) || circleCircleCollision(c, f);
 }
 
 #endif

@@ -43,7 +43,7 @@ const uint8_t powerUpHeight = 50;
 const uint8_t maxNeedleLength = 50;
 const uint8_t buddyPowerUpLength = 40;
 const uint8_t trapLength = 40;
-const uint8_t circleCarRadius = 30;
+const uint8_t circleCarRadius = 40;
 
 class ShapesContainer{
 	olc::PixelGameEngine* pixelGameEngine;
@@ -84,6 +84,8 @@ public:
 
 	void reset(){
 		setMainCircleRadius(initialMainCircleSize);
+		resetMainCircleObjects();
+
 		deleteAllCircles();
 		deleteAllPowerUps();
 		deleteAllBuddyPowerUps();
@@ -588,9 +590,9 @@ public:
 	// If multiple bits are one, them multiple circles will pop out
 	void addCircleCar(uint8_t dirFromCode){
 		auto makeCircleCar = [&](olc::vi2d _loc, int dirCode){
-			const uint8_t circleCarNumWheels = 4;
-			const double degOffset = 45.0;
-			circleCars.push_back(CircleCar(*pixelGameEngine, _loc, circleCarSpeed, circleCarColor, circleCarWheelColor, circleCarRadius, circleCarNumWheels, degOffset, dirCode));
+			// const uint8_t circleCarNumWheels = 4;
+			// const double degOffset = 45.0;
+			circleCars.push_back(CircleCar(*pixelGameEngine, _loc, circleCarSpeed, circleCarColor, circleCarWheelColor, circleCarRadius, dirCode));
 		};
 
 		if(dirFromCode & 0x01){ // FROM TOP
@@ -789,7 +791,16 @@ public:
 	int checkCollisionForCircle(){
 		for(auto it = otherCircle.begin(); it != otherCircle.end(); ++it){
 			int otherRadius = it->getRadius();
-			if(circleCircleCollision(mainCircle, *it)){
+			// If in car
+			if(mainCircle.inCar()){
+				if(circleFlowerCollision(*it, mainCircle.getCar())){
+					mainCircle.hitCar(otherRadius);
+					otherCircle.erase(it);
+					return otherRadius;
+				}
+
+			// If not in car
+			}else if(circleCircleCollision(mainCircle, *it)){
 				if(otherRadius > mainCircle.getRadius()){
 					return -1;
 				}else{
@@ -936,6 +947,21 @@ public:
 		return 0;
 	}
 
+	// Return 0 for no collisions
+	// Return -1 for collision
+	int checkCollisionForCircleCars(){
+		for(auto it = circleCars.begin(); it != circleCars.end(); ++it){
+			// Check collision with main circle
+			if(circleFlowerCollision(mainCircle, *it)){
+				mainCircle.activateCar();
+				circleCars.erase(it);
+				return -1;
+			}
+		}
+
+		return 0;
+	}
+
 	// 
 	// Shape changes
 	// 
@@ -946,6 +972,10 @@ public:
 
 	void resetMainCirclePosition(){
 		mainCircle.setPosition(olc::vi2d(pixelGameEngine->ScreenWidth() / 2, pixelGameEngine->ScreenHeight() / 2));
+	}
+
+	void resetMainCircleObjects(){
+		mainCircle.inactivateObjects();
 	}
 
 	void growMainCircle(int amount){

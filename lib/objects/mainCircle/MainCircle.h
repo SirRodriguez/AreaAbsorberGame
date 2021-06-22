@@ -3,6 +3,7 @@
 
 #include "../../shapes/derivedShapes/Circle.h"
 #include "TrapSquare.h"
+#include "Car.h"
 
 class MainCircle: public Circle{
 private:
@@ -19,6 +20,7 @@ private:
 
 protected:
 	TrapSquare trapSquare;
+	Car car;
 	Direction dir;
 
 	int lives;
@@ -35,15 +37,15 @@ protected:
 	void moveDownLeft(int pixels){ movePosition(olc::vi2d(-pixels, pixels)); }
 	void moveDownRight(int pixels){ movePosition(olc::vi2d(pixels, pixels)); }
 
-	// Move at default speed
-	void moveUp(){ moveUp(speed); }
-	void moveDown(){ moveDown(speed); }
-	void moveLeft(){ moveLeft(speed); }
-	void moveRight(){ moveRight(speed); }
-	void moveUpLeft(){ moveUpLeft(speed); }
-	void moveUpRight(){ moveUpRight(speed); }
-	void moveDownLeft(){ moveDownLeft(speed); }
-	void moveDownRight(){ moveDownRight(speed); }
+	// Move at default speed unless car is active
+	void moveUp(){ moveUp(inCar() ? speed * 2 : speed); }
+	void moveDown(){ moveDown(inCar() ? speed * 2 : speed); }
+	void moveLeft(){ moveLeft(inCar() ? speed * 2 : speed); }
+	void moveRight(){ moveRight(inCar() ? speed * 2 : speed); }
+	void moveUpLeft(){ moveUpLeft(inCar() ? speed * 2 : speed); }
+	void moveUpRight(){ moveUpRight(inCar() ? speed * 2 : speed); }
+	void moveDownLeft(){ moveDownLeft(inCar() ? speed * 2 : speed); }
+	void moveDownRight(){ moveDownRight(inCar() ? speed * 2 : speed); }
 
 	// Drawing
 	void drawWithColor(const olc::Pixel& colorToDraw) override {
@@ -59,6 +61,8 @@ protected:
 		// }
 
 
+		car.draw();
+
 		pixelGameEngine->FillCircle(position, radius, colorToDraw);
 
 		trapSquare.draw();
@@ -68,7 +72,11 @@ public:
 	MainCircle()
 	: Circle(), lives(0), trapSquare(TrapSquare()){}
 	MainCircle(olc::PixelGameEngine& pge, olc::vi2d& pos, int _speed, const olc::Pixel& _color, int newRadius, int newLives)
-	: Circle(pge, pos, _speed, _color, newRadius), lives(newLives), trapSquare(TrapSquare(pge, pos, _speed, _color, newRadius)), dir(Direction::DOWN){}
+	: Circle(pge, pos, _speed, _color, newRadius), 
+		lives(newLives), 	
+		trapSquare(TrapSquare(pge, pos, _speed, _color, newRadius)), 
+		car(Car(pge, pos, _speed, olc::BLUE, olc::BLACK, 40)),
+		dir(Direction::DOWN){}
 
 	// Lives
 	bool alive(){ return lives > 0; }
@@ -90,8 +98,8 @@ public:
 				moveRight();
 			}
 
-			// Move the trap to the main circle
-			trapSquare.setPosition(getPosition());
+			// // Move the trap to the main circle
+			// trapSquare.setPosition(getPosition());
 
 		}else if(aboveBottomOfScreen()){
 			// Move the main circle
@@ -109,12 +117,21 @@ public:
 				default: break;
 			}
 
-			// Move the trap to the main circle
-			trapSquare.setPosition(getPosition());
+			// // Move the trap to the main circle
+			// trapSquare.setPosition(getPosition());
 		}
+
+		// Move the trap to the main circle
+		trapSquare.setPosition(getPosition());
 
 		// This is to change its life
 		trapSquare.move();
+
+		// Move the car to the main circle
+		car.setPosition(getPosition());
+
+		// To move its pedals
+		car.move();
 	}
 
 	// Size
@@ -138,19 +155,20 @@ public:
 		trapSquare.setLength(getRadius() * 2 + getRadius() / 2);
 		trapSquare.activate();	
 	}
-	void inactivateTrap(){
-		trapSquare.inactivate();
-	}
-	bool isTrapped(){
-		return trapSquare.isActive();
-	}
-	bool isNotTrapped(){
-		return !isTrapped();
-	}
+	void inactivateTrap(){ trapSquare.inactivate(); }
+	bool isTrapped(){ return trapSquare.isActive(); }
+	bool isNotTrapped(){ return !isTrapped(); }
 
-	TrapSquare& getTrapSquare(){
-		return trapSquare;
-	}
+	TrapSquare& getTrapSquare(){ return trapSquare; }
+
+	// Circle Car functions
+	void activateCar(){	car.activate(); }
+	void inactivateCar(){ car.inactivate(); }
+	bool inCar(){ return car.isActive(); }
+	bool notInCar(){ return !inCar(); }
+
+	Car& getCar(){ return car; }
+	void hitCar(int value){ car.loseLife(value); }
 
 	// Drawing
 	void clear() override {
@@ -159,6 +177,14 @@ public:
 
 		// Clear the trap
 		trapSquare.clear();
+
+		// Clear the car
+		car.clear();
+	}
+
+	void inactivateObjects(){
+		inactivateTrap();
+		inactivateCar();
 	}
 };
 

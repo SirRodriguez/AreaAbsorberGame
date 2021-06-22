@@ -3,6 +3,9 @@
 
 #include "../shapes/derivedShapes/flower/Flower.h"
 
+#define NUMWHEELS 4
+#define WHEELANGLEOFFSET 45.0
+
 class CircleCar: public Flower{
 private:
 	enum Direction{
@@ -28,21 +31,11 @@ protected:
 	void moveDownLeft(){ movePosition(olc::vi2d(-speed, speed)); }
 	void moveDownRight(){ movePosition(olc::vi2d(speed, speed)); }
 
-
-	void movePedalsUp(){ movePedalsPosition(olc::vi2d(0, -speed)); }
-	void movePedalsDown(){ movePedalsPosition(olc::vi2d(0, speed)); }
-	void movePedalsLeft(){ movePedalsPosition(olc::vi2d(-speed, 0)); }
-	void movePedalsRight(){ movePedalsPosition(olc::vi2d(speed, 0)); }
-	void movePedalsUpLeft(){ movePedalsPosition(olc::vi2d(-speed, -speed)); }
-	void movePedalsUpRight(){ movePedalsPosition(olc::vi2d(speed, -speed)); }
-	void movePedalsDownLeft(){ movePedalsPosition(olc::vi2d(-speed, speed)); }
-	void movePedalsDownRight(){ movePedalsPosition(olc::vi2d(speed, speed)); }
-
 public:
 	CircleCar()
 	: Flower(){}
-	CircleCar(olc::PixelGameEngine& pge, olc::vi2d& pos, int _speed, const olc::Pixel& _color, const olc::Pixel& _pedalColor, int newRadius, int pedals, double degOffset, int directionCode)
-	: Flower(pge, pos, _speed, _color, _pedalColor, newRadius, pedals, degOffset){
+	CircleCar(olc::PixelGameEngine& pge, olc::vi2d& pos, int _speed, const olc::Pixel& _color, const olc::Pixel& _wheelColor, int newRadius, int directionCode)
+	: Flower(pge, pos, _speed, _color, _wheelColor, newRadius, NUMWHEELS, WHEELANGLEOFFSET){
 		switch(directionCode){
 			case 0: dir = Direction::UP; break;
 			case 1: dir = Direction::DOWN; break;
@@ -69,23 +62,9 @@ public:
 			default: break;
 		}
 
-		moveAllPedals();
+		fixPedalsToPosition();
 	}
-
-	void moveAllPedals() override {
-		switch(dir){
-			case Direction::UP: movePedalsUp(); break;
-			case Direction::DOWN: movePedalsDown(); break;
-			case Direction::LEFT: movePedalsLeft(); break;
-			case Direction::RIGHT: movePedalsRight(); break;
-			case Direction::UPRIGHT: movePedalsUpRight(); break;
-			case Direction::UPLEFT: movePedalsUpLeft(); break;
-			case Direction::DOWNLEFT: movePedalsDownLeft(); break;
-			case Direction::DOWNRIGHT: movePedalsDownRight(); break;
-			default: break;
-		}
-	}
-
+	
 	bool outOfBounds() override {
 		switch(dir){
 			case Direction::UP: return !belowTopOfScreen();
