@@ -18,6 +18,8 @@
 // Make the car on the main circle break when a needle hits and destroy the needle
 // Make the car of the main circle touch the power ups and taps
 // Make the cars less OP
+// Put the buddy circle as part of the main circle class
+// Put the collide functions in the shape classes.
 
 
 #define OLC_PGE_APPLICATION
@@ -31,6 +33,7 @@ int main(){
 	const int height = 1000;
 	const int pixel_width = 1;
 	const int pixel_height = 1;
+
 	const bool full_screen = true;
 	const bool vsync = true; // Game made to run at 60 fps
 	const bool cohesion = false;

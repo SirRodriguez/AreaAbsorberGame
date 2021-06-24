@@ -6,7 +6,7 @@
 #define NUMWHEELS 4
 #define WHEELANGLEOFFSET 45.0
 
-#define ACTIVATELIFE 255
+#define ACTIVATELIFE 100
 
 class Car: public Flower{
 protected:
@@ -46,7 +46,10 @@ public:
 	bool isNotActive(){ return !isActive(); }
 
 	// Life
-	void loseLife(int amount){ life -= amount; }
+	void loseLife(int amount){ 
+		life -= amount; 
+		if(life < 0) life = 0;
+	}
 	int getLife(){ return life; }
 };
 

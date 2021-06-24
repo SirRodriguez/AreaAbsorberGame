@@ -104,70 +104,29 @@ public:
 
 	// Draw score and level
 	void drawInfoText(){
-		// Draw "Score - "
-		const std::string scoreTitle = "Score - " + std::to_string(scoreContainer.getScore());
-		olc::vi2d scTitSize = GetTextSize(scoreTitle);
+		const olc::Pixel textColor = olc::BLACK;
+		const std::string infoText = "Score - " + std::to_string(scoreContainer.getScore()) + " " + "Car Life - " + std::to_string(shapesContainer.getMainCircleCarLife()) + '\n'
+			+ "Level - " + std::to_string(scoreContainer.getLevel());
+
 		DrawString(
 			0,
 			0,
-			scoreTitle,
-			olc::BLACK,
+			infoText,
+			textColor,
 			textScale
 		);
-
-		// Draw the Level
-		const std::string levelTitle = "Level - " + std::to_string(scoreContainer.getLevel());
-		olc::vi2d lvlTitSize = GetTextSize(levelTitle);
-		DrawString(
-			0,
-			scTitSize.y * textScale,
-			levelTitle,
-			olc::BLACK,
-			textScale
-		);
-
-
-		// Draw the car life
-		const std::string carLifeTitle = " Car Life - " + std::to_string(shapesContainer.getMainCircleCarLife());
-		olc::vi2d carTitSize = GetTextSize(carLifeTitle);
-		if(shapesContainer.getMainCircleCarLife() > 0){ // Only draw if there is life
-			DrawString(
-				scTitSize.x * textScale,
-				0,
-				carLifeTitle,
-				olc::BLACK,
-				textScale
-			);
-		}
 	}
 
 	void clearInfoText(){
-		// Make a white rectangle white to clear the score
-		const std::string scoreTitle = "Score - " + std::to_string(scoreContainer.getScore());
-		olc::vi2d scTitSize = GetTextSize(scoreTitle);
-
-		int scoreRectLength = textScale * scTitSize.x;
-		int scoreRectHeight = textScale * scTitSize.y;
-
-		FillRect(0, 0, scoreRectLength, scoreRectHeight);
-
-		// Make a white rectangle white to clear the level
-		const std::string levelTitle = "Level - " + std::to_string(scoreContainer.getLevel());
-		olc::vi2d lvlTitSize = GetTextSize(levelTitle);
-
-		int levelRectLength = textScale * lvlTitSize.x;
-		int levelRectHeight = textScale * lvlTitSize.y;
-
-		FillRect(0, scoreRectHeight, levelRectLength, levelRectHeight);
-
-		// Make a white rectangle white to clear the car life
-		const std::string carLifeTitle = " Car Life - " + std::to_string(shapesContainer.getMainCircleCarLife());
-		olc::vi2d carTitSize = GetTextSize(carLifeTitle);
-
-		int carLifeRectLength = textScale * carTitSize.x;
-		int carLiferectHeight = textScale * carTitSize.y;
-
-		FillRect(scoreRectLength, 0, carLifeRectLength, carLiferectHeight);
+		const std::string infoText = "Score - " + std::to_string(scoreContainer.getScore()) + " " + "Car Life - " + std::to_string(shapesContainer.getMainCircleCarLife()) + '\n'
+			+ "Level - " + std::to_string(scoreContainer.getLevel());
+		DrawString(
+			0,
+			0,
+			infoText,
+			olc::WHITE,
+			textScale
+		);
 	}
 
 	bool checkCollision(){
