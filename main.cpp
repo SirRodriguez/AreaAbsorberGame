@@ -7,6 +7,17 @@
 // Mech suit that will shoot other balls and destroys anything in the way.
 // A power up balloon that will raise you up from all the balls
 // There is a towel that will go over you or your pet and will block all the needles and other balls. still get score.
+// Power up that freezes other balls
+// A Boss Level
+// A nuke
+// Star that makes you invincible
+// Wave that you can ride that will absorbe other circles
+// slime that you turn into the size of the slime and absorbs other circle, then you turn into the size of the slime.
+
+// TODO
+// Make the car on the main circle break when a needle hits and destroy the needle
+// Make the car of the main circle touch the power ups and taps
+// Make the cars less OP
 
 
 #define OLC_PGE_APPLICATION
@@ -16,7 +27,7 @@
 
 int main(){
 	AreaAbsorber aa;
-	const int width = 750;
+	const int width = 1000;
 	const int height = 1000;
 	const int pixel_width = 1;
 	const int pixel_height = 1;

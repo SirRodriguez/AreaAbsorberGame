@@ -1006,6 +1006,10 @@ public:
 	bool mainCircleTooBig(){
 		return mainCircle.getRadius() >= 50;
 	}
+
+	int getMainCircleCarLife(){
+		return mainCircle.getCarLife();
+	}
 };
 
 #endif

@@ -47,6 +47,7 @@ public:
 
 	// Life
 	void loseLife(int amount){ life -= amount; }
+	int getLife(){ return life; }
 };
 
 #endif

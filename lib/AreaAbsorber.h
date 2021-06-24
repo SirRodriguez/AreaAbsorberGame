@@ -92,7 +92,7 @@ public:
 		// Make the background white
 		Clear(olc::WHITE);
 
-		drawScore();
+		drawInfoText();
 
 		setMainMenu();
 
@@ -103,13 +103,10 @@ public:
 	}
 
 	// Draw score and level
-	void drawScore(){
+	void drawInfoText(){
 		// Draw "Score - "
-		const std::string scoreTitle = "Score - ";
+		const std::string scoreTitle = "Score - " + std::to_string(scoreContainer.getScore());
 		olc::vi2d scTitSize = GetTextSize(scoreTitle);
-		const std::string levelTitle = "Level - ";
-		olc::vi2d lvlTitSize = GetTextSize(levelTitle);
-
 		DrawString(
 			0,
 			0,
@@ -117,15 +114,10 @@ public:
 			olc::BLACK,
 			textScale
 		);
-		// Draw the actual score
-		DrawString(
-			scTitSize.x * textScale,
-			0,
-			std::to_string(scoreContainer.getScore()),
-			olc::BLACK,
-			textScale
-		);
 
+		// Draw the Level
+		const std::string levelTitle = "Level - " + std::to_string(scoreContainer.getLevel());
+		olc::vi2d lvlTitSize = GetTextSize(levelTitle);
 		DrawString(
 			0,
 			scTitSize.y * textScale,
@@ -133,36 +125,49 @@ public:
 			olc::BLACK,
 			textScale
 		);
-		// Draw actual level
-		DrawString(
-			lvlTitSize.x * textScale,
-			scTitSize.y * textScale,
-			std::to_string(scoreContainer.getLevel()),
-			olc::BLACK,
-			textScale
-		);
+
+
+		// Draw the car life
+		const std::string carLifeTitle = " Car Life - " + std::to_string(shapesContainer.getMainCircleCarLife());
+		olc::vi2d carTitSize = GetTextSize(carLifeTitle);
+		if(shapesContainer.getMainCircleCarLife() > 0){ // Only draw if there is life
+			DrawString(
+				scTitSize.x * textScale,
+				0,
+				carLifeTitle,
+				olc::BLACK,
+				textScale
+			);
+		}
 	}
 
-	void clearScore(){
+	void clearInfoText(){
 		// Make a white rectangle white to clear the score
-		const std::string scoreTitle = "Score - ";
+		const std::string scoreTitle = "Score - " + std::to_string(scoreContainer.getScore());
 		olc::vi2d scTitSize = GetTextSize(scoreTitle);
-		olc::vi2d scoreSize = GetTextSize(std::to_string(scoreContainer.getScore()));
 
-		int scoreRectLength = textScale * (scTitSize.x + scoreSize.x);
-		int scoreRectHeight = textScale * (scTitSize.y + scoreSize.y);
+		int scoreRectLength = textScale * scTitSize.x;
+		int scoreRectHeight = textScale * scTitSize.y;
 
 		FillRect(0, 0, scoreRectLength, scoreRectHeight);
 
 		// Make a white rectangle white to clear the level
-		const std::string levelTitle = "Level - ";
+		const std::string levelTitle = "Level - " + std::to_string(scoreContainer.getLevel());
 		olc::vi2d lvlTitSize = GetTextSize(levelTitle);
-		olc::vi2d levelSize = GetTextSize(std::to_string(scoreContainer.getLevel()));
 
-		int levelRectLength = textScale * (lvlTitSize.x + levelSize.x);
-		int levelRectHeight = textScale * (lvlTitSize.y + levelSize.y);
+		int levelRectLength = textScale * lvlTitSize.x;
+		int levelRectHeight = textScale * lvlTitSize.y;
 
 		FillRect(0, scoreRectHeight, levelRectLength, levelRectHeight);
+
+		// Make a white rectangle white to clear the car life
+		const std::string carLifeTitle = " Car Life - " + std::to_string(shapesContainer.getMainCircleCarLife());
+		olc::vi2d carTitSize = GetTextSize(carLifeTitle);
+
+		int carLifeRectLength = textScale * carTitSize.x;
+		int carLiferectHeight = textScale * carTitSize.y;
+
+		FillRect(scoreRectLength, 0, carLifeRectLength, carLiferectHeight);
 	}
 
 	bool checkCollision(){
@@ -222,7 +227,7 @@ public:
 
 	void drawTheScreen(){
 		shapesContainer.drawAllShapes();
-		drawScore();
+		drawInfoText();
 	}
 
 
@@ -248,7 +253,7 @@ public:
 			}
 		}else{
 			// Clear the Screen where it needs to
-			clearScore();
+			clearInfoText();
 			shapesContainer.hideAll();
 
 			// Shape Generation

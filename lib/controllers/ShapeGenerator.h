@@ -4,8 +4,6 @@
 #include "../containers/ShapesContainer.h"
 #include "../containers/ScoreContainer.h"
 
-typedef void (*voidFunct) ();
-
 class ShapeGenerator{
 	ShapesContainer* shapesContainer;
 	ScoreContainer* scoreContainer;

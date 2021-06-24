@@ -170,6 +170,8 @@ public:
 	Car& getCar(){ return car; }
 	void hitCar(int value){ car.loseLife(value); }
 
+	int getCarLife(){ return car.getLife(); }
+
 	// Drawing
 	void clear() override {
 		// Clear the main circle
