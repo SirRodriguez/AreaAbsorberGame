@@ -2,7 +2,6 @@
 // g++ -o AreaAbsorber.exe main.cpp -luser32 -lgdi32 -lopengl32 -lgdiplus -lShlwapi -ldwmapi -lstdc++fs -static -std=c++17
 
 // Ideas
-// Circle car that last a certain time and can run over other balls. Has wheels
 // Cup that points at you and sucks you in
 // Mech suit that will shoot other balls and destroys anything in the way.
 // A power up balloon that will raise you up from all the balls
@@ -15,7 +14,6 @@
 // slime that you turn into the size of the slime and absorbs other circle, then you turn into the size of the slime.
 
 // TODO
-// Make the car on the main circle break when a needle hits and destroy the needle
 // Make the car of the main circle touch the power ups and taps
 // Make the cars less OP
 // Put the buddy circle as part of the main circle class

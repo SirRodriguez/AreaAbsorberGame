@@ -857,11 +857,15 @@ public:
 	// Returns -1 for collision with main circle
 	// Returns -2 for collision with buddy circle
 	// Returns -3 for collision with trap on main circle
+	// Returns -4 for collision with main circle car
 	int checkCollisionForNeedles(){
 		for(auto it = needles.begin(); it != needles.end(); ++it){
-			// Check collision with main circle
-			if(circleLineCollision(mainCircle, *it)){
-				return -1;
+			// Check collision with circle car
+			if(mainCircle.inCar()){
+				if(lineFlowerCollision(*it, mainCircle.getCar())){
+					needles.erase(it); // Delete needle with it
+					return -4;
+				}
 			}
 
 			// Check collision for trapped box
@@ -869,6 +873,11 @@ public:
 				if(lineSquareCollision(*it, mainCircle.getTrapSquare())){
 					return -3;
 				}
+			}
+
+			// Check collision with main circle
+			if(circleLineCollision(mainCircle, *it)){
+				return -1;
 			}
 
 			// Check collision with other circles
@@ -966,10 +975,7 @@ public:
 	// Shape changes
 	// 
 
-	void resetBuddyCircle(){
-		buddyCircle.kill();
-	}
-
+	// Main Circle
 	void resetMainCirclePosition(){
 		mainCircle.setPosition(olc::vi2d(pixelGameEngine->ScreenWidth() / 2, pixelGameEngine->ScreenHeight() / 2));
 	}
@@ -985,6 +991,16 @@ public:
 
 	void setMainCircleRadius(int radius){
 		mainCircle.setRadius(radius);
+	}
+
+	// Main Circle Car
+	void killMainCircleCar(){
+		mainCircle.inactivateCar();
+	}
+
+	// Buddy Circle
+	void resetBuddyCircle(){
+		buddyCircle.kill();
 	}
 
 	void growBuddyCircle(int amount){

@@ -171,17 +171,31 @@ bool lineSquareCollision(Line& l, Square& s){
 // 
 
 bool circlePedalsCollision(Circle& c, std::vector<Pedal>& pedals){
-	for(auto it = pedals.begin(); it != pedals.end(); ++it){
-		if(circleCircleCollision(c, *it)){
+	for(auto it = pedals.begin(); it != pedals.end(); ++it)
+		if(circleCircleCollision(c, *it))
 			return true;
-		}
-	}
 
 	return false;
 }
 
 bool circleFlowerCollision(Circle& c, Flower& f){
 	return circlePedalsCollision(c, f.getPedals()) || circleCircleCollision(c, f);
+}
+
+// 
+// Line Flower Collision Functions
+// 
+
+bool linePedalsCollision(Line& l, std::vector<Pedal>& pedals){
+	for(auto it = pedals.begin(); it != pedals.end(); ++it)
+		if(circleLineCollision(*it, l))
+			return true;
+
+	return false;
+}
+
+bool lineFlowerCollision(Line& l, Flower& f){
+	return linePedalsCollision(l, f.getPedals()) || circleLineCollision(f, l);
 }
 
 #endif

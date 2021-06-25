@@ -157,6 +157,8 @@ public:
 		int needleCollideNumber = shapesContainer.checkCollisionForNeedles();
 		if(needleCollideNumber == -2){ // Collided with buddy circle
 			shapesContainer.subtractLifeToBuddyCircle(3);
+		}else if(needleCollideNumber == -4){
+			shapesContainer.killMainCircleCar();
 		}
 
 		// Buddy Power Up collision
