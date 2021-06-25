@@ -842,9 +842,17 @@ public:
 	// Returns 0 for no colision
 	int checkCollisionForPowerUps(){
 		for(auto it = powerUps.begin(); it != powerUps.end(); ++it){
-			if(circleTriangleCollision(mainCircle, *it)){
-				powerUps.erase(it);
-				return 1;
+			// Check if main circle has car
+			if(mainCircle.inCar()){
+				if(triangleFlowerCollision(*it, mainCircle.getCar())){
+					powerUps.erase(it);
+					return 1;
+				}
+			}else{
+				if(circleTriangleCollision(mainCircle, *it)){
+					powerUps.erase(it);
+					return 1;
+				}				
 			}
 		}
 
@@ -908,10 +916,17 @@ public:
 	// Returns -1 for collision with main circle
 	int checkCollisionForBuddyPowerUps(){
 		for(auto it = buddyPowerUps.begin(); it != buddyPowerUps.end(); ++it){
-			// Check collision with main circle
-			if(circleSquareCollision(mainCircle, *it)){
-				buddyPowerUps.erase(it);
-				return -1;
+			if(mainCircle.inCar()){
+				if(squareFlowerCollision(*it, mainCircle.getCar())){
+					buddyPowerUps.erase(it);
+					return -1;
+				}
+			}else{
+				// Check collision with main circle
+				if(circleSquareCollision(mainCircle, *it)){
+					buddyPowerUps.erase(it);
+					return -1;
+				}
 			}
 		}
 
@@ -944,12 +959,21 @@ public:
 	// Return -1 for collision
 	int checkCollisionForTraps(){
 		for(auto it = traps.begin(); it != traps.end(); ++it){
-			// Check collision with main circle
-			if(circleSquareCollision(mainCircle, *it)){
-				// Activate trap for main circle
-				mainCircle.activateTrap(it->getDirectionCode());
-				traps.erase(it);
-				return -1;
+			if(mainCircle.inCar()){
+				if(squareFlowerCollision(*it, mainCircle.getCar())){
+					// Activate trap for main circle
+					mainCircle.activateTrap(it->getDirectionCode());
+					traps.erase(it);
+					return -1;
+				}
+			}else{
+				// Check collision with main circle
+				if(circleSquareCollision(mainCircle, *it)){
+					// Activate trap for main circle
+					mainCircle.activateTrap(it->getDirectionCode());
+					traps.erase(it);
+					return -1;
+				}
 			}
 		}
 

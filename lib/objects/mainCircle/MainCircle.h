@@ -152,7 +152,11 @@ public:
 			default: dir = Direction::DOWN; break;
 		}
 
-		trapSquare.setLength(getRadius() * 2 + getRadius() / 2);
+		if(inCar()){
+			trapSquare.setLength(40 + 20);
+		}else{
+			trapSquare.setLength(getRadius() * 2 + getRadius() / 2);
+		}
 		trapSquare.activate();	
 	}
 	void inactivateTrap(){ trapSquare.inactivate(); }
