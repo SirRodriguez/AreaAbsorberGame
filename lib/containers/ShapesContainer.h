@@ -6,8 +6,7 @@
 #include "../objects/powerUp/PowerUp.h"
 #include "../objects/powerUp/PowerUpCircle.h"
 #include "../objects/Needle.h"
-#include "../objects/buddy/BuddyPowerUp.h"
-#include "../objects/buddy/BuddyCircle.h"
+#include "../objects/BuddyPowerUp.h"
 #include "../objects/Trap.h"
 #include "../objects/CircleCar.h"
 
@@ -55,11 +54,7 @@ class ShapesContainer{
 	std::list<Needle> needles;
 	std::list<Trap> traps;
 	std::list<CircleCar> circleCars;
-
-	// For the buddy shapes power ups
 	std::list<BuddyPowerUp> buddyPowerUps;
-	BuddyCircle buddyCircle;
-
 	std::list<PowerUpCircle> powerUpCircles;
 
 public:
@@ -70,8 +65,20 @@ public:
 		olc::vi2d centerPos = olc::vi2d(pixelGameEngine->ScreenWidth() / 2, pixelGameEngine->ScreenHeight() / 2);
 
 		// Initialize the main circle and buddy circle
-		mainCircle = MainCircle(pge, centerPos, mainCircleSpeed, mainCircleColor, initialMainCircleSize, 0);
-		buddyCircle = BuddyCircle(pge, centerPos, buddyCircleSpeed, buddyCircleColor, 0, 0);
+		uint8_t numLives = 0;
+		mainCircle = MainCircle(
+			pge, 
+			centerPos, 
+			mainCircleSpeed, 
+			mainCircleColor, 
+			initialMainCircleSize, 
+			numLives,
+			circleCarColor,
+			circleCarWheelColor,
+			circleCarRadius,
+			buddyCircleSpeed,
+			buddyCircleColor
+		);
 
 		// Make sure that the lists are cleared
 		otherCircle.clear();
@@ -140,10 +147,6 @@ public:
 		}
 	}
 
-	void hideBuddyCircle(){
-		buddyCircle.clear();
-	}
-
 	void hideTraps(){
 		for(auto it = traps.begin(); it != traps.end(); ++it){
 			it->clear();
@@ -163,7 +166,6 @@ public:
 		hidePowerUpCircles();
 		hideNeedles();
 		hideBuddyPowerUps();
-		hideBuddyCircle();
 		hideTraps();
 		hideCircleCars();
 	}
@@ -202,10 +204,6 @@ public:
 		}
 	}
 
-	void drawBuddyCircle(){
-		buddyCircle.draw();
-	}
-
 	void drawTraps(){
 		for(auto it = traps.begin(); it != traps.end(); ++it){
 			it->draw();
@@ -225,7 +223,6 @@ public:
 		drawPowerUpCircles();
 		drawNeedles();
 		drawBuddyPowerUps();
-		drawBuddyCircle();
 		drawTraps();
 		drawCircleCars();
 	}
@@ -707,10 +704,6 @@ public:
 		}
 	}
 
-	void moveBuddyCircle(){
-		buddyCircle.move(mainCircle);
-	}
-
 	void moveTraps(){
 		for(auto it = traps.begin(); it != traps.end();){
 			it->move();
@@ -740,7 +733,6 @@ public:
 		movePowerUpCircles();
 		moveNeedles();
 		moveBuddyPowerUps();
-		moveBuddyCircle();
 		moveTraps();
 		moveCircleCars();
 	}
@@ -770,7 +762,7 @@ public:
 	}
 
 	void deleteBuddyCircle(){
-		buddyCircle.kill();
+		mainCircle.killBuddy();
 	}
 
 	void deleteAllTraps(){
@@ -905,7 +897,7 @@ public:
 			}
 
 			// Check collision with buddy circle
-			if(circleLineCollision(buddyCircle, *it)){
+			if(circleLineCollision(mainCircle.getBuddy(), *it)){
 				return -2;
 			}
 		}
@@ -937,11 +929,11 @@ public:
 	// Return negative number for Collision with other circle thats bigger
 	// Return positive number for collision with other circle thats smaller
 	int checkCollisionForBuddyCircle(){
-		if(buddyCircle.alive()){
+		if(mainCircle.buddyAlive()){
 			for(auto it = otherCircle.begin(); it != otherCircle.end(); ++it){
 				// Check collision with other circles
-				if(circleCircleCollision(*it, buddyCircle)){
-					if(buddyCircle.getRadius() > it->getRadius()){
+				if(circleCircleCollision(*it, mainCircle.getBuddy())){
+					if(mainCircle.getBuddyRadius() > it->getRadius()){
 						otherCircle.erase(it);
 						return it->getRadius();
 					}else{
@@ -1024,19 +1016,19 @@ public:
 
 	// Buddy Circle
 	void resetBuddyCircle(){
-		buddyCircle.kill();
+		mainCircle.killBuddy();
 	}
 
 	void growBuddyCircle(int amount){
-		buddyCircle.grow(amount);
+		mainCircle.growBuddy(amount);
 	}
 
 	void addLifeToBuddyCircle(int amount){
-		buddyCircle.addLife(amount);
+		mainCircle.addLifeToBuddy(amount);
 	}
 
 	void subtractLifeToBuddyCircle(int amount){
-		buddyCircle.subtractLife(amount);
+		mainCircle.reduceLifeToBuddy(amount);
 	}
 
 	// 

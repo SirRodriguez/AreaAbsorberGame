@@ -4,6 +4,7 @@
 #include "../../shapes/derivedShapes/Circle.h"
 #include "TrapSquare.h"
 #include "Car.h"
+#include "BuddyCircle.h"
 
 class MainCircle: public Circle{
 private:
@@ -21,6 +22,8 @@ private:
 protected:
 	TrapSquare trapSquare;
 	Car car;
+	BuddyCircle buddy;
+
 	Direction dir;
 
 	int lives;
@@ -63,6 +66,8 @@ protected:
 
 		car.draw();
 
+		buddy.draw();
+
 		pixelGameEngine->FillCircle(position, radius, colorToDraw);
 
 		trapSquare.draw();
@@ -70,12 +75,13 @@ protected:
 
 public:
 	MainCircle()
-	: Circle(), lives(0), trapSquare(TrapSquare()){}
-	MainCircle(olc::PixelGameEngine& pge, olc::vi2d& pos, int _speed, const olc::Pixel& _color, int newRadius, int newLives)
+	: Circle(), lives(0), trapSquare(TrapSquare()), car(Car()), buddy(BuddyCircle()){}
+	MainCircle(olc::PixelGameEngine& pge, olc::vi2d& pos, int _speed, const olc::Pixel& _color, int newRadius, int newLives, const olc::Pixel& carColor, const olc::Pixel& wheelColor, int carRadius, int buddySpeed, const olc::Pixel& buddyColor)
 	: Circle(pge, pos, _speed, _color, newRadius), 
 		lives(newLives), 	
 		trapSquare(TrapSquare(pge, pos, _speed, _color, newRadius)), 
-		car(Car(pge, pos, _speed, olc::BLUE, olc::BLACK, 40)),
+		car(Car(pge, pos, _speed, carColor, wheelColor, carRadius)),
+		buddy(BuddyCircle(pge, pos, buddySpeed, buddyColor, 0, 0)),
 		dir(Direction::DOWN){}
 
 	// Lives
@@ -98,9 +104,6 @@ public:
 				moveRight();
 			}
 
-			// // Move the trap to the main circle
-			// trapSquare.setPosition(getPosition());
-
 		}else if(aboveBottomOfScreen()){
 			// Move the main circle
 			// moveDown(getTrappedSpeed());
@@ -116,9 +119,6 @@ public:
 				case 7: moveDownRight(getTrappedSpeed()); break;
 				default: break;
 			}
-
-			// // Move the trap to the main circle
-			// trapSquare.setPosition(getPosition());
 		}
 
 		// Move the trap to the main circle
@@ -132,12 +132,17 @@ public:
 
 		// To move its pedals
 		car.move();
+
+		// Move the buddy circle
+		buddy.move(*this);
 	}
 
 	// Size
 	void grow(int amount){ addRadius(amount); }
 
+	// 
 	// Trap Square functions
+	// 
 	void activateTrap(int directionCode){
 		// Direction the trap was going
 		switch(directionCode){
@@ -165,7 +170,9 @@ public:
 
 	TrapSquare& getTrapSquare(){ return trapSquare; }
 
+	// 
 	// Circle Car functions
+	// 
 	void activateCar(){	car.activate(); }
 	void inactivateCar(){ car.inactivate(); }
 	bool inCar(){ return car.isActive(); }
@@ -186,11 +193,29 @@ public:
 
 		// Clear the car
 		car.clear();
+
+		// Clear the buddy circle
+		buddy.clear();
 	}
+
+	// 
+	// Buddy Circle functions
+	// 
+	int getBuddyRadius(){ return buddy.getRadius(); }
+	bool buddyAlive(){ return buddy.alive(); }
+	bool buddyNotAlive(){ return !buddyAlive(); }
+	void killBuddy(){ buddy.kill(); }
+	BuddyCircle& getBuddy(){ return buddy; }
+	void growBuddy(int amount){ buddy.grow(amount); }
+	void addLifeToBuddy(int amount){ buddy.addLife(amount); }
+	void reduceLifeToBuddy(int amount){ buddy.subtractLife(amount); }
+
+
 
 	void inactivateObjects(){
 		inactivateTrap();
 		inactivateCar();
+		killBuddy();
 	}
 };
 

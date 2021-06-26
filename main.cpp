@@ -14,8 +14,6 @@
 // slime that you turn into the size of the slime and absorbs other circle, then you turn into the size of the slime.
 
 // TODO
-// Make the car of the main circle touch the power ups and taps
-// Make the cars less OP
 // Put the buddy circle as part of the main circle class
 // Put the collide functions in the shape classes.
 

@@ -1,7 +1,7 @@
 #ifndef BUDDYPOWERUP_H
 #define BUDDYPOWERUP_H
 
-#include "../../shapes/derivedShapes/Square.h"
+#include "../shapes/derivedShapes/Square.h"
 
 class BuddyPowerUp: public Square{
 private:

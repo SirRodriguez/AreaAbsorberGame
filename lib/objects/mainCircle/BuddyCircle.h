@@ -1,8 +1,11 @@
 #ifndef BUDDYCIRCLE_H
 #define BUDDYCIRCLE_H
 
-#include "../../utils.h"
+// #include "../../utils.h"
 #include "../../shapes/derivedShapes/Circle.h"
+
+// Forward declaration for this function only
+bool circleCircleCollision(Circle& c, Circle& c2);
 
 #define MAXRADIUS 50
 
@@ -41,6 +44,9 @@ public:
 	// Life ---
 	bool alive(){
 		return lives > 0;
+	}
+	bool notAlive(){
+		return !alive();
 	}
 	void kill(){
 		lives = 0;
