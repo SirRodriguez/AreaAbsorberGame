@@ -14,7 +14,6 @@
 // slime that you turn into the size of the slime and absorbs other circle, then you turn into the size of the slime.
 
 // TODO
-// Put the buddy circle as part of the main circle class
 // Put the collide functions in the shape classes.
 
 

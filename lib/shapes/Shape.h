@@ -10,6 +10,15 @@ protected:
 
 	virtual void drawWithColor(const olc::Pixel& colorToDraw) = 0;
 
+	virtual void moveUp(){ movePosition(olc::vi2d(0, -speed)); }
+	virtual void moveDown(){ movePosition(olc::vi2d(0, speed)); }
+	virtual void moveLeft(){ movePosition(olc::vi2d(-speed, 0)); }
+	virtual void moveRight(){ movePosition(olc::vi2d(speed, 0)); }
+	virtual void moveUpLeft(){ movePosition(olc::vi2d(-speed, -speed)); }
+	virtual void moveUpRight(){ movePosition(olc::vi2d(speed, -speed)); }
+	virtual void moveDownLeft(){ movePosition(olc::vi2d(-speed, speed)); }
+	virtual void moveDownRight(){ movePosition(olc::vi2d(speed, speed)); }
+
 public:
 	Shape()
 	: pixelGameEngine(nullptr), position(olc::vi2d(0,0)), speed(0), color(olc::WHITE){}

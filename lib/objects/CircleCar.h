@@ -22,15 +22,6 @@ private:
 protected:
 	Direction dir;
 
-	void moveUp(){ movePosition(olc::vi2d(0, -speed)); }
-	void moveDown(){ movePosition(olc::vi2d(0, speed)); }
-	void moveLeft(){ movePosition(olc::vi2d(-speed, 0)); }
-	void moveRight(){ movePosition(olc::vi2d(speed, 0)); }
-	void moveUpLeft(){ movePosition(olc::vi2d(-speed, -speed)); }
-	void moveUpRight(){ movePosition(olc::vi2d(speed, -speed)); }
-	void moveDownLeft(){ movePosition(olc::vi2d(-speed, speed)); }
-	void moveDownRight(){ movePosition(olc::vi2d(speed, speed)); }
-
 public:
 	CircleCar()
 	: Flower(){}

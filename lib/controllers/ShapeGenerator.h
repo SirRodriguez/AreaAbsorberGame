@@ -15,6 +15,7 @@ class ShapeGenerator{
 	int likelyHoodOfBuddyPowerUps = 1000;
 	int likelyHoodOfTraps = 500;
 	int likelyHoodOfCircleCars = 2000;
+	int likelyHoodOfNukes = 3000;
 
 	bool generateChecker(int likelyHood){
 		int module = likelyHood - (scoreContainer->getLevel() - 1) * likelyHood / 10;
@@ -89,6 +90,11 @@ class ShapeGenerator{
 			shapesContainer->addCircleCar(makeDirectionCode());
 	}
 
+	void generateNukes(){
+		if(generateChecker(likelyHoodOfNukes))
+			shapesContainer->addNuke(makeDirectionCode());
+	}
+
 public:
 	ShapeGenerator()
 	: shapesContainer(nullptr), scoreContainer(nullptr){
@@ -106,6 +112,7 @@ public:
 		generateBuddyPowerUps();
 		generateTraps();
 		generateCircleCars();
+		generateNukes();
 	}
 };
 

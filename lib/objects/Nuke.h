@@ -1,9 +1,12 @@
-#ifndef NEEDLE_H
-#define NEEDLE_H
+#ifndef NUKE_H
+#define NUKE_H
 
-#include "../shapes/derivedShapes/Line.h"
+#include "../shapes/derivedShapes/flower/Flower.h"
 
-class Needle: public Line{
+#define NUMPEDALS 7
+#define PEDALANGLEOFFSET 0.0
+
+class Nuke: public Flower{
 private:
 	enum Direction{
 		UP,
@@ -20,10 +23,10 @@ protected:
 	Direction dir;
 
 public:
-	Needle()
-	: Line(){}
-	Needle(olc::PixelGameEngine& pge, olc::vi2d& pos, int _speed, const olc::Pixel& _color, int _dx, int _dy, int directionCode)
-	: Line(pge, pos, _speed, _color, _dx, _dy){
+	Nuke()
+	: Flower(){}
+	Nuke(olc::PixelGameEngine& pge, olc::vi2d& pos, int _speed, const olc::Pixel& _color, const olc::Pixel& _pedalColor, int newRadius, int directionCode)
+	: Flower(pge, pos, _speed, _color, _pedalColor, newRadius, NUMPEDALS, PEDALANGLEOFFSET){
 		switch(directionCode){
 			case 0: dir = Direction::UP; break;
 			case 1: dir = Direction::DOWN; break;
@@ -37,7 +40,7 @@ public:
 		}
 	}
 
-	void move(){
+	void move() override{
 		switch(dir){
 			case Direction::UP: moveUp(); break;
 			case Direction::DOWN: moveDown(); break;
@@ -49,6 +52,8 @@ public:
 			case Direction::DOWNRIGHT: moveDownRight(); break;
 			default: break;
 		}
+
+		fixPedalsToPosition();
 	}
 
 	bool outOfBounds() override {

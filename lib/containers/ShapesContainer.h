@@ -9,6 +9,7 @@
 #include "../objects/BuddyPowerUp.h"
 #include "../objects/Trap.h"
 #include "../objects/CircleCar.h"
+#include "../objects/Nuke.h"
 
 #include "../utils.h"
 
@@ -23,6 +24,8 @@ const olc::Pixel buddyCircleColor = olc::DARK_GREY;
 const olc::Pixel trapColor = olc::BLUE;
 const olc::Pixel circleCarColor = olc::BLUE;
 const olc::Pixel circleCarWheelColor = olc::BLACK;
+const olc::Pixel nukeColor = olc::BLACK;
+const olc::Pixel nukePedalColor = olc::DARK_RED;
 
 // Speeds
 const uint8_t otherCircleSpeed = 4;
@@ -34,6 +37,7 @@ const uint8_t buddyCircleSpeed = 2;
 const uint8_t mainCircleSpeed = 5;
 const uint8_t trapSpeed = 4;
 const uint8_t circleCarSpeed = 2;
+const uint8_t nukeSpeed = 6;
 
 // Sizes
 const uint8_t initialMainCircleSize = 10;
@@ -43,19 +47,25 @@ const uint8_t maxNeedleLength = 50;
 const uint8_t buddyPowerUpLength = 40;
 const uint8_t trapLength = 40;
 const uint8_t circleCarRadius = 40;
+const uint8_t nukeRadius = 30;
 
 class ShapesContainer{
 	olc::PixelGameEngine* pixelGameEngine;
 
-	// Shapes
+	// Main circle
 	MainCircle mainCircle;
-	std::list<OtherCircle> otherCircle;
+
+	// Power ups
 	std::list<PowerUp> powerUps;
-	std::list<Needle> needles;
-	std::list<Trap> traps;
 	std::list<CircleCar> circleCars;
 	std::list<BuddyPowerUp> buddyPowerUps;
 	std::list<PowerUpCircle> powerUpCircles;
+	std::list<Nuke> nukes;
+
+	// Enemies
+	std::list<Needle> needles;
+	std::list<Trap> traps;
+	std::list<OtherCircle> otherCircle;
 
 public:
 	ShapesContainer()
@@ -100,6 +110,7 @@ public:
 		deleteAllNeedles();
 		deleteAllTraps();
 		deleteAllCircleCars();
+		deleteAllNukes();
 	}
 
 	void clearForNextLevel(){
@@ -159,6 +170,12 @@ public:
 		}
 	}
 
+	void hideNukes(){
+		for(auto it = nukes.begin(); it != nukes.end(); ++it){
+			it->clear();
+		}
+	}
+
 	void hideAll(){
 		hideCircles();
 		hideMainCircle();
@@ -168,6 +185,7 @@ public:
 		hideBuddyPowerUps();
 		hideTraps();
 		hideCircleCars();
+		hideNukes();
 	}
 
 	void drawMainCircle(){
@@ -216,6 +234,12 @@ public:
 		}
 	}
 
+	void drawNukes(){
+		for(auto it = nukes.begin(); it != nukes.end(); ++it){
+			it->draw();
+		}
+	}
+
 	void drawAllShapes(){
 		drawMainCircle();
 		drawCircles();
@@ -225,6 +249,7 @@ public:
 		drawBuddyPowerUps();
 		drawTraps();
 		drawCircleCars();
+		drawNukes();
 	}
 
 	// 
@@ -639,6 +664,74 @@ public:
 				makeCircleCar(olc::vi2d(pixelGameEngine->ScreenWidth(), (rand() % pixelGameEngine->ScreenHeight() / 2) + pixelGameEngine->ScreenHeight() / 2), 4);
 			}
 		}
+	}
+
+	// Direction code tells the direction where the power up is comming from on the screen
+	// It is a bitwise code, so:
+	// 0000 0000 <- from right to left, if the bit is a 1 it means:
+	// - From Top
+	// - From Bottom
+	// - From Left
+	// - From Right
+	// - From Top Left
+	// - From Top Right
+	// - Form Bottom Left
+	// - From Bottom Right
+	// If multiple bits are one, them multiple circles will pop out
+	void addNuke(uint8_t dirFromCode){
+		auto makeNuke = [&](olc::vi2d _loc, int dirCode){
+			// const uint8_t circleCarNumWheels = 4;
+			// const double degOffset = 45.0;
+			nukes.push_back(Nuke(*pixelGameEngine, _loc, nukeSpeed, nukeColor, nukePedalColor, nukeRadius, dirCode));
+		};
+
+		if(dirFromCode & 0x01){ // FROM TOP
+			makeNuke(olc::vi2d(rand() % pixelGameEngine->ScreenWidth(), 0), 1);
+		}
+
+		if(dirFromCode & 0x02){ // FROM BOTTOM
+			makeNuke(olc::vi2d(rand() % pixelGameEngine->ScreenWidth(), pixelGameEngine->ScreenHeight()), 0);
+		}
+
+		if(dirFromCode & 0x04){ // FROM LEFT
+			makeNuke(olc::vi2d(0, rand() % pixelGameEngine->ScreenHeight()), 3);
+		}
+
+		if(dirFromCode & 0x08){ // FROM RIGHT
+			makeNuke(olc::vi2d(pixelGameEngine->ScreenWidth(), rand() % pixelGameEngine->ScreenHeight()), 2);
+		}
+
+		if(dirFromCode & 0x10){ // FROM TOP LEFT
+			if(rand() % 2 == 0){ // FROM TOP ON LEFT HALF
+				makeNuke(olc::vi2d(rand() % pixelGameEngine->ScreenWidth() / 2, 0), 7);
+			}else{ // FROM LEFT ON TOP HALF
+				makeNuke(olc::vi2d(0, rand() % pixelGameEngine->ScreenHeight() / 2), 7);
+			}
+		}
+
+		if(dirFromCode & 0x20){ // FROM TOP RIGHT
+			if(rand() % 2 == 0){ // FROM TOP ON RIGHT HALF
+				makeNuke(olc::vi2d((rand() % pixelGameEngine->ScreenWidth() / 2 ) + pixelGameEngine->ScreenWidth() / 2, 0), 6);
+			}else{ // FROM RIGHT ON TOP HALF
+				makeNuke(olc::vi2d(pixelGameEngine->ScreenWidth(), (rand() % pixelGameEngine->ScreenHeight() / 2 )), 6);
+			}
+		}
+
+		if(dirFromCode & 0x40){ // FROM BOTTOM LEFT
+			if(rand() % 2 == 0){ // FROM BOTTOM ON LEFT HALF
+				makeNuke(olc::vi2d(rand() % pixelGameEngine->ScreenWidth() / 2, pixelGameEngine->ScreenHeight()), 5);
+			}else{ // FROM LEFT ON BOTTOM HALF
+				makeNuke(olc::vi2d(0, (rand() % pixelGameEngine->ScreenHeight() / 2) + pixelGameEngine->ScreenHeight() / 2), 5);
+			}
+		}
+
+		if(dirFromCode & 0x80){ // FROM BOTTOM RIGHT
+			if(rand() % 2 == 0){ // FROM BOTTOM ON RIGHT HALF
+				makeNuke(olc::vi2d((rand() % pixelGameEngine->ScreenWidth() / 2) + pixelGameEngine->ScreenWidth() / 2, pixelGameEngine->ScreenHeight()), 4);
+			}else{ // FROM RIGHT ON BOTTOM HALF
+				makeNuke(olc::vi2d(pixelGameEngine->ScreenWidth(), (rand() % pixelGameEngine->ScreenHeight() / 2) + pixelGameEngine->ScreenHeight() / 2), 4);
+			}
+		}
 
 	}
 
@@ -726,6 +819,17 @@ public:
 		}
 	}
 
+	void moveNukes(){
+		for(auto it = nukes.begin(); it != nukes.end();){
+			it->move();
+			if(it->outOfBounds()){
+				nukes.erase(it++);
+			}else{
+				++it;
+			}
+		}
+	}
+
 	void moveAllShapes(){
 		moveMainCircle();
 		moveCircles();
@@ -735,6 +839,7 @@ public:
 		moveBuddyPowerUps();
 		moveTraps();
 		moveCircleCars();
+		moveNukes();
 	}
 
 	// 
@@ -771,6 +876,10 @@ public:
 
 	void deleteAllCircleCars(){
 		circleCars.clear();
+	}
+
+	void deleteAllNukes(){
+		nukes.clear();
 	}
 
 	// 

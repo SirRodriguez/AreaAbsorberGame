@@ -41,14 +41,14 @@ protected:
 	void moveDownRight(int pixels){ movePosition(olc::vi2d(pixels, pixels)); }
 
 	// Move at default speed unless car is active
-	void moveUp(){ moveUp(inCar() ? speed * 2 : speed); }
-	void moveDown(){ moveDown(inCar() ? speed * 2 : speed); }
-	void moveLeft(){ moveLeft(inCar() ? speed * 2 : speed); }
-	void moveRight(){ moveRight(inCar() ? speed * 2 : speed); }
-	void moveUpLeft(){ moveUpLeft(inCar() ? speed * 2 : speed); }
-	void moveUpRight(){ moveUpRight(inCar() ? speed * 2 : speed); }
-	void moveDownLeft(){ moveDownLeft(inCar() ? speed * 2 : speed); }
-	void moveDownRight(){ moveDownRight(inCar() ? speed * 2 : speed); }
+	void moveUp() override { moveUp(inCar() ? speed * 2 : speed); }
+	void moveDown() override { moveDown(inCar() ? speed * 2 : speed); }
+	void moveLeft() override { moveLeft(inCar() ? speed * 2 : speed); }
+	void moveRight() override { moveRight(inCar() ? speed * 2 : speed); }
+	void moveUpLeft() override { moveUpLeft(inCar() ? speed * 2 : speed); }
+	void moveUpRight() override { moveUpRight(inCar() ? speed * 2 : speed); }
+	void moveDownLeft() override { moveDownLeft(inCar() ? speed * 2 : speed); }
+	void moveDownRight() override { moveDownRight(inCar() ? speed * 2 : speed); }
 
 	// Drawing
 	void drawWithColor(const olc::Pixel& colorToDraw) override {
