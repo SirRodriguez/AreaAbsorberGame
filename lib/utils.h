@@ -230,4 +230,24 @@ bool squareFlowerCollision(Square& s, Flower& f){
 	return squarePedalsCollision(s, f.getPedals()) || circleSquareCollision(f, s);
 }
 
+// 
+// Flower Flower Collision Functions
+// 
+
+bool pedalsPedalsCollision(std::vector<Pedal>& p, std::vector<Pedal>& p2){
+	for(auto it = p.begin(); it != p.end(); ++it)
+		for(auto it2 = p2.begin(); it2 != p2.end(); ++it2)
+			if(circleCircleCollision(*it, *it2))
+				return true;
+
+	return false;
+}
+
+bool flowerFlowerCollision(Flower& f, Flower& f2){
+	return pedalsPedalsCollision(f.getPedals(), f2.getPedals()) ||
+		circlePedalsCollision(f, f2.getPedals()) ||
+		circlePedalsCollision(f2, f.getPedals()) ||
+		circleCircleCollision(f, f2);
+}
+
 #endif

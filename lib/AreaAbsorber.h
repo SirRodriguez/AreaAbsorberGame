@@ -183,6 +183,12 @@ public:
 		// Check Circle Car Collisions
 		int circleCarCollidenumber = shapesContainer.checkCollisionForCircleCars();
 
+		// Check Nukes Collision
+		int nukesCollideNumber = shapesContainer.checkCollisionForNukes();
+		if(nukesCollideNumber == -1){
+			shapesContainer.runNuke();
+		}
+
 		return collideNumber == -1 || needleCollideNumber == -1;
 	}
 

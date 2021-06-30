@@ -1085,11 +1085,40 @@ public:
 	// Return -1 for collision
 	int checkCollisionForCircleCars(){
 		for(auto it = circleCars.begin(); it != circleCars.end(); ++it){
-			// Check collision with main circle
-			if(circleFlowerCollision(mainCircle, *it)){
-				mainCircle.activateCar();
-				circleCars.erase(it);
-				return -1;
+			if(mainCircle.inCar()){
+				if(flowerFlowerCollision(mainCircle.getCar(), *it)){
+					mainCircle.activateCar();
+					circleCars.erase(it);
+					return -1;
+				}
+			}else{
+				// Check collision with main circle
+				if(circleFlowerCollision(mainCircle, *it)){
+					mainCircle.activateCar();
+					circleCars.erase(it);
+					return -1;
+				}
+			}
+		}
+
+		return 0;
+	}
+
+	// Return 0 for no collisions
+	// Return -1 for collision
+	int checkCollisionForNukes(){
+		for(auto it = nukes.begin(); it != nukes.end(); ++it){
+			if(mainCircle.inCar()){
+				if(flowerFlowerCollision(mainCircle.getCar(), *it)){
+					nukes.erase(it);
+					return -1;
+				}
+			}else{
+				// Check collision with the circle itself
+				if(circleFlowerCollision(mainCircle, *it)){
+					nukes.erase(it);
+					return -1;
+				}
 			}
 		}
 
@@ -1138,6 +1167,13 @@ public:
 
 	void subtractLifeToBuddyCircle(int amount){
 		mainCircle.reduceLifeToBuddy(amount);
+	}
+
+	// Nuke
+	void runNuke(){
+		needles.clear();
+		traps.clear();
+		otherCircle.clear();
 	}
 
 	// 
