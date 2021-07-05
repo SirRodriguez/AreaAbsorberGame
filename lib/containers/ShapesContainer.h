@@ -2,7 +2,6 @@
 #define SHAPESCONTAINER
 
 #include "../objects/mainCircle/MainCircle.h"
-#include "../objects/OtherCircle.h"
 #include "../objects/powerUp/PowerUp.h"
 #include "../objects/powerUp/PowerUpCircle.h"
 #include "../objects/Needle.h"
@@ -12,6 +11,8 @@
 #include "../objects/Nuke.h"
 
 #include "../utils.h"
+
+#include "derivedShapeList/OtherCircleList.h"
 
 // Colors
 const olc::Pixel mainCircleColor = olc::BLACK;
@@ -65,7 +66,7 @@ class ShapesContainer{
 	// Enemies
 	std::list<Needle> needles;
 	std::list<Trap> traps;
-	std::list<OtherCircle> otherCircle;
+	OtherCircleList otherCircles;
 
 public:
 	ShapesContainer()
@@ -90,20 +91,25 @@ public:
 			buddyCircleColor
 		);
 
+		otherCircles = OtherCircleList(pge);
+
 		// Make sure that the lists are cleared
-		otherCircle.clear();
-		powerUps.clear();
-		powerUpCircles.clear();
-		needles.clear();
-		buddyPowerUps.clear();
-		traps.clear();
+		otherCircles.deleteAll();
+		deleteAllPowerUps();
+		deleteAllPowerUpCircles();
+		deleteAllNeedles();
+		deleteAllBuddyPowerUps();
+		deleteAllTraps();
+		deleteAllCircleCars();
+		deleteAllNukes();
 	}
 
 	void reset(){
 		setMainCircleRadius(initialMainCircleSize);
 		resetMainCircleObjects();
 
-		deleteAllCircles();
+		// deleteAllCircles();
+		otherCircles.deleteAll();
 		deleteAllPowerUps();
 		deleteAllBuddyPowerUps();
 		deleteAllPowerUpCircles();
@@ -115,7 +121,7 @@ public:
 
 	void clearForNextLevel(){
 		setMainCircleRadius(initialMainCircleSize);
-		deleteAllCircles();
+		otherCircles.deleteAll();
 		deleteAllNeedles();
 		deleteAllTraps();
 	}
@@ -126,12 +132,6 @@ public:
 
 	void hideMainCircle(){
 		mainCircle.clear();
-	}
-
-	void hideCircles(){
-		for(auto it = otherCircle.begin(); it != otherCircle.end(); ++it){
-			it->clear();
-		}
 	}
 
 	void hidePowerUpCircles(){
@@ -177,8 +177,8 @@ public:
 	}
 
 	void hideAll(){
-		hideCircles();
 		hideMainCircle();
+		otherCircles.hideAll();
 		hidePowerUps();
 		hidePowerUpCircles();
 		hideNeedles();
@@ -190,12 +190,6 @@ public:
 
 	void drawMainCircle(){
 		mainCircle.draw();
-	}
-
-	void drawCircles(){
-		for(auto it = otherCircle.begin(); it != otherCircle.end(); ++it){
-			it->draw();
-		}
 	}
 
 	void drawPowerUps(){
@@ -242,7 +236,7 @@ public:
 
 	void drawAllShapes(){
 		drawMainCircle();
-		drawCircles();
+		otherCircles.drawAll();
 		drawPowerUps();
 		drawPowerUpCircles();
 		drawNeedles();
@@ -256,70 +250,8 @@ public:
 	// List additions
 	// 
 
-	// Direction code tells the direction where the circle is comming from on the screen
-	// It is a bitwise code, so:
-	// 0000 0000 <- from right to left, if the bit is a 1 it means:
-	// - From Top
-	// - From Bottom
-	// - From Left
-	// - From Right
-	// - From Top Left
-	// - From Top Right
-	// - Form Bottom Left
-	// - From Bottom Right
-	// If multiple bits are one, them multiple circles will pop out
 	void addCircle(uint8_t dirFromCode){
-		auto makeCircle = [&](olc::vi2d _loc, int dirCode){
-			otherCircle.push_back(OtherCircle(*pixelGameEngine, _loc, otherCircleSpeed, otherCircleColor, rand() % otherCircleMaxRadius, dirCode));
-		};
-
-		if(dirFromCode & 0x01){ // FROM TOP
-			makeCircle(olc::vi2d(rand() % pixelGameEngine->ScreenWidth(), 0), 1);
-		}
-
-		if(dirFromCode & 0x02){ // FROM BOTTOM
-			makeCircle(olc::vi2d(rand() % pixelGameEngine->ScreenWidth(), pixelGameEngine->ScreenHeight()), 0);
-		}
-
-		if(dirFromCode & 0x04){ // FROM LEFT
-			makeCircle(olc::vi2d(0, rand() % pixelGameEngine->ScreenHeight()), 3);
-		}
-
-		if(dirFromCode & 0x08){ // FROM RIGHT
-			makeCircle(olc::vi2d(pixelGameEngine->ScreenWidth(), rand() % pixelGameEngine->ScreenHeight()), 2);
-		}
-
-		if(dirFromCode & 0x10){ // FROM TOP LEFT
-			if(rand() % 2 == 0){ // FROM TOP ON LEFT HALF
-				makeCircle(olc::vi2d(rand() % pixelGameEngine->ScreenWidth() / 2, 0), 7);
-			}else{ // FROM LEFT ON TOP HALF
-				makeCircle(olc::vi2d(0, rand() % pixelGameEngine->ScreenHeight() / 2), 7);
-			}
-		}
-
-		if(dirFromCode & 0x20){ // FROM TOP RIGHT
-			if(rand() % 2 == 0){ // FROM TOP ON RIGHT HALF
-				makeCircle(olc::vi2d((rand() % pixelGameEngine->ScreenWidth() / 2 ) + pixelGameEngine->ScreenWidth() / 2, 0), 6);
-			}else{ // FROM RIGHT ON TOP HALF
-				makeCircle(olc::vi2d(pixelGameEngine->ScreenWidth(), (rand() % pixelGameEngine->ScreenHeight() / 2 )), 6);
-			}
-		}
-
-		if(dirFromCode & 0x40){ // FROM BOTTOM LEFT
-			if(rand() % 2 == 0){ // FROM BOTTOM ON LEFT HALF
-				makeCircle(olc::vi2d(rand() % pixelGameEngine->ScreenWidth() / 2, pixelGameEngine->ScreenHeight()), 5);
-			}else{ // FROM LEFT ON BOTTOM HALF
-				makeCircle(olc::vi2d(0, (rand() % pixelGameEngine->ScreenHeight() / 2) + pixelGameEngine->ScreenHeight() / 2), 5);
-			}
-		}
-
-		if(dirFromCode & 0x80){ // FROM BOTTOM RIGHT
-			if(rand() % 2 == 0){ // FROM BOTTOM ON RIGHT HALF
-				makeCircle(olc::vi2d((rand() % pixelGameEngine->ScreenWidth() / 2) + pixelGameEngine->ScreenWidth() / 2, pixelGameEngine->ScreenHeight()), 4);
-			}else{ // FROM RIGHT ON BOTTOM HALF
-				makeCircle(olc::vi2d(pixelGameEngine->ScreenWidth(), (rand() % pixelGameEngine->ScreenHeight() / 2) + pixelGameEngine->ScreenHeight() / 2), 4);
-			}
-		}
+		otherCircles.add(dirFromCode);
 	}
 
 	// Direction code tells the direction where the power up is comming from on the screen
@@ -742,17 +674,6 @@ public:
 		mainCircle.move();
 	}
 
-	void moveCircles(){
-		for(auto it = otherCircle.begin(); it != otherCircle.end();){
-			it->move();
-			if(it->outOfBounds()){
-				otherCircle.erase(it++);
-			}else{
-				++it;
-			}
-		}
-	}
-
 	void movePowerUps(){
 		for(auto it = powerUps.begin(); it != powerUps.end();){
 			it->move();
@@ -832,7 +753,7 @@ public:
 
 	void moveAllShapes(){
 		moveMainCircle();
-		moveCircles();
+		otherCircles.moveAll();
 		movePowerUps();
 		movePowerUpCircles();
 		moveNeedles();
@@ -843,46 +764,6 @@ public:
 	}
 
 	// 
-	// Deleting Shapes
-	// 
-
-	void deleteAllCircles(){
-		otherCircle.clear();
-	}
-
-	void deleteAllPowerUps(){
-		powerUps.clear();
-	}
-
-	void deleteAllPowerUpCircles(){
-		powerUpCircles.clear();
-	}
-
-	void deleteAllNeedles(){
-		needles.clear();
-	}
-
-	void deleteAllBuddyPowerUps(){
-		buddyPowerUps.clear();
-	}
-
-	void deleteBuddyCircle(){
-		mainCircle.killBuddy();
-	}
-
-	void deleteAllTraps(){
-		traps.clear();
-	}
-
-	void deleteAllCircleCars(){
-		circleCars.clear();
-	}
-
-	void deleteAllNukes(){
-		nukes.clear();
-	}
-
-	// 
 	// Collision detection
 	// 
 
@@ -890,52 +771,30 @@ public:
 	// return -1 if other circle is bigger
 	// return any positive number means that the circle was smaller and thats the size
 	int checkCollisionForCircle(){
-		for(auto it = otherCircle.begin(); it != otherCircle.end(); ++it){
-			int otherRadius = it->getRadius();
-			// If in car
-			if(mainCircle.inCar()){
-				if(circleFlowerCollision(*it, mainCircle.getCar())){
-					mainCircle.hitCar(otherRadius);
-					otherCircle.erase(it);
-					return otherRadius;
-				}
+		int collideNum = 0;
+		if(mainCircle.inCar()){
+			collideNum = otherCircles.checkCollisionsWith(mainCircle.getCar());
+			if(collideNum > 0)
+				mainCircle.hitCar(collideNum);
 
-			// If not in car
-			}else if(circleCircleCollision(mainCircle, *it)){
-				if(otherRadius > mainCircle.getRadius()){
-					return -1;
-				}else{
-					otherCircle.erase(it);
-					return otherRadius;
-				}
-			}
+		}else{
+			collideNum = otherCircles.checkCollisionsWith(mainCircle);
 		}
 
-		return 0;
+		return collideNum;
 	}
 
 	// Return 0 for no collision
 	// return -1 if the other circle is bigger than the power up circle
 	// return other circle radius if it is smaller than the powerup circle
 	int checkCollisionForPowerUpCircles(){
-		int otherRadius;
-		for(auto it = otherCircle.begin(); it != otherCircle.end(); ++it){
-			otherRadius = it->getRadius();
-			for(auto pit = powerUpCircles.begin(); pit != powerUpCircles.end(); ++pit){
-				if(circleCircleCollision(*it, *pit)){
-					if(otherRadius > pit->getRadius()){
-						otherCircle.erase(it);
-						powerUpCircles.erase(pit);
-						return -1;
-					}else{
-						powerUpCircles.erase(pit);
-						otherCircle.erase(it);
-						return otherRadius;
-					}
-				}
+		for(auto it = powerUpCircles.begin(); it != powerUpCircles.end(); ++it){
+			int collideNum = otherCircles.checkCollisionsWith(*it);
+			if(collideNum != 0){
+				powerUpCircles.erase(it);
+				return collideNum;
 			}
 		}
-
 		return 0;
 	}
 
@@ -989,12 +848,9 @@ public:
 				return -1;
 			}
 
-			// Check collision with other circles
-			for(auto oit = otherCircle.begin(); oit != otherCircle.end(); ++oit){
-				if(circleLineCollision(*oit, *it)){
-					otherCircle.erase(oit);
-					return 1;
-				}
+			int collideNum = otherCircles.checkCollisionsWith(*it);
+			if(collideNum > 0){
+				return 1;
 			}
 
 			// check collision with powerUpCircles
@@ -1039,18 +895,8 @@ public:
 	// Return positive number for collision with other circle thats smaller
 	int checkCollisionForBuddyCircle(){
 		if(mainCircle.buddyAlive()){
-			for(auto it = otherCircle.begin(); it != otherCircle.end(); ++it){
-				// Check collision with other circles
-				if(circleCircleCollision(*it, mainCircle.getBuddy())){
-					if(mainCircle.getBuddyRadius() > it->getRadius()){
-						otherCircle.erase(it);
-						return it->getRadius();
-					}else{
-						otherCircle.erase(it);
-						return -1;
-					}
-				}
-			}
+			int collideNum = otherCircles.checkCollisionsWith(mainCircle.getBuddy());
+			return collideNum;
 		}
 
 		return 0;
@@ -1126,6 +972,41 @@ public:
 	}
 
 	// 
+	// Deleting Shapes
+	// 
+	void deleteAllPowerUps(){
+		powerUps.clear();
+	}
+
+	void deleteAllPowerUpCircles(){
+		powerUpCircles.clear();
+	}
+
+	void deleteAllNeedles(){
+		needles.clear();
+	}
+
+	void deleteAllBuddyPowerUps(){
+		buddyPowerUps.clear();
+	}
+
+	void deleteBuddyCircle(){
+		mainCircle.killBuddy();
+	}
+
+	void deleteAllTraps(){
+		traps.clear();
+	}
+
+	void deleteAllCircleCars(){
+		circleCars.clear();
+	}
+
+	void deleteAllNukes(){
+		nukes.clear();
+	}
+
+	// 
 	// Shape changes
 	// 
 
@@ -1173,7 +1054,7 @@ public:
 	void runNuke(){
 		needles.clear();
 		traps.clear();
-		otherCircle.clear();
+		otherCircles.deleteAll();
 	}
 
 	// 
