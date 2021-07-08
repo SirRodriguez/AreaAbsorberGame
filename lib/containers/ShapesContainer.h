@@ -701,14 +701,21 @@ public:
 		int collideNum = 0;
 		if(mainCircle.inCar()){
 			collideNum = otherCircles.checkCollisionsWith(mainCircle.getCar());
-			if(collideNum > 0)
+			if(collideNum > 0){
 				mainCircle.hitCar(collideNum);
+			}
+
+			return collideNum;
 
 		}else{
 			collideNum = otherCircles.checkCollisionsWith(mainCircle);
-		}
 
-		return collideNum;
+			if(collideNum > mainCircle.getRadius()){
+				return -1;
+			}else{
+				return collideNum;
+			}
+		}
 	}
 
 	// Return 0 for no collision
@@ -717,9 +724,14 @@ public:
 	int checkCollisionForPowerUpCircles(){
 		for(auto it = powerUpCircles.begin(); it != powerUpCircles.end(); ++it){
 			int collideNum = otherCircles.checkCollisionsWith(*it);
-			if(collideNum != 0){
-				powerUpCircles.erase(it);
-				return collideNum;
+			if(collideNum > 0){
+				if(collideNum > it->getRadius()){
+					powerUpCircles.erase(it);
+					return -1;
+				}else{
+					powerUpCircles.erase(it);
+					return collideNum;
+				}
 			}
 		}
 		return 0;
@@ -823,7 +835,11 @@ public:
 	int checkCollisionForBuddyCircle(){
 		if(mainCircle.buddyAlive()){
 			int collideNum = otherCircles.checkCollisionsWith(mainCircle.getBuddy());
-			return collideNum;
+			if(mainCircle.getBuddyRadius() < collideNum){
+				return -1;
+			}else{
+				return collideNum;
+			}
 		}
 
 		return 0;

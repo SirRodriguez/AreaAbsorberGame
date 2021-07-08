@@ -53,16 +53,17 @@ public:
 	// Change to return the radius of the circle only
 	virtual int checkCollisionsWith(Circle& c) override {
 		for(auto it = otherCircle.begin(); it != otherCircle.end(); ++it){
-			int otherRadius = it->getRadius();
-
 			if(circleCircleCollision(c, *it)){
-				if(otherRadius > c.getRadius()){
-					otherCircle.erase(it);
-					return -1;
-				}else{
-					otherCircle.erase(it);
-					return otherRadius;
-				}
+				int otherRadius = it->getRadius();
+				otherCircle.erase(it);
+				return otherRadius;
+				// if(otherRadius > c.getRadius()){
+				// 	otherCircle.erase(it);
+				// 	return -1;
+				// }else{
+				// 	otherCircle.erase(it);
+				// 	return otherRadius;
+				// }
 			}
 		}
 
