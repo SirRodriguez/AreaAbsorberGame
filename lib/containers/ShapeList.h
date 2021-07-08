@@ -106,7 +106,7 @@ public:
 	virtual void moveAll() = 0;
 	virtual int checkCollisionsWith(Circle& c) = 0;
 	virtual int checkCollisionsWith(Flower& f) = 0;
-	virtual int checkCollisionsWith(Line& n) = 0;
+	virtual int checkCollisionsWith(Line& l) = 0;
 };
 
 #endif

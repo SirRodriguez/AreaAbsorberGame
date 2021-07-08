@@ -50,6 +50,7 @@ public:
 		}
 	}
 
+	// Change to return the radius of the circle only
 	virtual int checkCollisionsWith(Circle& c) override {
 		for(auto it = otherCircle.begin(); it != otherCircle.end(); ++it){
 			int otherRadius = it->getRadius();
@@ -70,9 +71,8 @@ public:
 
 	virtual int checkCollisionsWith(Flower& f) override {
 		for(auto it = otherCircle.begin(); it != otherCircle.end(); ++it){
-			int otherRadius = it->getRadius();
-
 			if(circleFlowerCollision(*it, f)){
+				int otherRadius = it->getRadius();
 				otherCircle.erase(it);
 				return otherRadius;
 			}
@@ -83,9 +83,8 @@ public:
 
 	virtual int checkCollisionsWith(Line& l) override {
 		for(auto it = otherCircle.begin(); it != otherCircle.end(); ++it){
-			int otherRadius = it->getRadius();
-
 			if(circleLineCollision(*it, l)){
+				int otherRadius = it->getRadius();
 				otherCircle.erase(it);
 				return otherRadius;
 			}
