@@ -104,9 +104,11 @@ public:
 	virtual void hideAll() = 0;
 	virtual void drawAll() = 0;
 	virtual void moveAll() = 0;
-	virtual int checkCollisionsWith(Circle& c) = 0;
-	virtual int checkCollisionsWith(Flower& f) = 0;
-	virtual int checkCollisionsWith(Line& l) = 0;
+	virtual int checkCollisionsWith(ShapeList& list, bool removeOnCollision = true) = 0;
+	virtual int checkCollisionsWith(Circle& c, bool removeOnCollision = true) = 0;
+	virtual int checkCollisionsWith(Flower& f, bool removeOnCollision = true) = 0;
+	virtual int checkCollisionsWith(Line& l, bool removeOnCollision = true) = 0;
+	virtual int checkCollisionsWith(Square& s, bool removeOnCollision = true) = 0;
 };
 
 #endif

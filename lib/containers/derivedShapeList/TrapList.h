@@ -52,11 +52,24 @@ public:
 		}
 	}
 
-	virtual int checkCollisionsWith(Circle& c){
+	virtual int checkCollisionsWith(ShapeList& list, bool removeOnCollision = true) override {
+		for(auto it = traps.begin(); it != traps.end(); ++it){
+			int collideNum = list.checkCollisionsWith(*it, removeOnCollision);
+			if(collideNum > 0){
+				int dirCode = it->getDirectionCode();
+				if(removeOnCollision) traps.erase(it);
+				return dirCode;
+			}
+		}
+
+		return 0;
+	}
+
+	virtual int checkCollisionsWith(Circle& c, bool removeOnCollision = true) override {
 		for(auto it = traps.begin(); it != traps.end(); ++it){
 			if(circleSquareCollision(c, *it)){
 				int dirCode = it->getDirectionCode();
-				traps.erase(it);
+				if(removeOnCollision) traps.erase(it);
 				return dirCode;
 			}
 		}
@@ -64,11 +77,11 @@ public:
 		return 0;
 	}
 
-	virtual int checkCollisionsWith(Flower& f){
+	virtual int checkCollisionsWith(Flower& f, bool removeOnCollision = true) override {
 		for(auto it = traps.begin(); it != traps.end(); ++it){
 			if(squareFlowerCollision(*it, f)){
 				int dirCode = it->getDirectionCode();
-				traps.erase(it);
+				if(removeOnCollision) traps.erase(it);
 				return dirCode;
 			}
 		}
@@ -76,11 +89,23 @@ public:
 		return 0;
 	}
 
-	virtual int checkCollisionsWith(Line& l){
+	virtual int checkCollisionsWith(Line& l, bool removeOnCollision = true) override {
 		for(auto it = traps.begin(); it != traps.end(); ++it){
 			if(lineSquareCollision(l, *it)){
 				int dirCode = it->getDirectionCode();
-				traps.erase(it);
+				if(removeOnCollision) traps.erase(it);
+				return dirCode;
+			}
+		}
+
+		return 0;
+	}
+
+	virtual int checkCollisionsWith(Square& s, bool removeOnCollision = true) override {
+		for(auto it = traps.begin(); it != traps.end(); ++it){
+			if(squareSquareCollision(*it, s)){
+				int dirCode = it->getDirectionCode();
+				if(removeOnCollision) traps.erase(it);
 				return dirCode;
 			}
 		}

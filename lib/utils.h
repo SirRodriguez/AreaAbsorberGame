@@ -1,6 +1,7 @@
 #ifndef UTILS_H
 #define UTILS_H
 
+#include "./shapes/derivedShapes/Line.h"
 #include "./shapes/derivedShapes/Square.h"
 #include "./shapes/derivedShapes/flower/Flower.h"
 #include "./shapes/derivedShapes/flower/Pedal.h"
@@ -164,6 +165,21 @@ bool lineSquareCollision(olc::vi2d ls, olc::vi2d le, olc::vi2d stl, olc::vi2d st
 
 bool lineSquareCollision(Line& l, Square& s){
 	return lineSquareCollision(l.getStartPoint(), l.getEndPoint(), s.getTopLeftPoint(), s.getTopRightPoint(), s.getBotLeftPoint(), s.getBotRightPoint());
+}
+
+// 
+// Square Square Collision
+// 
+
+bool squareSquareCollision(olc::vi2d stl, olc::vi2d str, olc::vi2d sbl, olc::vi2d sbr, olc::vi2d stl2, olc::vi2d str2, olc::vi2d sbl2, olc::vi2d sbr2){
+	return lineLineCollision(stl, str, stl2, str2) || lineLineCollision(stl, str, str2, sbr2) || lineLineCollision(stl, str, sbr2, sbl2) || lineLineCollision(stl, str, sbl2, stl2) ||
+		lineLineCollision(str, sbr, stl2, str2) || lineLineCollision(str, sbr, str2, sbr2) || lineLineCollision(str, sbr, sbr2, sbl2) || lineLineCollision(str, sbr, sbl2, stl2) ||
+		lineLineCollision(sbr, sbl, stl2, str2) || lineLineCollision(sbr, sbl, str2, sbr2) || lineLineCollision(sbr, sbl, sbr2, sbl2) || lineLineCollision(sbr, sbl, sbl2, stl2) ||
+		lineLineCollision(sbl, stl, stl2, str2) || lineLineCollision(sbl, stl, str2, sbr2) || lineLineCollision(sbl, stl, sbr2, sbl2) || lineLineCollision(sbl, stl, sbl2, stl2);
+}
+
+bool squareSquareCollision(Square& s, Square& s2){
+	return squareSquareCollision(s.getTopLeftPoint(), s.getTopRightPoint(), s.getBotLeftPoint(), s.getBotRightPoint(), s2.getTopLeftPoint(), s2.getTopRightPoint(), s2.getBotLeftPoint(), s2.getBotRightPoint());
 }
 
 // 

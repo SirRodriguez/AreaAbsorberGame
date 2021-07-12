@@ -50,31 +50,36 @@ public:
 		}
 	}
 
-	// Change to return the radius of the circle only
-	virtual int checkCollisionsWith(Circle& c) override {
+	virtual int checkCollisionsWith(ShapeList& list, bool removeOnCollision = true) override {
+		for(auto it = otherCircle.begin(); it != otherCircle.end(); ++it){
+			int collideNum = list.checkCollisionsWith(*it, removeOnCollision);
+			if(collideNum > 0){
+				int otherRadius = it->getRadius();
+				if(removeOnCollision) otherCircle.erase(it);
+				return otherRadius;
+			}
+		}
+
+		return 0;
+	}
+
+	virtual int checkCollisionsWith(Circle& c, bool removeOnCollision = true) override {
 		for(auto it = otherCircle.begin(); it != otherCircle.end(); ++it){
 			if(circleCircleCollision(c, *it)){
 				int otherRadius = it->getRadius();
-				otherCircle.erase(it);
+				if(removeOnCollision) otherCircle.erase(it);
 				return otherRadius;
-				// if(otherRadius > c.getRadius()){
-				// 	otherCircle.erase(it);
-				// 	return -1;
-				// }else{
-				// 	otherCircle.erase(it);
-				// 	return otherRadius;
-				// }
 			}
 		}
 
 		return 0;
 	}
 
-	virtual int checkCollisionsWith(Flower& f) override {
+	virtual int checkCollisionsWith(Flower& f, bool removeOnCollision = true) override {
 		for(auto it = otherCircle.begin(); it != otherCircle.end(); ++it){
 			if(circleFlowerCollision(*it, f)){
 				int otherRadius = it->getRadius();
-				otherCircle.erase(it);
+				if(removeOnCollision) otherCircle.erase(it);
 				return otherRadius;
 			}
 		}
@@ -82,11 +87,23 @@ public:
 		return 0;
 	}
 
-	virtual int checkCollisionsWith(Line& l) override {
+	virtual int checkCollisionsWith(Line& l, bool removeOnCollision = true) override {
 		for(auto it = otherCircle.begin(); it != otherCircle.end(); ++it){
 			if(circleLineCollision(*it, l)){
 				int otherRadius = it->getRadius();
-				otherCircle.erase(it);
+				if(removeOnCollision) otherCircle.erase(it);
+				return otherRadius;
+			}
+		}
+
+		return 0;
+	}
+
+	virtual int checkCollisionsWith(Square& s, bool removeOnCollision = true) override {
+		for(auto it = otherCircle.begin(); it != otherCircle.end(); ++it){
+			if(circleSquareCollision(*it, s)){
+				int otherRadius = it->getRadius();
+				if(removeOnCollision) otherCircle.erase(it);
 				return otherRadius;
 			}
 		}

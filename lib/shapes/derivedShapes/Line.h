@@ -32,6 +32,7 @@ public:
 	// Getters ---
 	olc::vi2d getStartPoint(){ return position + olc::vi2d(-dx, -dy); }
 	olc::vi2d getEndPoint(){ return position + olc::vi2d(dx, dy); }
+	int getLength(){ return  2 * (int)std::sqrt(dx*dx+dy*dy); }
 
 };
 
