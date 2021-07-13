@@ -53,8 +53,7 @@ public:
 
 	virtual int checkCollisionsWith(ShapeList& list, bool removeOnCollision = true) override {
 		for(auto it = needles.begin(); it != needles.end(); ++it){
-			int collideNum = list.checkCollisionsWith(*it, removeOnCollision);
-			if(collideNum > 0){
+			if(list.checkCollisionsWith(*it, removeOnCollision) > 0){
 				int length = it->getLength();
 				if(removeOnCollision) needles.erase(it);
 				return length;

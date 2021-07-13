@@ -54,8 +54,7 @@ public:
 
 	virtual int checkCollisionsWith(ShapeList& list, bool removeOnCollision = true) override {
 		for(auto it = traps.begin(); it != traps.end(); ++it){
-			int collideNum = list.checkCollisionsWith(*it, removeOnCollision);
-			if(collideNum > 0){
+			if(list.checkCollisionsWith(*it, removeOnCollision) > 0){
 				int dirCode = it->getDirectionCode();
 				if(removeOnCollision) traps.erase(it);
 				return dirCode;
