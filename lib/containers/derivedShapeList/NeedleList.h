@@ -53,7 +53,7 @@ public:
 
 	virtual int checkCollisionsWith(ShapeList& list, bool removeOnCollision = true) override {
 		for(auto it = needles.begin(); it != needles.end(); ++it){
-			if(list.checkCollisionsWith(*it, removeOnCollision) > 0){
+			if(list.checkCollisionsWith(*it) > 0){
 				int length = it->getLength();
 				if(removeOnCollision) needles.erase(it);
 				return length;
@@ -102,6 +102,18 @@ public:
 	virtual int checkCollisionsWith(Square& s, bool removeOnCollision = true) override {
 		for(auto it = needles.begin(); it != needles.end(); ++it){
 			if(lineSquareCollision(*it, s)){
+				int length = it->getLength();
+				if(removeOnCollision) needles.erase(it);
+				return length;
+			}
+		}
+
+		return 0;
+	}
+
+	virtual int checkCollisionsWith(Triangle& t, bool removeOnCollision = true) override {
+		for(auto it = needles.begin(); it != needles.end(); ++it){
+			if(lineTriangleCollision(*it, t)){
 				int length = it->getLength();
 				if(removeOnCollision) needles.erase(it);
 				return length;

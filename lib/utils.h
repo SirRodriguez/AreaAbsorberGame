@@ -1,6 +1,7 @@
 #ifndef UTILS_H
 #define UTILS_H
 
+#include "./shapes/derivedShapes/Triangle.h"
 #include "./shapes/derivedShapes/Line.h"
 #include "./shapes/derivedShapes/Square.h"
 #include "./shapes/derivedShapes/flower/Flower.h"
@@ -168,6 +169,34 @@ bool lineSquareCollision(Line& l, Square& s){
 }
 
 // 
+// Line Triangle collision
+// 
+
+bool lineTriangleCollision(olc::vi2d ls, olc::vi2d le, olc::vi2d tp, olc::vi2d blp, olc::vi2d brp){
+	return lineLineCollision(ls, le, tp, blp) ||
+		lineLineCollision(ls, le, blp, brp) ||
+		lineLineCollision(ls, le, brp, tp);
+}
+
+bool lineTriangleCollision(Line& l, Triangle& t){
+	return lineTriangleCollision(l.getStartPoint(), l.getEndPoint(), t.topPoint(), t.botLeftPoint(), t.botRightPoint());
+}
+
+// 
+// Triangle Triangle Collision
+// 
+
+bool triangleTriangleCollision(olc::vi2d tp, olc::vi2d blp, olc::vi2d brp, olc::vi2d tp2, olc::vi2d blp2, olc::vi2d brp2){
+	return lineLineCollision(tp, blp, tp2, blp2) || lineLineCollision(tp, blp, blp2, brp2) || lineLineCollision(tp, blp, brp2, tp2) ||
+		lineLineCollision(blp, brp, tp2, blp2) || lineLineCollision(blp, brp, blp2, brp2) || lineLineCollision(blp, brp, brp2, tp2) ||
+		lineLineCollision(brp, tp, tp2, blp2) || lineLineCollision(brp, tp, blp2, brp2) || lineLineCollision(brp, tp, brp2, tp2);
+}
+
+bool triangleTriangleCollision(Triangle& t, Triangle& t2){
+	return triangleTriangleCollision(t.topPoint(), t.botLeftPoint(), t.botRightPoint(), t2.topPoint(), t2.botLeftPoint(), t2.botRightPoint());
+}
+
+// 
 // Square Square Collision
 // 
 
@@ -180,6 +209,21 @@ bool squareSquareCollision(olc::vi2d stl, olc::vi2d str, olc::vi2d sbl, olc::vi2
 
 bool squareSquareCollision(Square& s, Square& s2){
 	return squareSquareCollision(s.getTopLeftPoint(), s.getTopRightPoint(), s.getBotLeftPoint(), s.getBotRightPoint(), s2.getTopLeftPoint(), s2.getTopRightPoint(), s2.getBotLeftPoint(), s2.getBotRightPoint());
+}
+
+// 
+// Square Triangle collision
+// 
+
+bool squareTriangleCollision(olc::vi2d stlp, olc::vi2d strp, olc::vi2d sblp, olc::vi2d sbrp, olc::vi2d ttp, olc::vi2d tblp, olc::vi2d tbrp){
+	return lineLineCollision(stlp, strp, ttp, tblp) || lineLineCollision(stlp, strp, tblp, tbrp) || lineLineCollision(stlp, strp, tbrp, ttp) ||
+		lineLineCollision(strp, sbrp, ttp, tblp) || lineLineCollision(strp, sbrp, tblp, tbrp) || lineLineCollision(strp, sbrp, tbrp, ttp) ||
+		lineLineCollision(sbrp, sblp, ttp, tblp) || lineLineCollision(sbrp, sblp, tblp, tbrp) || lineLineCollision(sbrp, sblp, tbrp, ttp) ||
+		lineLineCollision(sblp, stlp, ttp, tblp) || lineLineCollision(sblp, stlp, tblp, tbrp) || lineLineCollision(sblp, stlp, tbrp, ttp);
+}
+
+bool squareTriangleCollision(Square& s, Triangle& t){
+	return squareTriangleCollision(s.getTopLeftPoint(), s.getTopRightPoint(), s.getBotLeftPoint(), s.getBotRightPoint(), t.topPoint(), t.botLeftPoint(), t.botRightPoint());
 }
 
 // 

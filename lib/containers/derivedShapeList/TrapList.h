@@ -54,7 +54,7 @@ public:
 
 	virtual int checkCollisionsWith(ShapeList& list, bool removeOnCollision = true) override {
 		for(auto it = traps.begin(); it != traps.end(); ++it){
-			if(list.checkCollisionsWith(*it, removeOnCollision) > 0){
+			if(list.checkCollisionsWith(*it) > 0){
 				int dirCode = it->getDirectionCode();
 				if(removeOnCollision) traps.erase(it);
 				return dirCode;
@@ -103,6 +103,18 @@ public:
 	virtual int checkCollisionsWith(Square& s, bool removeOnCollision = true) override {
 		for(auto it = traps.begin(); it != traps.end(); ++it){
 			if(squareSquareCollision(*it, s)){
+				int dirCode = it->getDirectionCode();
+				if(removeOnCollision) traps.erase(it);
+				return dirCode;
+			}
+		}
+
+		return 0;
+	}
+
+	virtual int checkCollisionsWith(Triangle& t, bool removeOnCollision = true) override {
+		for(auto it = traps.begin(); it != traps.end(); ++it){
+			if(squareTriangleCollision(*it, t)){
 				int dirCode = it->getDirectionCode();
 				if(removeOnCollision) traps.erase(it);
 				return dirCode;

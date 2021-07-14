@@ -2,7 +2,6 @@
 #define SHAPESCONTAINER
 
 #include "../objects/mainCircle/MainCircle.h"
-#include "../objects/powerUp/PowerUp.h"
 #include "../objects/powerUp/PowerUpCircle.h"
 #include "../objects/BuddyPowerUp.h"
 #include "../objects/CircleCar.h"
@@ -13,6 +12,7 @@
 #include "derivedShapeList/TrapList.h"
 #include "derivedShapeList/NeedleList.h"
 #include "derivedShapeList/NukeList.h"
+#include "derivedShapeList/PowerUpList.h"
 
 // Colors
 const olc::Pixel mainCircleColor = olc::BLACK;
@@ -57,7 +57,7 @@ class ShapesContainer{
 	MainCircle mainCircle;
 
 	// Power ups
-	std::list<PowerUp> powerUps;
+	PowerUpList powerUps;
 	std::list<CircleCar> circleCars;
 	std::list<BuddyPowerUp> buddyPowerUps;
 	std::list<PowerUpCircle> powerUpCircles;
@@ -91,6 +91,7 @@ public:
 			buddyCircleColor
 		);
 
+		powerUps = PowerUpList(pge);
 		nukes = NukeList(pge);
 
 		otherCircles = OtherCircleList(pge);
@@ -99,7 +100,7 @@ public:
 
 		// Make sure that the lists are cleared
 		otherCircles.deleteAll();
-		deleteAllPowerUps();
+		powerUps.deleteAll();
 		deleteAllPowerUpCircles();
 		needles.deleteAll();
 		deleteAllBuddyPowerUps();
@@ -113,7 +114,7 @@ public:
 		resetMainCircleObjects();
 
 		otherCircles.deleteAll();
-		deleteAllPowerUps();
+		powerUps.deleteAll();
 		deleteAllBuddyPowerUps();
 		deleteAllPowerUpCircles();
 		needles.deleteAll();
@@ -143,12 +144,6 @@ public:
 		}
 	}
 
-	void hidePowerUps(){
-		for(auto it = powerUps.begin(); it != powerUps.end(); ++it){
-			it->clear();
-		}
-	}
-
 	void hideBuddyPowerUps(){
 		for(auto it = buddyPowerUps.begin(); it != buddyPowerUps.end(); ++it){
 			it->clear();
@@ -164,7 +159,7 @@ public:
 	void hideAll(){
 		hideMainCircle();
 		otherCircles.hideAll();
-		hidePowerUps();
+		powerUps.hideAll();
 		hidePowerUpCircles();
 		needles.hideAll();
 		hideBuddyPowerUps();
@@ -175,12 +170,6 @@ public:
 
 	void drawMainCircle(){
 		mainCircle.draw();
-	}
-
-	void drawPowerUps(){
-		for(auto it = powerUps.begin(); it != powerUps.end(); ++it){
-			it->draw();
-		}
 	}
 
 	void drawPowerUpCircles(){
@@ -204,7 +193,7 @@ public:
 	void drawAllShapes(){
 		drawMainCircle();
 		otherCircles.drawAll();
-		drawPowerUps();
+		powerUps.drawAll();
 		drawPowerUpCircles();
 		needles.drawAll();
 		drawBuddyPowerUps();
@@ -234,57 +223,7 @@ public:
 	// - From Bottom Right
 	// If multiple bits are one, them multiple circles will pop out
 	void addPowerUp(uint8_t dirFromCode){
-		auto makePowerUp = [&](olc::vi2d _loc, int dirCode){
-			powerUps.push_back(PowerUp(*pixelGameEngine, _loc, powerUpSpeed, powerUpColor, powerUpHeight, dirCode));
-		};
-
-		if(dirFromCode & 0x01){ // FROM TOP
-			makePowerUp(olc::vi2d(rand() % pixelGameEngine->ScreenWidth(), 0), 1);
-		}
-
-		if(dirFromCode & 0x02){ // FROM BOTTOM
-			makePowerUp(olc::vi2d(rand() % pixelGameEngine->ScreenWidth(), pixelGameEngine->ScreenHeight()), 0);
-		}
-
-		if(dirFromCode & 0x04){ // FROM LEFT
-			makePowerUp(olc::vi2d(0, rand() % pixelGameEngine->ScreenHeight()), 3);
-		}
-
-		if(dirFromCode & 0x08){ // FROM RIGHT
-			makePowerUp(olc::vi2d(pixelGameEngine->ScreenWidth(), rand() % pixelGameEngine->ScreenHeight()), 2);
-		}
-
-		if(dirFromCode & 0x10){ // FROM TOP LEFT
-			if(rand() % 2 == 0){ // FROM TOP ON LEFT HALF
-				makePowerUp(olc::vi2d(rand() % pixelGameEngine->ScreenWidth() / 2, 0), 7);
-			}else{ // FROM LEFT ON TOP HALF
-				makePowerUp(olc::vi2d(0, rand() % pixelGameEngine->ScreenHeight() / 2), 7);
-			}
-		}
-
-		if(dirFromCode & 0x20){ // FROM TOP RIGHT
-			if(rand() % 2 == 0){ // FROM TOP ON RIGHT HALF
-				makePowerUp(olc::vi2d((rand() % pixelGameEngine->ScreenWidth() / 2 ) + pixelGameEngine->ScreenWidth() / 2, 0), 6);
-			}else{ // FROM RIGHT ON TOP HALF
-				makePowerUp(olc::vi2d(pixelGameEngine->ScreenWidth(), (rand() % pixelGameEngine->ScreenHeight() / 2 )), 6);
-			}
-		}
-
-		if(dirFromCode & 0x40){ // FROM BOTTOM LEFT
-			if(rand() % 2 == 0){ // FROM BOTTOM ON LEFT HALF
-				makePowerUp(olc::vi2d(rand() % pixelGameEngine->ScreenWidth() / 2, pixelGameEngine->ScreenHeight()), 5);
-			}else{ // FROM LEFT ON BOTTOM HALF
-				makePowerUp(olc::vi2d(0, (rand() % pixelGameEngine->ScreenHeight() / 2) + pixelGameEngine->ScreenHeight() / 2), 5);
-			}
-		}
-
-		if(dirFromCode & 0x80){ // FROM BOTTOM RIGHT
-			if(rand() % 2 == 0){ // FROM BOTTOM ON RIGHT HALF
-				makePowerUp(olc::vi2d((rand() % pixelGameEngine->ScreenWidth() / 2) + pixelGameEngine->ScreenWidth() / 2, pixelGameEngine->ScreenHeight()), 4);
-			}else{ // FROM RIGHT ON BOTTOM HALF
-				makePowerUp(olc::vi2d(pixelGameEngine->ScreenWidth(), (rand() % pixelGameEngine->ScreenHeight() / 2) + pixelGameEngine->ScreenHeight() / 2), 4);
-			}
-		}
+		powerUps.add(dirFromCode);
 	}
 
 	void addPowerUpCircles(){
@@ -488,17 +427,6 @@ public:
 		mainCircle.move();
 	}
 
-	void movePowerUps(){
-		for(auto it = powerUps.begin(); it != powerUps.end();){
-			it->move();
-			if(it->outOfBounds()){
-				powerUps.erase(it++);
-			}else{
-				++it;
-			}
-		}
-	}
-
 	void movePowerUpCircles(){
 		for(auto it = powerUpCircles.begin(); it != powerUpCircles.end();){
 			it->move();
@@ -535,7 +463,7 @@ public:
 	void moveAllShapes(){
 		moveMainCircle();
 		otherCircles.moveAll();
-		movePowerUps();
+		powerUps.moveAll();
 		movePowerUpCircles();
 		needles.moveAll();
 		moveBuddyPowerUps();
@@ -594,18 +522,13 @@ public:
 	// Returns 1 for collision
 	// Returns 0 for no colision
 	int checkCollisionForPowerUps(){
-		for(auto it = powerUps.begin(); it != powerUps.end(); ++it){
-			// Check if main circle has car
-			if(mainCircle.inCar()){
-				if(triangleFlowerCollision(*it, mainCircle.getCar())){
-					powerUps.erase(it);
-					return 1;
-				}
-			}else{
-				if(circleTriangleCollision(mainCircle, *it)){
-					powerUps.erase(it);
-					return 1;
-				}				
+		if(mainCircle.inCar()){
+			if(powerUps.checkCollisionsWith(mainCircle.getCar()) > 0){
+				return 1;
+			}
+		}else{
+			if(powerUps.checkCollisionsWith(mainCircle) > 0){
+				return 1;
 			}
 		}
 
@@ -752,10 +675,6 @@ public:
 	// 
 	// Deleting Shapes
 	// 
-	void deleteAllPowerUps(){
-		powerUps.clear();
-	}
-
 	void deleteAllPowerUpCircles(){
 		powerUpCircles.clear();
 	}

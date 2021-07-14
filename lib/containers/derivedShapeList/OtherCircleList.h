@@ -52,7 +52,7 @@ public:
 
 	virtual int checkCollisionsWith(ShapeList& list, bool removeOnCollision = true) override {
 		for(auto it = otherCircle.begin(); it != otherCircle.end(); ++it){
-			if(list.checkCollisionsWith(*it, removeOnCollision) > 0){
+			if(list.checkCollisionsWith(*it) > 0){
 				int otherRadius = it->getRadius();
 				if(removeOnCollision) otherCircle.erase(it);
 				return otherRadius;
@@ -101,6 +101,18 @@ public:
 	virtual int checkCollisionsWith(Square& s, bool removeOnCollision = true) override {
 		for(auto it = otherCircle.begin(); it != otherCircle.end(); ++it){
 			if(circleSquareCollision(*it, s)){
+				int otherRadius = it->getRadius();
+				if(removeOnCollision) otherCircle.erase(it);
+				return otherRadius;
+			}
+		}
+
+		return 0;
+	}
+
+	virtual checkCollisionsWith(Triangle& t, bool removeOnCollision = true) override {
+		for(auto it = otherCircle.begin(); it != otherCircle.end(); ++it){
+			if(circleTriangleCollision(*it, t)){
 				int otherRadius = it->getRadius();
 				if(removeOnCollision) otherCircle.erase(it);
 				return otherRadius;

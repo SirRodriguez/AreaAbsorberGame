@@ -109,6 +109,7 @@ public:
 	virtual int checkCollisionsWith(Flower& f, bool removeOnCollision = true) = 0;
 	virtual int checkCollisionsWith(Line& l, bool removeOnCollision = true) = 0;
 	virtual int checkCollisionsWith(Square& s, bool removeOnCollision = true) = 0;
+	virtual int checkCollisionsWith(Triangle& t, bool removeOnCollision = true) = 0;
 };
 
 #endif
