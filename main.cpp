@@ -8,13 +8,9 @@
 // There is a towel that will go over you or your pet and will block all the needles and other balls. still get score.
 // Power up that freezes other balls
 // A Boss Level
-// A nuke
 // Star that makes you invincible
 // Wave that you can ride that will absorbe other circles
 // slime that you turn into the size of the slime and absorbs other circle, then you turn into the size of the slime.
-
-// TODO
-// Put the collide functions in the shape classes.
 
 
 #define OLC_PGE_APPLICATION

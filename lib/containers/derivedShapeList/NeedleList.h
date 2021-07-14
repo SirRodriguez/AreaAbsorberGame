@@ -65,7 +65,7 @@ public:
 
 	virtual int checkCollisionsWith(Circle& c, bool removeOnCollision = true) override {
 		for(auto it = needles.begin(); it != needles.end(); ++it){
-			if(circleLineCollision(c, *it)){
+			if(collision(c, *it)){
 				int length = it->getLength();
 				if(removeOnCollision) needles.erase(it);
 				return length;
@@ -77,7 +77,7 @@ public:
 
 	virtual int checkCollisionsWith(Flower& f, bool removeOnCollision = true) override {
 		for(auto it = needles.begin(); it != needles.end(); ++it){
-			if(lineFlowerCollision(*it, f)){
+			if(collision(*it, f)){
 				int length = it->getLength();
 				if(removeOnCollision) needles.erase(it);
 				return length;
@@ -89,7 +89,7 @@ public:
 
 	virtual int checkCollisionsWith(Line& l, bool removeOnCollision = true) override {
 		for(auto it = needles.begin(); it != needles.end(); ++it){
-			if(lineLineCollision(*it, l)){
+			if(collision(*it, l)){
 				int length = it->getLength();
 				if(removeOnCollision) needles.erase(it);
 				return length;
@@ -101,7 +101,7 @@ public:
 
 	virtual int checkCollisionsWith(Square& s, bool removeOnCollision = true) override {
 		for(auto it = needles.begin(); it != needles.end(); ++it){
-			if(lineSquareCollision(*it, s)){
+			if(collision(*it, s)){
 				int length = it->getLength();
 				if(removeOnCollision) needles.erase(it);
 				return length;
@@ -113,7 +113,7 @@ public:
 
 	virtual int checkCollisionsWith(Triangle& t, bool removeOnCollision = true) override {
 		for(auto it = needles.begin(); it != needles.end(); ++it){
-			if(lineTriangleCollision(*it, t)){
+			if(collision(*it, t)){
 				int length = it->getLength();
 				if(removeOnCollision) needles.erase(it);
 				return length;

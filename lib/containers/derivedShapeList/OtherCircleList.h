@@ -64,7 +64,7 @@ public:
 
 	virtual int checkCollisionsWith(Circle& c, bool removeOnCollision = true) override {
 		for(auto it = otherCircle.begin(); it != otherCircle.end(); ++it){
-			if(circleCircleCollision(c, *it)){
+			if(collision(c, *it)){
 				int otherRadius = it->getRadius();
 				if(removeOnCollision) otherCircle.erase(it);
 				return otherRadius;
@@ -76,7 +76,7 @@ public:
 
 	virtual int checkCollisionsWith(Flower& f, bool removeOnCollision = true) override {
 		for(auto it = otherCircle.begin(); it != otherCircle.end(); ++it){
-			if(circleFlowerCollision(*it, f)){
+			if(collision(*it, f)){
 				int otherRadius = it->getRadius();
 				if(removeOnCollision) otherCircle.erase(it);
 				return otherRadius;
@@ -88,7 +88,7 @@ public:
 
 	virtual int checkCollisionsWith(Line& l, bool removeOnCollision = true) override {
 		for(auto it = otherCircle.begin(); it != otherCircle.end(); ++it){
-			if(circleLineCollision(*it, l)){
+			if(collision(*it, l)){
 				int otherRadius = it->getRadius();
 				if(removeOnCollision) otherCircle.erase(it);
 				return otherRadius;
@@ -100,7 +100,7 @@ public:
 
 	virtual int checkCollisionsWith(Square& s, bool removeOnCollision = true) override {
 		for(auto it = otherCircle.begin(); it != otherCircle.end(); ++it){
-			if(circleSquareCollision(*it, s)){
+			if(collision(*it, s)){
 				int otherRadius = it->getRadius();
 				if(removeOnCollision) otherCircle.erase(it);
 				return otherRadius;
@@ -112,7 +112,7 @@ public:
 
 	virtual checkCollisionsWith(Triangle& t, bool removeOnCollision = true) override {
 		for(auto it = otherCircle.begin(); it != otherCircle.end(); ++it){
-			if(circleTriangleCollision(*it, t)){
+			if(collision(*it, t)){
 				int otherRadius = it->getRadius();
 				if(removeOnCollision) otherCircle.erase(it);
 				return otherRadius;

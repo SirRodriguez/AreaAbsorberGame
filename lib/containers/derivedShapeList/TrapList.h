@@ -66,7 +66,7 @@ public:
 
 	virtual int checkCollisionsWith(Circle& c, bool removeOnCollision = true) override {
 		for(auto it = traps.begin(); it != traps.end(); ++it){
-			if(circleSquareCollision(c, *it)){
+			if(collision(c, *it)){
 				int dirCode = it->getDirectionCode();
 				if(removeOnCollision) traps.erase(it);
 				return dirCode;
@@ -78,7 +78,7 @@ public:
 
 	virtual int checkCollisionsWith(Flower& f, bool removeOnCollision = true) override {
 		for(auto it = traps.begin(); it != traps.end(); ++it){
-			if(squareFlowerCollision(*it, f)){
+			if(collision(*it, f)){
 				int dirCode = it->getDirectionCode();
 				if(removeOnCollision) traps.erase(it);
 				return dirCode;
@@ -90,7 +90,7 @@ public:
 
 	virtual int checkCollisionsWith(Line& l, bool removeOnCollision = true) override {
 		for(auto it = traps.begin(); it != traps.end(); ++it){
-			if(lineSquareCollision(l, *it)){
+			if(collision(l, *it)){
 				int dirCode = it->getDirectionCode();
 				if(removeOnCollision) traps.erase(it);
 				return dirCode;
@@ -102,7 +102,7 @@ public:
 
 	virtual int checkCollisionsWith(Square& s, bool removeOnCollision = true) override {
 		for(auto it = traps.begin(); it != traps.end(); ++it){
-			if(squareSquareCollision(*it, s)){
+			if(collision(*it, s)){
 				int dirCode = it->getDirectionCode();
 				if(removeOnCollision) traps.erase(it);
 				return dirCode;
@@ -114,7 +114,7 @@ public:
 
 	virtual int checkCollisionsWith(Triangle& t, bool removeOnCollision = true) override {
 		for(auto it = traps.begin(); it != traps.end(); ++it){
-			if(squareTriangleCollision(*it, t)){
+			if(collision(*it, t)){
 				int dirCode = it->getDirectionCode();
 				if(removeOnCollision) traps.erase(it);
 				return dirCode;

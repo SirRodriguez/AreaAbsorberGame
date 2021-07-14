@@ -6,7 +6,8 @@ private:
 	enum ShapeType{
 		ENEMY,
 		BUDDY,
-		POWERUP
+		POWERUP,
+		MAINCIRCLE
 	};
 
 	void assignShapeType(int typeCode){
@@ -14,6 +15,7 @@ private:
 			case 0: shapeType = ShapeType::ENEMY; break;
 			case 1: shapeType = ShapeType::BUDDY; break;
 			case 2: shapeType = ShapeType::POWERUP; break;
+			case 3: shapeType = ShapeType::MAINCIRCLE; break;
 			default: shapeType = ShapeType::ENEMY; break;
 		}
 	}

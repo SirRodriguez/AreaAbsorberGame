@@ -66,7 +66,7 @@ public:
 
 	virtual int checkCollisionsWith(Circle& c, bool removeOnCollision = true) override {
 		for(auto it = powerUps.begin(); it != powerUps.end(); ++it){
-			if(circleTriangleCollision(c, *it)){
+			if(collision(c, *it)){
 				int height = it->getHeight();
 				if(removeOnCollision) powerUps.erase(it);
 				return height;
@@ -78,7 +78,7 @@ public:
 
 	virtual int checkCollisionsWith(Flower& f, bool removeOnCollision = true) override {
 		for(auto it = powerUps.begin(); it != powerUps.end(); ++it){
-			if(triangleFlowerCollision(*it, f)){
+			if(collision(*it, f)){
 				int height = it->getHeight();
 				if(removeOnCollision) powerUps.erase(it);
 				return height;
@@ -90,7 +90,7 @@ public:
 
 	virtual int checkCollisionsWith(Line& l, bool removeOnCollision = true) override {
 		for(auto it = powerUps.begin(); it != powerUps.end(); ++it){
-			if(lineTriangleCollision(l, *it)){
+			if(collision(l, *it)){
 				int height = it->getHeight();
 				if(removeOnCollision) powerUps.erase(it);
 				return height;
@@ -102,7 +102,7 @@ public:
 
 	virtual int checkCollisionsWith(Square& s, bool removeOnCollision = true) override {
 		for(auto it = powerUps.begin(); it != powerUps.end(); ++it){
-			if(squareTriangleCollision(s, *it)){
+			if(collision(s, *it)){
 				int height = it->getHeight();
 				if(removeOnCollision) powerUps.erase(it);
 				return height;
@@ -114,7 +114,7 @@ public:
 
 	virtual int checkCollisionsWith(Triangle& t, bool removeOnCollision = true) override {
 		for(auto it = powerUps.begin(); it != powerUps.end(); ++it){
-			if(triangleTriangleCollision(t, *it)){
+			if(collision(t, *it)){
 				int height = it->getHeight();
 				if(removeOnCollision) powerUps.erase(it);
 				return height;

@@ -67,7 +67,7 @@ public:
 
 	virtual int checkCollisionsWith(Circle& c, bool removeOnCollision = true) override {
 		for(auto it = nukes.begin(); it != nukes.end(); ++it){
-			if(circleFlowerCollision(c, *it)){
+			if(collision(c, *it)){
 				int radius = it->getRadius();
 				if(removeOnCollision) nukes.erase(it);
 				return radius;
@@ -79,7 +79,7 @@ public:
 
 	virtual int checkCollisionsWith(Flower& f, bool removeOnCollision = true) override {
 		for(auto it = nukes.begin(); it != nukes.end(); ++it){
-			if(flowerFlowerCollision(*it, f)){
+			if(collision(*it, f)){
 				int radius = it->getRadius();
 				if(removeOnCollision) nukes.erase(it);
 				return radius;
@@ -91,7 +91,7 @@ public:
 
 	virtual int checkCollisionsWith(Line& l, bool removeOnCollision = true) override {
 		for(auto it = nukes.begin(); it != nukes.end(); ++it){
-			if(lineFlowerCollision(l, *it)){
+			if(collision(l, *it)){
 				int radius = it->getRadius();
 				if(removeOnCollision) nukes.erase(it);
 				return radius;
@@ -103,7 +103,7 @@ public:
 
 	virtual int checkCollisionsWith(Square& s, bool removeOnCollision = true) override {
 		for(auto it = nukes.begin(); it != nukes.end(); ++it){
-			if(squareFlowerCollision(s, *it)){
+			if(collision(s, *it)){
 				int radius = it->getRadius();
 				if(removeOnCollision) nukes.erase(it);
 				return radius;
@@ -115,7 +115,7 @@ public:
 
 	virtual int checkCollisionsWith(Triangle& t, bool removeOnCollision = true) override {
 		for(auto it = nukes.begin(); it != nukes.end(); ++it){
-			if(triangleFlowerCollision(t, *it)){
+			if(collision(t, *it)){
 				int radius = it->getRadius();
 				if(removeOnCollision) nukes.erase(it);
 				return radius;
