@@ -4,7 +4,6 @@
 #include "../objects/mainCircle/MainCircle.h"
 #include "../objects/powerUp/PowerUpCircle.h"
 #include "../objects/BuddyPowerUp.h"
-#include "../objects/CircleCar.h"
 
 #include "../utils.h"
 
@@ -13,6 +12,7 @@
 #include "derivedShapeList/NeedleList.h"
 #include "derivedShapeList/NukeList.h"
 #include "derivedShapeList/PowerUpList.h"
+#include "derivedShapeList/CircleCarList.h"
 
 // Colors
 const olc::Pixel mainCircleColor = olc::BLACK;
@@ -58,7 +58,7 @@ class ShapesContainer{
 
 	// Power ups
 	PowerUpList powerUps;
-	std::list<CircleCar> circleCars;
+	CircleCarList circleCars;
 	std::list<BuddyPowerUp> buddyPowerUps;
 	std::list<PowerUpCircle> powerUpCircles;
 	NukeList nukes;
@@ -92,6 +92,7 @@ public:
 		);
 
 		powerUps = PowerUpList(pge);
+		circleCars = CircleCarList(pge);
 		nukes = NukeList(pge);
 
 		otherCircles = OtherCircleList(pge);
@@ -105,7 +106,7 @@ public:
 		needles.deleteAll();
 		deleteAllBuddyPowerUps();
 		traps.deleteAll();
-		deleteAllCircleCars();
+		circleCars.deleteAll();
 		nukes.deleteAll();
 	}
 
@@ -119,7 +120,7 @@ public:
 		deleteAllPowerUpCircles();
 		needles.deleteAll();
 		traps.deleteAll();
-		deleteAllCircleCars();
+		circleCars.deleteAll();
 		nukes.deleteAll();
 	}
 
@@ -150,12 +151,6 @@ public:
 		}
 	}
 
-	void hideCircleCars(){
-		for(auto it = circleCars.begin(); it != circleCars.end(); ++it){
-			it->clear();
-		}
-	}
-
 	void hideAll(){
 		hideMainCircle();
 		otherCircles.hideAll();
@@ -164,7 +159,7 @@ public:
 		needles.hideAll();
 		hideBuddyPowerUps();
 		traps.hideAll();
-		hideCircleCars();
+		circleCars.hideAll();
 		nukes.hideAll();
 	}
 
@@ -184,12 +179,6 @@ public:
 		}
 	}
 
-	void drawCircleCars(){
-		for(auto it = circleCars.begin(); it != circleCars.end(); ++it){
-			it->draw();
-		}
-	}
-
 	void drawAllShapes(){
 		drawMainCircle();
 		otherCircles.drawAll();
@@ -198,7 +187,7 @@ public:
 		needles.drawAll();
 		drawBuddyPowerUps();
 		traps.drawAll();
-		drawCircleCars();
+		circleCars.drawAll();
 		nukes.drawAll();
 	}
 
@@ -349,59 +338,7 @@ public:
 	// - From Bottom Right
 	// If multiple bits are one, them multiple circles will pop out
 	void addCircleCar(uint8_t dirFromCode){
-		auto makeCircleCar = [&](olc::vi2d _loc, int dirCode){
-			// const uint8_t circleCarNumWheels = 4;
-			// const double degOffset = 45.0;
-			circleCars.push_back(CircleCar(*pixelGameEngine, _loc, circleCarSpeed, circleCarColor, circleCarWheelColor, circleCarRadius, dirCode));
-		};
-
-		if(dirFromCode & 0x01){ // FROM TOP
-			makeCircleCar(olc::vi2d(rand() % pixelGameEngine->ScreenWidth(), 0), 1);
-		}
-
-		if(dirFromCode & 0x02){ // FROM BOTTOM
-			makeCircleCar(olc::vi2d(rand() % pixelGameEngine->ScreenWidth(), pixelGameEngine->ScreenHeight()), 0);
-		}
-
-		if(dirFromCode & 0x04){ // FROM LEFT
-			makeCircleCar(olc::vi2d(0, rand() % pixelGameEngine->ScreenHeight()), 3);
-		}
-
-		if(dirFromCode & 0x08){ // FROM RIGHT
-			makeCircleCar(olc::vi2d(pixelGameEngine->ScreenWidth(), rand() % pixelGameEngine->ScreenHeight()), 2);
-		}
-
-		if(dirFromCode & 0x10){ // FROM TOP LEFT
-			if(rand() % 2 == 0){ // FROM TOP ON LEFT HALF
-				makeCircleCar(olc::vi2d(rand() % pixelGameEngine->ScreenWidth() / 2, 0), 7);
-			}else{ // FROM LEFT ON TOP HALF
-				makeCircleCar(olc::vi2d(0, rand() % pixelGameEngine->ScreenHeight() / 2), 7);
-			}
-		}
-
-		if(dirFromCode & 0x20){ // FROM TOP RIGHT
-			if(rand() % 2 == 0){ // FROM TOP ON RIGHT HALF
-				makeCircleCar(olc::vi2d((rand() % pixelGameEngine->ScreenWidth() / 2 ) + pixelGameEngine->ScreenWidth() / 2, 0), 6);
-			}else{ // FROM RIGHT ON TOP HALF
-				makeCircleCar(olc::vi2d(pixelGameEngine->ScreenWidth(), (rand() % pixelGameEngine->ScreenHeight() / 2 )), 6);
-			}
-		}
-
-		if(dirFromCode & 0x40){ // FROM BOTTOM LEFT
-			if(rand() % 2 == 0){ // FROM BOTTOM ON LEFT HALF
-				makeCircleCar(olc::vi2d(rand() % pixelGameEngine->ScreenWidth() / 2, pixelGameEngine->ScreenHeight()), 5);
-			}else{ // FROM LEFT ON BOTTOM HALF
-				makeCircleCar(olc::vi2d(0, (rand() % pixelGameEngine->ScreenHeight() / 2) + pixelGameEngine->ScreenHeight() / 2), 5);
-			}
-		}
-
-		if(dirFromCode & 0x80){ // FROM BOTTOM RIGHT
-			if(rand() % 2 == 0){ // FROM BOTTOM ON RIGHT HALF
-				makeCircleCar(olc::vi2d((rand() % pixelGameEngine->ScreenWidth() / 2) + pixelGameEngine->ScreenWidth() / 2, pixelGameEngine->ScreenHeight()), 4);
-			}else{ // FROM RIGHT ON BOTTOM HALF
-				makeCircleCar(olc::vi2d(pixelGameEngine->ScreenWidth(), (rand() % pixelGameEngine->ScreenHeight() / 2) + pixelGameEngine->ScreenHeight() / 2), 4);
-			}
-		}
+		circleCars.add(dirFromCode);
 	}
 
 	// Direction code tells the direction where the power up is comming from on the screen
@@ -449,17 +386,6 @@ public:
 		}
 	}
 
-	void moveCircleCars(){
-		for(auto it = circleCars.begin(); it != circleCars.end();){
-			it->move();
-			if(it->outOfBounds()){
-				circleCars.erase(it++);
-			}else{
-				++it;
-			}
-		}
-	}
-
 	void moveAllShapes(){
 		moveMainCircle();
 		otherCircles.moveAll();
@@ -468,7 +394,7 @@ public:
 		needles.moveAll();
 		moveBuddyPowerUps();
 		traps.moveAll();
-		moveCircleCars();
+		circleCars.moveAll();
 		nukes.moveAll();
 	}
 
@@ -636,20 +562,15 @@ public:
 	// Return 0 for no collisions
 	// Return -1 for collision
 	int checkCollisionForCircleCars(){
-		for(auto it = circleCars.begin(); it != circleCars.end(); ++it){
-			if(mainCircle.inCar()){
-				if(flowerFlowerCollision(mainCircle.getCar(), *it)){
-					mainCircle.activateCar();
-					circleCars.erase(it);
-					return -1;
-				}
-			}else{
-				// Check collision with main circle
-				if(circleFlowerCollision(mainCircle, *it)){
-					mainCircle.activateCar();
-					circleCars.erase(it);
-					return -1;
-				}
+		if(mainCircle.inCar()){
+			if(circleCars.checkCollisionsWith(mainCircle.getCar()) > 0){
+				mainCircle.activateCar();
+				return -1;
+			}
+		}else{
+			if(circleCars.checkCollisionsWith(mainCircle) > 0){
+				mainCircle.activateCar();
+				return -1;
 			}
 		}
 
@@ -685,10 +606,6 @@ public:
 
 	void deleteBuddyCircle(){
 		mainCircle.killBuddy();
-	}
-
-	void deleteAllCircleCars(){
-		circleCars.clear();
 	}
 
 	// 

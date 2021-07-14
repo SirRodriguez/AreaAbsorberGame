@@ -21,9 +21,9 @@ protected:
 
 public:
 	PowerUpList()
-	: ShapeList(ENEMYCODE){}
+	: ShapeList(POWERUPCODE){}
 	PowerUpList(olc::PixelGameEngine& pge)
-	: ShapeList(pge, ENEMYCODE){}
+	: ShapeList(pge, POWERUPCODE){}
 
 	virtual void deleteAll() override {
 		powerUps.clear();
