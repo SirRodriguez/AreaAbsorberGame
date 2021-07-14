@@ -3,7 +3,6 @@
 
 #include "../objects/mainCircle/MainCircle.h"
 #include "../objects/powerUp/PowerUpCircle.h"
-#include "../objects/BuddyPowerUp.h"
 
 #include "../utils.h"
 
@@ -13,6 +12,7 @@
 #include "derivedShapeList/NukeList.h"
 #include "derivedShapeList/PowerUpList.h"
 #include "derivedShapeList/CircleCarList.h"
+#include "derivedShapeList/BuddyPowerUpList.h"
 
 // Colors
 const olc::Pixel mainCircleColor = olc::BLACK;
@@ -59,7 +59,7 @@ class ShapesContainer{
 	// Power ups
 	PowerUpList powerUps;
 	CircleCarList circleCars;
-	std::list<BuddyPowerUp> buddyPowerUps;
+	BuddyPowerUpList buddyPowerUps;
 	std::list<PowerUpCircle> powerUpCircles;
 	NukeList nukes;
 
@@ -94,6 +94,7 @@ public:
 		powerUps = PowerUpList(pge);
 		circleCars = CircleCarList(pge);
 		nukes = NukeList(pge);
+		buddyPowerUps = BuddyPowerUpList(pge);
 
 		otherCircles = OtherCircleList(pge);
 		traps = TrapList(pge);
@@ -104,7 +105,7 @@ public:
 		powerUps.deleteAll();
 		deleteAllPowerUpCircles();
 		needles.deleteAll();
-		deleteAllBuddyPowerUps();
+		buddyPowerUps.deleteAll();
 		traps.deleteAll();
 		circleCars.deleteAll();
 		nukes.deleteAll();
@@ -116,7 +117,7 @@ public:
 
 		otherCircles.deleteAll();
 		powerUps.deleteAll();
-		deleteAllBuddyPowerUps();
+		buddyPowerUps.deleteAll();
 		deleteAllPowerUpCircles();
 		needles.deleteAll();
 		traps.deleteAll();
@@ -145,19 +146,13 @@ public:
 		}
 	}
 
-	void hideBuddyPowerUps(){
-		for(auto it = buddyPowerUps.begin(); it != buddyPowerUps.end(); ++it){
-			it->clear();
-		}
-	}
-
 	void hideAll(){
 		hideMainCircle();
 		otherCircles.hideAll();
 		powerUps.hideAll();
 		hidePowerUpCircles();
 		needles.hideAll();
-		hideBuddyPowerUps();
+		buddyPowerUps.hideAll();
 		traps.hideAll();
 		circleCars.hideAll();
 		nukes.hideAll();
@@ -173,19 +168,13 @@ public:
 		}
 	}
 
-	void drawBuddyPowerUps(){
-		for(auto it = buddyPowerUps.begin(); it != buddyPowerUps.end(); ++it){
-			it->draw();
-		}
-	}
-
 	void drawAllShapes(){
 		drawMainCircle();
 		otherCircles.drawAll();
 		powerUps.drawAll();
 		drawPowerUpCircles();
 		needles.drawAll();
-		drawBuddyPowerUps();
+		buddyPowerUps.drawAll();
 		traps.drawAll();
 		circleCars.drawAll();
 		nukes.drawAll();
@@ -195,11 +184,7 @@ public:
 	// List additions
 	// 
 
-	void addCircle(uint8_t dirFromCode){
-		otherCircles.add(dirFromCode);
-	}
-
-	// Direction code tells the direction where the power up is comming from on the screen
+	// Direction code tells the direction where the shape is comming from on the screen
 	// It is a bitwise code, so:
 	// 0000 0000 <- from right to left, if the bit is a 1 it means:
 	// - From Top
@@ -211,9 +196,13 @@ public:
 	// - Form Bottom Left
 	// - From Bottom Right
 	// If multiple bits are one, them multiple circles will pop out
-	void addPowerUp(uint8_t dirFromCode){
-		powerUps.add(dirFromCode);
-	}
+	void addCircle(uint8_t dirFromCode){ otherCircles.add(dirFromCode); }
+	void addPowerUp(uint8_t dirFromCode){ powerUps.add(dirFromCode); }
+	void addNeedle(uint8_t dirFromCode){ needles.add(dirFromCode); }
+	void addBuddyPowerUp(uint8_t dirFromCode){ buddyPowerUps.add(dirFromCode); }
+	void addTrap(uint8_t dirFromCode){ traps.add(dirFromCode); }
+	void addCircleCar(uint8_t dirFromCode){ circleCars.add(dirFromCode); }
+	void addNuke(uint8_t dirFromCode){ nukes.add(dirFromCode); }
 
 	void addPowerUpCircles(){
 		olc::vi2d pos = mainCircle.getPosition();
@@ -225,136 +214,6 @@ public:
 		powerUpCircles.push_back(PowerUpCircle(*pixelGameEngine, pos, powerUpCircleSpeed, powerUpCircleColor, mainCircle.getRadius(), 5));
 		powerUpCircles.push_back(PowerUpCircle(*pixelGameEngine, pos, powerUpCircleSpeed, powerUpCircleColor, mainCircle.getRadius(), 6));
 		powerUpCircles.push_back(PowerUpCircle(*pixelGameEngine, pos, powerUpCircleSpeed, powerUpCircleColor, mainCircle.getRadius(), 7));
-	}
-
-	// Direction code tells the direction where the power up is comming from on the screen
-	// It is a bitwise code, so:
-	// 0000 0000 <- from right to left, if the bit is a 1 it means:
-	// - From Top
-	// - From Bottom
-	// - From Left
-	// - From Right
-	// - From Top Left
-	// - From Top Right
-	// - Form Bottom Left
-	// - From Bottom Right
-	// If multiple bits are one, them multiple circles will pop out
-	void addNeedle(uint8_t dirFromCode){
-		needles.add(dirFromCode);
-	}
-
-	// Direction code tells the direction where the power up is comming from on the screen
-	// It is a bitwise code, so:
-	// 0000 0000 <- from right to left, if the bit is a 1 it means:
-	// - From Top
-	// - From Bottom
-	// - From Left
-	// - From Right
-	// - From Top Left
-	// - From Top Right
-	// - Form Bottom Left
-	// - From Bottom Right
-	// If multiple bits are one, them multiple circles will pop out
-	void addBuddyPowerUp(uint8_t dirFromCode){
-		auto makeBuddyPowerUp = [&](olc::vi2d _loc, int dirCode){
-			buddyPowerUps.push_back(BuddyPowerUp(*pixelGameEngine, _loc, buddyCircleSpeed, buddyPowerUpColor, buddyPowerUpLength, dirCode));
-		};
-
-		if(dirFromCode & 0x01){ // FROM TOP
-			makeBuddyPowerUp(olc::vi2d(rand() % pixelGameEngine->ScreenWidth(), 0), 1);
-		}
-
-		if(dirFromCode & 0x02){ // FROM BOTTOM
-			makeBuddyPowerUp(olc::vi2d(rand() % pixelGameEngine->ScreenWidth(), pixelGameEngine->ScreenHeight()), 0);
-		}
-
-		if(dirFromCode & 0x04){ // FROM LEFT
-			makeBuddyPowerUp(olc::vi2d(0, rand() % pixelGameEngine->ScreenHeight()), 3);
-		}
-
-		if(dirFromCode & 0x08){ // FROM RIGHT
-			makeBuddyPowerUp(olc::vi2d(pixelGameEngine->ScreenWidth(), rand() % pixelGameEngine->ScreenHeight()), 2);
-		}
-
-		if(dirFromCode & 0x10){ // FROM TOP LEFT
-			if(rand() % 2 == 0){ // FROM TOP ON LEFT HALF
-				makeBuddyPowerUp(olc::vi2d(rand() % pixelGameEngine->ScreenWidth() / 2, 0), 7);
-			}else{ // FROM LEFT ON TOP HALF
-				makeBuddyPowerUp(olc::vi2d(0, rand() % pixelGameEngine->ScreenHeight() / 2), 7);
-			}
-		}
-
-		if(dirFromCode & 0x20){ // FROM TOP RIGHT
-			if(rand() % 2 == 0){ // FROM TOP ON RIGHT HALF
-				makeBuddyPowerUp(olc::vi2d((rand() % pixelGameEngine->ScreenWidth() / 2 ) + pixelGameEngine->ScreenWidth() / 2, 0), 6);
-			}else{ // FROM RIGHT ON TOP HALF
-				makeBuddyPowerUp(olc::vi2d(pixelGameEngine->ScreenWidth(), (rand() % pixelGameEngine->ScreenHeight() / 2 )), 6);
-			}
-		}
-
-		if(dirFromCode & 0x40){ // FROM BOTTOM LEFT
-			if(rand() % 2 == 0){ // FROM BOTTOM ON LEFT HALF
-				makeBuddyPowerUp(olc::vi2d(rand() % pixelGameEngine->ScreenWidth() / 2, pixelGameEngine->ScreenHeight()), 5);
-			}else{ // FROM LEFT ON BOTTOM HALF
-				makeBuddyPowerUp(olc::vi2d(0, (rand() % pixelGameEngine->ScreenHeight() / 2) + pixelGameEngine->ScreenHeight() / 2), 5);
-			}
-		}
-
-		if(dirFromCode & 0x80){ // FROM BOTTOM RIGHT
-			if(rand() % 2 == 0){ // FROM BOTTOM ON RIGHT HALF
-				makeBuddyPowerUp(olc::vi2d((rand() % pixelGameEngine->ScreenWidth() / 2) + pixelGameEngine->ScreenWidth() / 2, pixelGameEngine->ScreenHeight()), 4);
-			}else{ // FROM RIGHT ON BOTTOM HALF
-				makeBuddyPowerUp(olc::vi2d(pixelGameEngine->ScreenWidth(), (rand() % pixelGameEngine->ScreenHeight() / 2) + pixelGameEngine->ScreenHeight() / 2), 4);
-			}
-		}
-	}
-
-	// Direction code tells the direction where the power up is comming from on the screen
-	// It is a bitwise code, so:
-	// 0000 0000 <- from right to left, if the bit is a 1 it means:
-	// - From Top
-	// - From Bottom
-	// - From Left
-	// - From Right
-	// - From Top Left
-	// - From Top Right
-	// - Form Bottom Left
-	// - From Bottom Right
-	// If multiple bits are one, them multiple circles will pop out
-	void addTrap(uint8_t dirFromCode){
-		traps.add(dirFromCode);
-	}
-
-	// Direction code tells the direction where the power up is comming from on the screen
-	// It is a bitwise code, so:
-	// 0000 0000 <- from right to left, if the bit is a 1 it means:
-	// - From Top
-	// - From Bottom
-	// - From Left
-	// - From Right
-	// - From Top Left
-	// - From Top Right
-	// - Form Bottom Left
-	// - From Bottom Right
-	// If multiple bits are one, them multiple circles will pop out
-	void addCircleCar(uint8_t dirFromCode){
-		circleCars.add(dirFromCode);
-	}
-
-	// Direction code tells the direction where the power up is comming from on the screen
-	// It is a bitwise code, so:
-	// 0000 0000 <- from right to left, if the bit is a 1 it means:
-	// - From Top
-	// - From Bottom
-	// - From Left
-	// - From Right
-	// - From Top Left
-	// - From Top Right
-	// - Form Bottom Left
-	// - From Bottom Right
-	// If multiple bits are one, them multiple circles will pop out
-	void addNuke(uint8_t dirFromCode){
-		nukes.add(dirFromCode);
 	}
 
 	// 
@@ -375,24 +234,13 @@ public:
 		}
 	}
 
-	void moveBuddyPowerUps(){
-		for(auto it = buddyPowerUps.begin(); it != buddyPowerUps.end();){
-			it->move();
-			if(it->outOfBounds()){
-				buddyPowerUps.erase(it++);
-			}else{
-				++it;
-			}
-		}
-	}
-
 	void moveAllShapes(){
 		moveMainCircle();
 		otherCircles.moveAll();
 		powerUps.moveAll();
 		movePowerUpCircles();
 		needles.moveAll();
-		moveBuddyPowerUps();
+		buddyPowerUps.moveAll();
 		traps.moveAll();
 		circleCars.moveAll();
 		nukes.moveAll();
@@ -507,18 +355,13 @@ public:
 	// Returns 0 for no collision
 	// Returns -1 for collision with main circle
 	int checkCollisionForBuddyPowerUps(){
-		for(auto it = buddyPowerUps.begin(); it != buddyPowerUps.end(); ++it){
-			if(mainCircle.inCar()){
-				if(squareFlowerCollision(*it, mainCircle.getCar())){
-					buddyPowerUps.erase(it);
-					return -1;
-				}
-			}else{
-				// Check collision with main circle
-				if(circleSquareCollision(mainCircle, *it)){
-					buddyPowerUps.erase(it);
-					return -1;
-				}
+		if(mainCircle.inCar()){
+			if(buddyPowerUps.checkCollisionsWith(mainCircle.getCar()) > 0){
+				return -1;
+			}
+		}else{
+			if(buddyPowerUps.checkCollisionsWith(mainCircle) > 0){
+				return -1;
 			}
 		}
 
@@ -598,10 +441,6 @@ public:
 	// 
 	void deleteAllPowerUpCircles(){
 		powerUpCircles.clear();
-	}
-
-	void deleteAllBuddyPowerUps(){
-		buddyPowerUps.clear();
 	}
 
 	void deleteBuddyCircle(){
