@@ -51,7 +51,7 @@ public:
 	// - Form Bottom Left
 	// - From Bottom Right
 	// If multiple bits are one, them multiple circles will pop out
-	void add(uint8_t dirFromCode){
+	virtual void add(uint8_t dirFromCode){
 		if(dirFromCode & 0x01){ // FROM TOP
 			make(olc::vi2d(rand() % pixelGameEngine->ScreenWidth(), 0), 1);
 		}

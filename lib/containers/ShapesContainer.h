@@ -2,7 +2,6 @@
 #define SHAPESCONTAINER
 
 #include "../objects/mainCircle/MainCircle.h"
-#include "../objects/powerUp/PowerUpCircle.h"
 
 #include "../utils.h"
 
@@ -13,6 +12,7 @@
 #include "derivedShapeList/PowerUpList.h"
 #include "derivedShapeList/CircleCarList.h"
 #include "derivedShapeList/BuddyPowerUpList.h"
+#include "derivedShapeList/PowerUpCircleList.h"
 
 // Colors
 const olc::Pixel mainCircleColor = olc::BLACK;
@@ -60,7 +60,7 @@ class ShapesContainer{
 	PowerUpList powerUps;
 	CircleCarList circleCars;
 	BuddyPowerUpList buddyPowerUps;
-	std::list<PowerUpCircle> powerUpCircles;
+	PowerUpCircleList powerUpCircles;
 	NukeList nukes;
 
 	// Enemies
@@ -95,6 +95,7 @@ public:
 		circleCars = CircleCarList(pge);
 		nukes = NukeList(pge);
 		buddyPowerUps = BuddyPowerUpList(pge);
+		powerUpCircles = PowerUpCircleList(pge);
 
 		otherCircles = OtherCircleList(pge);
 		traps = TrapList(pge);
@@ -103,7 +104,7 @@ public:
 		// Make sure that the lists are cleared
 		otherCircles.deleteAll();
 		powerUps.deleteAll();
-		deleteAllPowerUpCircles();
+		powerUpCircles.deleteAll();
 		needles.deleteAll();
 		buddyPowerUps.deleteAll();
 		traps.deleteAll();
@@ -118,7 +119,7 @@ public:
 		otherCircles.deleteAll();
 		powerUps.deleteAll();
 		buddyPowerUps.deleteAll();
-		deleteAllPowerUpCircles();
+		powerUpCircles.deleteAll();
 		needles.deleteAll();
 		traps.deleteAll();
 		circleCars.deleteAll();
@@ -140,17 +141,11 @@ public:
 		mainCircle.clear();
 	}
 
-	void hidePowerUpCircles(){
-		for(auto it = powerUpCircles.begin(); it != powerUpCircles.end(); ++it){
-			it->clear();
-		}
-	}
-
 	void hideAll(){
 		hideMainCircle();
 		otherCircles.hideAll();
 		powerUps.hideAll();
-		hidePowerUpCircles();
+		powerUpCircles.hideAll();
 		needles.hideAll();
 		buddyPowerUps.hideAll();
 		traps.hideAll();
@@ -162,17 +157,12 @@ public:
 		mainCircle.draw();
 	}
 
-	void drawPowerUpCircles(){
-		for(auto it = powerUpCircles.begin(); it != powerUpCircles.end(); ++it){
-			it->draw();
-		}
-	}
-
 	void drawAllShapes(){
 		drawMainCircle();
 		otherCircles.drawAll();
 		powerUps.drawAll();
-		drawPowerUpCircles();
+		// drawPowerUpCircles();
+		powerUpCircles.drawAll();
 		needles.drawAll();
 		buddyPowerUps.drawAll();
 		traps.drawAll();
@@ -205,15 +195,7 @@ public:
 	void addNuke(uint8_t dirFromCode){ nukes.add(dirFromCode); }
 
 	void addPowerUpCircles(){
-		olc::vi2d pos = mainCircle.getPosition();
-		powerUpCircles.push_back(PowerUpCircle(*pixelGameEngine, pos, powerUpCircleSpeed, powerUpCircleColor, mainCircle.getRadius(), 0));
-		powerUpCircles.push_back(PowerUpCircle(*pixelGameEngine, pos, powerUpCircleSpeed, powerUpCircleColor, mainCircle.getRadius(), 1));
-		powerUpCircles.push_back(PowerUpCircle(*pixelGameEngine, pos, powerUpCircleSpeed, powerUpCircleColor, mainCircle.getRadius(), 2));
-		powerUpCircles.push_back(PowerUpCircle(*pixelGameEngine, pos, powerUpCircleSpeed, powerUpCircleColor, mainCircle.getRadius(), 3));
-		powerUpCircles.push_back(PowerUpCircle(*pixelGameEngine, pos, powerUpCircleSpeed, powerUpCircleColor, mainCircle.getRadius(), 4));
-		powerUpCircles.push_back(PowerUpCircle(*pixelGameEngine, pos, powerUpCircleSpeed, powerUpCircleColor, mainCircle.getRadius(), 5));
-		powerUpCircles.push_back(PowerUpCircle(*pixelGameEngine, pos, powerUpCircleSpeed, powerUpCircleColor, mainCircle.getRadius(), 6));
-		powerUpCircles.push_back(PowerUpCircle(*pixelGameEngine, pos, powerUpCircleSpeed, powerUpCircleColor, mainCircle.getRadius(), 7));
+		powerUpCircles.add(mainCircle.getPosition(), mainCircle.getRadius());
 	}
 
 	// 
@@ -223,22 +205,11 @@ public:
 		mainCircle.move();
 	}
 
-	void movePowerUpCircles(){
-		for(auto it = powerUpCircles.begin(); it != powerUpCircles.end();){
-			it->move();
-			if(it->outOfBounds()){
-				powerUpCircles.erase(it++);
-			}else{
-				++it;
-			}
-		}
-	}
-
 	void moveAllShapes(){
 		moveMainCircle();
 		otherCircles.moveAll();
 		powerUps.moveAll();
-		movePowerUpCircles();
+		powerUpCircles.moveAll();
 		needles.moveAll();
 		buddyPowerUps.moveAll();
 		traps.moveAll();
@@ -275,22 +246,9 @@ public:
 	}
 
 	// Return 0 for no collision
-	// return -1 if the other circle is bigger than the power up circle
-	// return other circle radius if it is smaller than the powerup circle
+	// NEW: Return the value of the collided circle
 	int checkCollisionForPowerUpCircles(){
-		for(auto it = powerUpCircles.begin(); it != powerUpCircles.end(); ++it){
-			int collideNum = otherCircles.checkCollisionsWith(*it);
-			if(collideNum > 0){
-				if(collideNum > it->getRadius()){
-					powerUpCircles.erase(it);
-					return -1;
-				}else{
-					powerUpCircles.erase(it);
-					return collideNum;
-				}
-			}
-		}
-		return 0;
+		return otherCircles.checkCollisionsWith(powerUpCircles);
 	}
 
 	// Returns 1 for collision
@@ -337,10 +295,8 @@ public:
 			return 1;
 		}
 
-		for(auto pit = powerUpCircles.begin(); pit != powerUpCircles.end(); ++pit){
-			if(needles.checkCollisionsWith(*pit, false) > 0){
-				return 2;
-			}
+		if(needles.checkCollisionsWith(powerUpCircles, false)> 0){
+			return 2;
 		}
 
 		if(mainCircle.buddyAlive()){
@@ -439,10 +395,6 @@ public:
 	// 
 	// Deleting Shapes
 	// 
-	void deleteAllPowerUpCircles(){
-		powerUpCircles.clear();
-	}
-
 	void deleteBuddyCircle(){
 		mainCircle.killBuddy();
 	}
