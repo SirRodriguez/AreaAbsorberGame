@@ -1,6 +1,7 @@
 #ifndef UTILS_H
 #define UTILS_H
 
+#include "./objects/mainCircle/MainCircle.h"
 #include "./shapes/derivedShapes/Triangle.h"
 #include "./shapes/derivedShapes/Line.h"
 #include "./shapes/derivedShapes/Square.h"
@@ -314,6 +315,13 @@ bool flowerFlowerCollision(Flower& f, Flower& f2){
 // Generalized Collision Functions for easy access
 // 
 
+// Main Circle Collisions (Forward declarations)
+bool collision(MainCircle& mc, Circle& c);
+bool collision(MainCircle& mc, Line& l);
+bool collision(MainCircle& mc, Triangle& t);
+bool collision(MainCircle& mc, Square& s);
+bool collision(MainCircle& mc, Flower& f);
+
 // Point Collisions
 bool collision(olc::vi2d p, Circle& c){ return circlePointCillision(c, p); }
 
@@ -324,6 +332,7 @@ bool collision(Circle& c, Line& l){ return circleLineCollision(c, l); }
 bool collision(Circle& c, Triangle& t){ return circleTriangleCollision(c, t); }
 bool collision(Circle& c, Square& s){ return circleSquareCollision(c, s); }
 bool collision(Circle& c, Flower& f){ return circleFlowerCollision(c, f); }
+bool collision(Circle& c, MainCircle& mc){ return collision(mc, c); }
 
 // Line Collisions
 bool collision(Line& l, Line& l2){ return lineLineCollision(l ,l2); }
@@ -331,6 +340,7 @@ bool collision(Line& l, Circle& c){ return circleLineCollision(c, l); }
 bool collision(Line& l, Square& s){ return lineSquareCollision(l, s); }
 bool collision(Line& l, Triangle& t){ return lineTriangleCollision(l, t); }
 bool collision(Line& l, Flower& f){ return lineFlowerCollision(l, f); }
+bool collision(Line& l, MainCircle& mc){ return collision(mc, l); }
 
 // Triangle Collisions
 bool collision(Triangle& t, Triangle& t2){ return triangleTriangleCollision(t, t2); }
@@ -338,6 +348,7 @@ bool collision(Triangle& t, Circle& c){ return circleTriangleCollision(c, t); }
 bool collision(Triangle& t, Line& l){ return lineTriangleCollision(l, t); }
 bool collision(Triangle& t, Square& s){ return squareTriangleCollision(s, t); }
 bool collision(Triangle& t, Flower& f){ return triangleFlowerCollision(t, f); }
+bool collision(Triangle& t, MainCircle& mc){ return collision(mc, t); }
 
 // Square Collisions
 bool collision(Square& s, Square& s2){ return squareSquareCollision(s, s2); }
@@ -345,6 +356,7 @@ bool collision(Square& s, Circle& c){ return circleSquareCollision(c, s); }
 bool collision(Square& s, Line& l){ return lineSquareCollision(l, s); }
 bool collision(Square& s, Triangle& t){ return squareTriangleCollision(s, t); }
 bool collision(Square& s, Flower& f){ return squareFlowerCollision(s, f); }
+bool collision(Square& s, MainCircle& mc){ return collision(mc, s); }
 
 // Flower Collisions
 bool collision(Flower& f, Flower& f2){ return flowerFlowerCollision(f, f2); }
@@ -352,5 +364,23 @@ bool collision(Flower& f, Circle& c){ return circleFlowerCollision(c, f); }
 bool collision(Flower& f, Line& l){ return lineFlowerCollision(l, f); }
 bool collision(Flower& f, Triangle& t){ return triangleFlowerCollision(t, f); }
 bool collision(Flower& f, Square& s){ return squareFlowerCollision(s, f); }
+bool collision(Flower& f, MainCircle& mc){ return collision(mc, f); }
+
+// Main Circle Collisions
+bool collision(MainCircle& mc, Circle& c){
+	return mc.inCar() ? collision(mc.getCar(), c) : circleCircleCollision(mc, c);
+}
+bool collision(MainCircle& mc, Line& l){
+	return mc.inCar() ? collision(mc.getCar(), l) : circleLineCollision(mc, l);
+}
+bool collision(MainCircle& mc, Triangle& t){
+	return mc.inCar() ? collision(mc.getCar(), t) : circleTriangleCollision(mc, t);
+}
+bool collision(MainCircle& mc, Square& s){
+	return mc.inCar() ? collision(mc.getCar(), s) : circleSquareCollision(mc, s);
+}
+bool collision(MainCircle& mc, Flower& f){
+	return mc.inCar() ? collision(mc.getCar(), f) : circleFlowerCollision(mc, f);
+}
 
 #endif

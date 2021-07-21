@@ -214,7 +214,6 @@ public:
 		if(inMainMenu){
 			if(spaceButton.bPressed){
 				Clear(olc::WHITE);
-				shapesContainer.drawMainCircle();
 				inMainMenu = false;
 				scoreContainer.resetLevelAndScore();
 			}

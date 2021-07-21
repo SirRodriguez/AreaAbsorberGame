@@ -124,6 +124,18 @@ public:
 		return 0;
 	}
 
+	virtual int checkCollisionsWith(MainCircle& mc, bool removeOnCollision = true) override {
+		for(auto it = traps.begin(); it != traps.end(); ++it){
+			if(collision(*it, mc)){
+				int dirCode = it->getDirectionCode();
+				if(removeOnCollision) traps.erase(it);
+				return dirCode;
+			}
+		}
+
+		return 0;
+	}
+
 };
 
 #endif

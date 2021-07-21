@@ -124,6 +124,18 @@ public:
 
 		return 0;
 	}
+
+	virtual int checkCollisionsWith(MainCircle& mc, bool removeOnCollision = true) override {
+		for(auto it = circleCars.begin(); it != circleCars.end(); ++it){
+			if(collision(*it, mc)){
+				int radius = it->getRadius();
+				if(removeOnCollision) circleCars.erase(it);
+				return radius;
+			}
+		}
+
+		return 0;
+	}
 };
 
 #endif

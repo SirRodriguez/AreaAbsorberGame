@@ -22,9 +22,9 @@ protected:
 
 public:
 	NukeList()
-	: ShapeList(ENEMYCODE){}
+	: ShapeList(POWERUPCODE){}
 	NukeList(olc::PixelGameEngine& pge)
-	: ShapeList(pge, ENEMYCODE){}
+	: ShapeList(pge, POWERUPCODE){}
 
 	virtual void deleteAll() override {
 		nukes.clear();
@@ -116,6 +116,18 @@ public:
 	virtual int checkCollisionsWith(Triangle& t, bool removeOnCollision = true) override {
 		for(auto it = nukes.begin(); it != nukes.end(); ++it){
 			if(collision(t, *it)){
+				int radius = it->getRadius();
+				if(removeOnCollision) nukes.erase(it);
+				return radius;
+			}
+		}
+
+		return 0;
+	}
+
+	virtual int checkCollisionsWith(MainCircle& mc, bool removeOnCollision = true) override {
+		for(auto it = nukes.begin(); it != nukes.end(); ++it){
+			if(collision(*it, mc)){
 				int radius = it->getRadius();
 				if(removeOnCollision) nukes.erase(it);
 				return radius;

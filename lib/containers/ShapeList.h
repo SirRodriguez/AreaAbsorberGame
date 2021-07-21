@@ -1,6 +1,11 @@
 #ifndef SHAPELIST_H
 #define SHAPELIST_H
 
+#define ENEMYCODE 0
+#define BUDDYCODE 1
+#define POWERUPCODE 2
+#define MAINCIRCLECODE 3
+
 class ShapeList{
 private:
 	enum ShapeType{
@@ -12,10 +17,10 @@ private:
 
 	void assignShapeType(int typeCode){
 		switch(typeCode){
-			case 0: shapeType = ShapeType::ENEMY; break;
-			case 1: shapeType = ShapeType::BUDDY; break;
-			case 2: shapeType = ShapeType::POWERUP; break;
-			case 3: shapeType = ShapeType::MAINCIRCLE; break;
+			case ENEMYCODE: shapeType = ShapeType::ENEMY; break;
+			case BUDDYCODE: shapeType = ShapeType::BUDDY; break;
+			case POWERUPCODE: shapeType = ShapeType::POWERUP; break;
+			case MAINCIRCLECODE: shapeType = ShapeType::MAINCIRCLE; break;
 			default: shapeType = ShapeType::ENEMY; break;
 		}
 	}
@@ -37,6 +42,16 @@ public:
 	ShapeList(olc::PixelGameEngine& pge, int typeCode)
 	: pixelGameEngine(&pge){
 		assignShapeType(typeCode);
+	}
+
+	int getType(){
+		switch(shapeType){
+			case ShapeType::ENEMY: return ENEMYCODE;
+			case ShapeType::BUDDY: return BUDDYCODE;
+			case ShapeType::POWERUP: return POWERUPCODE;
+			case ShapeType::MAINCIRCLE: return MAINCIRCLECODE;
+			default: return ENEMYCODE;
+		}
 	}
 
 	// Direction code tells the direction where the circle is comming from on the screen
@@ -112,6 +127,7 @@ public:
 	virtual int checkCollisionsWith(Line& l, bool removeOnCollision = true) = 0;
 	virtual int checkCollisionsWith(Square& s, bool removeOnCollision = true) = 0;
 	virtual int checkCollisionsWith(Triangle& t, bool removeOnCollision = true) = 0;
+	virtual int checkCollisionsWith(MainCircle& mc, bool removeOnCollision = true) = 0;
 };
 
 #endif

@@ -1,8 +1,6 @@
 #ifndef SHAPESCONTAINER
 #define SHAPESCONTAINER
 
-#include "../objects/mainCircle/MainCircle.h"
-
 #include "../utils.h"
 
 #include "derivedShapeList/OtherCircleList.h"
@@ -13,6 +11,7 @@
 #include "derivedShapeList/CircleCarList.h"
 #include "derivedShapeList/BuddyPowerUpList.h"
 #include "derivedShapeList/PowerUpCircleList.h"
+#include "derivedShapeList/MainCircleList.h"
 
 // Colors
 const olc::Pixel mainCircleColor = olc::BLACK;
@@ -54,7 +53,8 @@ class ShapesContainer{
 	olc::PixelGameEngine* pixelGameEngine;
 
 	// Main circle
-	MainCircle mainCircle;
+	// MainCircle mainCircle;
+	MainCircleList mainCircle;
 
 	// Power ups
 	PowerUpList powerUps;
@@ -73,23 +73,7 @@ public:
 	: pixelGameEngine(nullptr){}
 	ShapesContainer(olc::PixelGameEngine& pge)
 	: pixelGameEngine(&pge){
-		olc::vi2d centerPos = olc::vi2d(pixelGameEngine->ScreenWidth() / 2, pixelGameEngine->ScreenHeight() / 2);
-
-		// Initialize the main circle and buddy circle
-		uint8_t numLives = 0;
-		mainCircle = MainCircle(
-			pge, 
-			centerPos, 
-			mainCircleSpeed, 
-			mainCircleColor, 
-			initialMainCircleSize, 
-			numLives,
-			circleCarColor,
-			circleCarWheelColor,
-			circleCarRadius,
-			buddyCircleSpeed,
-			buddyCircleColor
-		);
+		mainCircle = MainCircleList(pge);
 
 		powerUps = PowerUpList(pge);
 		circleCars = CircleCarList(pge);
@@ -113,8 +97,8 @@ public:
 	}
 
 	void reset(){
-		setMainCircleRadius(initialMainCircleSize);
-		resetMainCircleObjects();
+		mainCircle.setRadius(initialMainCircleSize);
+		mainCircle.resetObjects();
 
 		otherCircles.deleteAll();
 		powerUps.deleteAll();
@@ -127,7 +111,7 @@ public:
 	}
 
 	void clearForNextLevel(){
-		setMainCircleRadius(initialMainCircleSize);
+		mainCircle.setRadius(initialMainCircleSize);
 		otherCircles.deleteAll();
 		needles.deleteAll();
 		traps.deleteAll();
@@ -137,12 +121,8 @@ public:
 	// Drawing
 	// 
 
-	void hideMainCircle(){
-		mainCircle.clear();
-	}
-
 	void hideAll(){
-		hideMainCircle();
+		mainCircle.hideAll();
 		otherCircles.hideAll();
 		powerUps.hideAll();
 		powerUpCircles.hideAll();
@@ -153,15 +133,10 @@ public:
 		nukes.hideAll();
 	}
 
-	void drawMainCircle(){
-		mainCircle.draw();
-	}
-
 	void drawAllShapes(){
-		drawMainCircle();
+		mainCircle.drawAll();
 		otherCircles.drawAll();
 		powerUps.drawAll();
-		// drawPowerUpCircles();
 		powerUpCircles.drawAll();
 		needles.drawAll();
 		buddyPowerUps.drawAll();
@@ -201,12 +176,9 @@ public:
 	// 
 	// Moving Shapes
 	// 
-	void moveMainCircle(){
-		mainCircle.move();
-	}
 
 	void moveAllShapes(){
-		moveMainCircle();
+		mainCircle.moveAll();
 		otherCircles.moveAll();
 		powerUps.moveAll();
 		powerUpCircles.moveAll();
@@ -225,24 +197,12 @@ public:
 	// return -1 if other circle is bigger
 	// return any positive number means that the circle was smaller and thats the size
 	int checkCollisionForCircle(){
-		int collideNum = 0;
+		int collideNum = otherCircles.checkCollisionsWith(mainCircle);
 		if(mainCircle.inCar()){
-			collideNum = otherCircles.checkCollisionsWith(mainCircle.getCar());
-			if(collideNum > 0){
-				mainCircle.hitCar(collideNum);
-			}
-
+			mainCircle.hitCar(collideNum);
 			return collideNum;
-
-		}else{
-			collideNum = otherCircles.checkCollisionsWith(mainCircle);
-
-			if(collideNum > mainCircle.getRadius()){
-				return -1;
-			}else{
-				return collideNum;
-			}
 		}
+		return collideNum > mainCircle.getRadius() ? -1 : collideNum;
 	}
 
 	// Return 0 for no collision
@@ -254,17 +214,7 @@ public:
 	// Returns 1 for collision
 	// Returns 0 for no colision
 	int checkCollisionForPowerUps(){
-		if(mainCircle.inCar()){
-			if(powerUps.checkCollisionsWith(mainCircle.getCar()) > 0){
-				return 1;
-			}
-		}else{
-			if(powerUps.checkCollisionsWith(mainCircle) > 0){
-				return 1;
-			}
-		}
-
-		return 0;
+		return powerUps.checkCollisionsWith(mainCircle) > 0 ? 1 : 0;
 	}
 
 	// Returns 0 for no collision
@@ -311,17 +261,7 @@ public:
 	// Returns 0 for no collision
 	// Returns -1 for collision with main circle
 	int checkCollisionForBuddyPowerUps(){
-		if(mainCircle.inCar()){
-			if(buddyPowerUps.checkCollisionsWith(mainCircle.getCar()) > 0){
-				return -1;
-			}
-		}else{
-			if(buddyPowerUps.checkCollisionsWith(mainCircle) > 0){
-				return -1;
-			}
-		}
-
-		return 0;
+		return buddyPowerUps.checkCollisionsWith(mainCircle) > 0 ? -1 : 0;
 	}
 
 	// Return 0 for no collision
@@ -336,67 +276,34 @@ public:
 				return collideNum;
 			}
 		}
-
 		return 0;
 	}
 
 	// Return 0 for no collisions
 	// Return -1 for collision
 	int checkCollisionForTraps(){
-		int collideNum;
-		if(mainCircle.inCar()){
-			collideNum = traps.checkCollisionsWith(mainCircle.getCar());
-		}else{
-			collideNum = traps.checkCollisionsWith(mainCircle);
-		}
-
+		int collideNum = traps.checkCollisionsWith(mainCircle);
 		if(collideNum > 0){
 			mainCircle.activateTrap(collideNum);
 			return -1;
 		}
-
 		return 0;
 	}
 
 	// Return 0 for no collisions
 	// Return -1 for collision
 	int checkCollisionForCircleCars(){
-		if(mainCircle.inCar()){
-			if(circleCars.checkCollisionsWith(mainCircle.getCar()) > 0){
-				mainCircle.activateCar();
-				return -1;
-			}
-		}else{
-			if(circleCars.checkCollisionsWith(mainCircle) > 0){
-				mainCircle.activateCar();
-				return -1;
-			}
+		if(circleCars.checkCollisionsWith(mainCircle) > 0){
+			mainCircle.activateCar();
+			return -1;
 		}
-
 		return 0;
 	}
 
 	// Return 0 for no collisions
 	// Return -1 for collision
 	int checkCollisionForNukes(){
-		if(mainCircle.inCar()){
-			if(nukes.checkCollisionsWith(mainCircle.getCar()) > 0){
-				return -1;
-			}
-		}else{
-			if(nukes.checkCollisionsWith(mainCircle) > 0){
-				return -1;
-			}
-		}
-
-		return 0;
-	}
-
-	// 
-	// Deleting Shapes
-	// 
-	void deleteBuddyCircle(){
-		mainCircle.killBuddy();
+		return nukes.checkCollisionsWith(mainCircle) > 0 ? -1 : 0;
 	}
 
 	// 
@@ -408,17 +315,8 @@ public:
 		mainCircle.setPosition(olc::vi2d(pixelGameEngine->ScreenWidth() / 2, pixelGameEngine->ScreenHeight() / 2));
 	}
 
-	void resetMainCircleObjects(){
-		mainCircle.inactivateObjects();
-	}
-
 	void growMainCircle(int amount){
-		mainCircle.addRadius(amount);
-		growBuddyCircle(amount);
-	}
-
-	void setMainCircleRadius(int radius){
-		mainCircle.setRadius(radius);
+		mainCircle.grow(amount);
 	}
 
 	// Main Circle Car
@@ -429,10 +327,6 @@ public:
 	// Buddy Circle
 	void resetBuddyCircle(){
 		mainCircle.killBuddy();
-	}
-
-	void growBuddyCircle(int amount){
-		mainCircle.growBuddy(amount);
 	}
 
 	void addLifeToBuddyCircle(int amount){

@@ -123,6 +123,18 @@ public:
 
 		return 0;
 	}
+
+	virtual int checkCollisionsWith(MainCircle& mc, bool removeOnCollision = true) override {
+		for(auto it = powerUps.begin(); it != powerUps.end(); ++it){
+			if(collision(*it, mc)){
+				int height = it->getHeight();
+				if(removeOnCollision) powerUps.erase(it);
+				return height;
+			}
+		}
+
+		return 0;
+	}
 };
 
 #endif

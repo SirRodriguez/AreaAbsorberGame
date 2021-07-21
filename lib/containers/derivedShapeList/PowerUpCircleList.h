@@ -25,9 +25,9 @@ protected:
 
 public:
 	PowerUpCircleList()
-	: ShapeList(POWERUPCODE){}
+	: ShapeList(BUDDYCODE){}
 	PowerUpCircleList(olc::PixelGameEngine& pge)
-	: ShapeList(pge, POWERUPCODE){}
+	: ShapeList(pge, BUDDYCODE){}
 
 	virtual void add(olc::vi2d pos) {
 		for(uint8_t dirCode = 0; dirCode <= 7; ++dirCode) make(pos, dirCode);
@@ -127,6 +127,18 @@ public:
 	virtual int checkCollisionsWith(Triangle& t, bool removeOnCollision = true) override {
 		for(auto it = powerUpCircles.begin(); it != powerUpCircles.end(); ++it){
 			if(collision(t, *it)){
+				int radius = it->getRadius();
+				if(removeOnCollision) powerUpCircles.erase(it);
+				return radius;
+			}
+		}
+
+		return 0;
+	}
+
+	virtual int checkCollisionsWith(MainCircle& mc, bool removeOnCollision = true) override {
+		for(auto it = powerUpCircles.begin(); it != powerUpCircles.end(); ++it){
+			if(collision(*it, mc)){
 				int radius = it->getRadius();
 				if(removeOnCollision) powerUpCircles.erase(it);
 				return radius;

@@ -123,6 +123,18 @@ public:
 
 		return 0;
 	}
+
+	virtual int checkCollisionsWith(MainCircle& mc, bool removeOnCollision = true) override {
+		for(auto it = buddyPowerUps.begin(); it != buddyPowerUps.end(); ++it){
+			if(collision(*it, mc)){
+				int length = it->getLength();
+				if(removeOnCollision) buddyPowerUps.erase(it);
+				return length;
+			}
+		}
+
+		return 0;
+	}
 };
 
 #endif

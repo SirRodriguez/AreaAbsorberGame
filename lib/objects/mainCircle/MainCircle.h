@@ -206,7 +206,7 @@ public:
 	bool buddyNotAlive(){ return !buddyAlive(); }
 	void killBuddy(){ buddy.kill(); }
 	BuddyCircle& getBuddy(){ return buddy; }
-	void growBuddy(int amount){ buddy.grow(amount); }
+	void growBuddy(int amount){ if(buddyAlive()) buddy.grow(amount); }
 	void addLifeToBuddy(int amount){ buddy.addLife(amount); }
 	void reduceLifeToBuddy(int amount){ buddy.subtractLife(amount); }
 
