@@ -54,6 +54,10 @@ public:
 		}
 	}
 
+	bool isEnemy(){
+		return getType() == ENEMYCODE;
+	}
+
 	// Direction code tells the direction where the circle is comming from on the screen
 	// It is a bitwise code, so:
 	// 0000 0000 <- from right to left, if the bit is a 1 it means:

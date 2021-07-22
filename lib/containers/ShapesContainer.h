@@ -51,70 +51,52 @@ const uint8_t nukeRadius = 30;
 
 class ShapesContainer{
 	olc::PixelGameEngine* pixelGameEngine;
-
-	// Main circle
-	// MainCircle mainCircle;
-	MainCircleList mainCircle;
-
-	// Power ups
-	PowerUpList powerUps;
-	CircleCarList circleCars;
-	BuddyPowerUpList buddyPowerUps;
-	PowerUpCircleList powerUpCircles;
-	NukeList nukes;
-
-	// Enemies
-	NeedleList needles;
-	TrapList traps;
-	OtherCircleList otherCircles;
+	std::vector<ShapeList*> shapeLists;
 
 public:
 	ShapesContainer()
 	: pixelGameEngine(nullptr){}
 	ShapesContainer(olc::PixelGameEngine& pge)
 	: pixelGameEngine(&pge){
-		mainCircle = MainCircleList(pge);
+		// Main circle
+		shapeLists.push_back(new MainCircleList(pge)); 
+		#define mainCircleDef dynamic_cast<MainCircleList*>(shapeLists[0])
 
-		powerUps = PowerUpList(pge);
-		circleCars = CircleCarList(pge);
-		nukes = NukeList(pge);
-		buddyPowerUps = BuddyPowerUpList(pge);
-		powerUpCircles = PowerUpCircleList(pge);
+		// Power ups
+		shapeLists.push_back(new PowerUpList(pge));
+		#define powerUpsDef dynamic_cast<PowerUpList*>(shapeLists[1])
+		shapeLists.push_back(new CircleCarList(pge));
+		#define circleCarsDef dynamic_cast<CircleCarList*>(shapeLists[2])
+		shapeLists.push_back(new NukeList(pge));
+		#define nukesDef dynamic_cast<NukeList*>(shapeLists[3])
+		shapeLists.push_back(new BuddyPowerUpList(pge));
+		#define buddyPowerUpsDef dynamic_cast<BuddyPowerUpList*>(shapeLists[4])
+		shapeLists.push_back(new PowerUpCircleList(pge));
+		#define powerUpCirclesDef dynamic_cast<PowerUpCircleList*>(shapeLists[5])
 
-		otherCircles = OtherCircleList(pge);
-		traps = TrapList(pge);
-		needles = NeedleList(pge);
-
-		// Make sure that the lists are cleared
-		otherCircles.deleteAll();
-		powerUps.deleteAll();
-		powerUpCircles.deleteAll();
-		needles.deleteAll();
-		buddyPowerUps.deleteAll();
-		traps.deleteAll();
-		circleCars.deleteAll();
-		nukes.deleteAll();
+		// Enemies
+		shapeLists.push_back(new OtherCircleList(pge));
+		#define otherCirclesDef dynamic_cast<OtherCircleList*>(shapeLists[6])
+		shapeLists.push_back(new TrapList(pge));
+		#define trapsDef dynamic_cast<TrapList*>(shapeLists[7])
+		shapeLists.push_back(new NeedleList(pge));
+		#define needlesDef dynamic_cast<NeedleList*>(shapeLists[8])
 	}
 
 	void reset(){
-		mainCircle.setRadius(initialMainCircleSize);
-		mainCircle.resetObjects();
+		mainCircleDef->setRadius(initialMainCircleSize);
+		mainCircleDef->resetObjects();
 
-		otherCircles.deleteAll();
-		powerUps.deleteAll();
-		buddyPowerUps.deleteAll();
-		powerUpCircles.deleteAll();
-		needles.deleteAll();
-		traps.deleteAll();
-		circleCars.deleteAll();
-		nukes.deleteAll();
+		for(auto it = shapeLists.begin(); it != shapeLists.end(); ++it)
+			(*it)->deleteAll();
 	}
 
 	void clearForNextLevel(){
-		mainCircle.setRadius(initialMainCircleSize);
-		otherCircles.deleteAll();
-		needles.deleteAll();
-		traps.deleteAll();
+		mainCircleDef->setRadius(initialMainCircleSize);
+
+		for(auto it = shapeLists.begin(); it != shapeLists.end(); ++it)
+			if((*it)->isEnemy())
+				(*it)->deleteAll();
 	}
 
 	// 
@@ -122,27 +104,13 @@ public:
 	// 
 
 	void hideAll(){
-		mainCircle.hideAll();
-		otherCircles.hideAll();
-		powerUps.hideAll();
-		powerUpCircles.hideAll();
-		needles.hideAll();
-		buddyPowerUps.hideAll();
-		traps.hideAll();
-		circleCars.hideAll();
-		nukes.hideAll();
+		for(auto it = shapeLists.begin(); it != shapeLists.end(); ++it)
+			(*it)->hideAll();
 	}
 
 	void drawAllShapes(){
-		mainCircle.drawAll();
-		otherCircles.drawAll();
-		powerUps.drawAll();
-		powerUpCircles.drawAll();
-		needles.drawAll();
-		buddyPowerUps.drawAll();
-		traps.drawAll();
-		circleCars.drawAll();
-		nukes.drawAll();
+		for(auto it = shapeLists.begin(); it != shapeLists.end(); ++it)
+			(*it)->drawAll();
 	}
 
 	// 
@@ -161,16 +129,16 @@ public:
 	// - Form Bottom Left
 	// - From Bottom Right
 	// If multiple bits are one, them multiple circles will pop out
-	void addCircle(uint8_t dirFromCode){ otherCircles.add(dirFromCode); }
-	void addPowerUp(uint8_t dirFromCode){ powerUps.add(dirFromCode); }
-	void addNeedle(uint8_t dirFromCode){ needles.add(dirFromCode); }
-	void addBuddyPowerUp(uint8_t dirFromCode){ buddyPowerUps.add(dirFromCode); }
-	void addTrap(uint8_t dirFromCode){ traps.add(dirFromCode); }
-	void addCircleCar(uint8_t dirFromCode){ circleCars.add(dirFromCode); }
-	void addNuke(uint8_t dirFromCode){ nukes.add(dirFromCode); }
+	void addCircle(uint8_t dirFromCode){ otherCirclesDef->add(dirFromCode); }
+	void addPowerUp(uint8_t dirFromCode){ powerUpsDef->add(dirFromCode); }
+	void addNeedle(uint8_t dirFromCode){ needlesDef->add(dirFromCode); }
+	void addBuddyPowerUp(uint8_t dirFromCode){ buddyPowerUpsDef->add(dirFromCode); }
+	void addTrap(uint8_t dirFromCode){ trapsDef->add(dirFromCode); }
+	void addCircleCar(uint8_t dirFromCode){ circleCarsDef->add(dirFromCode); }
+	void addNuke(uint8_t dirFromCode){ nukesDef->add(dirFromCode); }
 
 	void addPowerUpCircles(){
-		powerUpCircles.add(mainCircle.getPosition(), mainCircle.getRadius());
+		powerUpCirclesDef->add(mainCircleDef->getPosition(), mainCircleDef->getRadius());
 	}
 
 	// 
@@ -178,15 +146,8 @@ public:
 	// 
 
 	void moveAllShapes(){
-		mainCircle.moveAll();
-		otherCircles.moveAll();
-		powerUps.moveAll();
-		powerUpCircles.moveAll();
-		needles.moveAll();
-		buddyPowerUps.moveAll();
-		traps.moveAll();
-		circleCars.moveAll();
-		nukes.moveAll();
+		for(auto it = shapeLists.begin(); it != shapeLists.end(); ++it)
+			(*it)->moveAll();
 	}
 
 	// 
@@ -197,24 +158,24 @@ public:
 	// return -1 if other circle is bigger
 	// return any positive number means that the circle was smaller and thats the size
 	int checkCollisionForCircle(){
-		int collideNum = otherCircles.checkCollisionsWith(mainCircle);
-		if(mainCircle.inCar()){
-			mainCircle.hitCar(collideNum);
+		int collideNum = otherCirclesDef->checkCollisionsWith(*mainCircleDef);
+		if(mainCircleDef->inCar()){
+			mainCircleDef->hitCar(collideNum);
 			return collideNum;
 		}
-		return collideNum > mainCircle.getRadius() ? -1 : collideNum;
+		return collideNum > mainCircleDef->getRadius() ? -1 : collideNum;
 	}
 
 	// Return 0 for no collision
 	// NEW: Return the value of the collided circle
 	int checkCollisionForPowerUpCircles(){
-		return otherCircles.checkCollisionsWith(powerUpCircles);
+		return otherCirclesDef->checkCollisionsWith(*powerUpCirclesDef);
 	}
 
 	// Returns 1 for collision
 	// Returns 0 for no colision
 	int checkCollisionForPowerUps(){
-		return powerUps.checkCollisionsWith(mainCircle) > 0 ? 1 : 0;
+		return powerUpsDef->checkCollisionsWith(*mainCircleDef) > 0 ? 1 : 0;
 	}
 
 	// Returns 0 for no collision
@@ -225,32 +186,32 @@ public:
 	// Returns -3 for collision with trap on main circle
 	// Returns -4 for collision with main circle car
 	int checkCollisionForNeedles(){
-		if(mainCircle.inCar()){
-			if(needles.checkCollisionsWith(mainCircle.getCar()) > 0){
+		if(mainCircleDef->inCar()){
+			if(needlesDef->checkCollisionsWith(mainCircleDef->getCar()) > 0){
 				return -4;
 			}
 		}
 
-		if(mainCircle.isTrapped()){
-			if(needles.checkCollisionsWith(mainCircle.getTrapSquare(), false) > 0){
+		if(mainCircleDef->isTrapped()){
+			if(needlesDef->checkCollisionsWith(mainCircleDef->getTrapSquare(), false) > 0){
 				return -3;
 			}
 		}
 
-		if(needles.checkCollisionsWith(mainCircle, false) > 0){
+		if(needlesDef->checkCollisionsWith(*mainCircleDef, false) > 0){
 			return -1;
 		}
 
-		if(needles.checkCollisionsWith(otherCircles, false) > 0){
+		if(needlesDef->checkCollisionsWith(*otherCirclesDef, false) > 0){
 			return 1;
 		}
 
-		if(needles.checkCollisionsWith(powerUpCircles, false)> 0){
+		if(needlesDef->checkCollisionsWith(*powerUpCirclesDef, false)> 0){
 			return 2;
 		}
 
-		if(mainCircle.buddyAlive()){
-			if(needles.checkCollisionsWith(mainCircle.getBuddy(), false) > 0){
+		if(mainCircleDef->buddyAlive()){
+			if(needlesDef->checkCollisionsWith(mainCircleDef->getBuddy(), false) > 0){
 				return -2;
 			}
 		}
@@ -261,16 +222,16 @@ public:
 	// Returns 0 for no collision
 	// Returns -1 for collision with main circle
 	int checkCollisionForBuddyPowerUps(){
-		return buddyPowerUps.checkCollisionsWith(mainCircle) > 0 ? -1 : 0;
+		return buddyPowerUpsDef->checkCollisionsWith(*mainCircleDef) > 0 ? -1 : 0;
 	}
 
 	// Return 0 for no collision
 	// Return negative number for Collision with other circle thats bigger
 	// Return positive number for collision with other circle thats smaller
 	int checkCollisionForBuddyCircle(){
-		if(mainCircle.buddyAlive()){
-			int collideNum = otherCircles.checkCollisionsWith(mainCircle.getBuddy());
-			if(mainCircle.getBuddyRadius() < collideNum){
+		if(mainCircleDef->buddyAlive()){
+			int collideNum = otherCirclesDef->checkCollisionsWith(mainCircleDef->getBuddy());
+			if(mainCircleDef->getBuddyRadius() < collideNum){
 				return -1;
 			}else{
 				return collideNum;
@@ -282,9 +243,9 @@ public:
 	// Return 0 for no collisions
 	// Return -1 for collision
 	int checkCollisionForTraps(){
-		int collideNum = traps.checkCollisionsWith(mainCircle);
+		int collideNum = trapsDef->checkCollisionsWith(*mainCircleDef);
 		if(collideNum > 0){
-			mainCircle.activateTrap(collideNum);
+			mainCircleDef->activateTrap(collideNum);
 			return -1;
 		}
 		return 0;
@@ -293,8 +254,8 @@ public:
 	// Return 0 for no collisions
 	// Return -1 for collision
 	int checkCollisionForCircleCars(){
-		if(circleCars.checkCollisionsWith(mainCircle) > 0){
-			mainCircle.activateCar();
+		if(circleCarsDef->checkCollisionsWith(*mainCircleDef) > 0){
+			mainCircleDef->activateCar();
 			return -1;
 		}
 		return 0;
@@ -303,7 +264,7 @@ public:
 	// Return 0 for no collisions
 	// Return -1 for collision
 	int checkCollisionForNukes(){
-		return nukes.checkCollisionsWith(mainCircle) > 0 ? -1 : 0;
+		return nukesDef->checkCollisionsWith(*mainCircleDef) > 0 ? -1 : 0;
 	}
 
 	// 
@@ -312,36 +273,36 @@ public:
 
 	// Main Circle
 	void resetMainCirclePosition(){
-		mainCircle.setPosition(olc::vi2d(pixelGameEngine->ScreenWidth() / 2, pixelGameEngine->ScreenHeight() / 2));
+		mainCircleDef->setPosition(olc::vi2d(pixelGameEngine->ScreenWidth() / 2, pixelGameEngine->ScreenHeight() / 2));
 	}
 
 	void growMainCircle(int amount){
-		mainCircle.grow(amount);
+		mainCircleDef->grow(amount);
 	}
 
 	// Main Circle Car
 	void killMainCircleCar(){
-		mainCircle.inactivateCar();
+		mainCircleDef->inactivateCar();
 	}
 
 	// Buddy Circle
 	void resetBuddyCircle(){
-		mainCircle.killBuddy();
+		mainCircleDef->killBuddy();
 	}
 
 	void addLifeToBuddyCircle(int amount){
-		mainCircle.addLifeToBuddy(amount);
+		mainCircleDef->addLifeToBuddy(amount);
 	}
 
 	void subtractLifeToBuddyCircle(int amount){
-		mainCircle.reduceLifeToBuddy(amount);
+		mainCircleDef->reduceLifeToBuddy(amount);
 	}
 
 	// Nuke
 	void runNuke(){
-		needles.deleteAll();
-		traps.deleteAll();
-		otherCircles.deleteAll();
+		for(auto it = shapeLists.begin(); it != shapeLists.end(); ++it)
+			if((*it)->isEnemy())
+				(*it)->deleteAll();
 	}
 
 	// 
@@ -349,11 +310,11 @@ public:
 	// 
 
 	bool mainCircleTooBig(){
-		return mainCircle.getRadius() >= 50;
+		return mainCircleDef->getRadius() >= 50;
 	}
 
 	int getMainCircleCarLife(){
-		return mainCircle.getCarLife();
+		return mainCircleDef->getCarLife();
 	}
 };
 
