@@ -9,25 +9,23 @@
 class PowerUpCircleList: public ShapeList{
 protected:
 	std::list<PowerUpCircle> powerUpCircles;
+	olc::Pixel default_color;
+	uint8_t default_speed;
+	uint8_t default_size;
 
 	virtual void make(olc::vi2d _loc, int dirCode) override {
-		const olc::Pixel powerUpCircleColor = olc::GREY;
-		const uint8_t powerUpCircleSpeed = 5;
-		const uint8_t powerUpCircleSize = 40;
-		powerUpCircles.push_back(PowerUpCircle(*pixelGameEngine, _loc, powerUpCircleSpeed, powerUpCircleColor, powerUpCircleSize, dirCode));
+		powerUpCircles.push_back(PowerUpCircle(*pixelGameEngine, _loc, default_speed, default_color, default_size, dirCode));
 	}
 
 	virtual void make(olc::vi2d _loc, int dirCode, uint8_t _size){
-		const olc::Pixel powerUpCircleColor = olc::GREY;
-		const uint8_t powerUpCircleSpeed = 5;
-		powerUpCircles.push_back(PowerUpCircle(*pixelGameEngine, _loc, powerUpCircleSpeed, powerUpCircleColor, _size, dirCode));
+		powerUpCircles.push_back(PowerUpCircle(*pixelGameEngine, _loc, default_speed, default_color, _size, dirCode));
 	}
 
 public:
 	PowerUpCircleList()
 	: ShapeList(BUDDYCODE){}
-	PowerUpCircleList(olc::PixelGameEngine& pge)
-	: ShapeList(pge, BUDDYCODE){}
+	PowerUpCircleList(olc::PixelGameEngine& pge, olc::Pixel _color, uint8_t _speed, uint8_t _size)
+	: ShapeList(pge, BUDDYCODE), default_color(_color), default_speed(_speed), default_size(_size){}
 
 	virtual void add(olc::vi2d pos) {
 		for(uint8_t dirCode = 0; dirCode <= 7; ++dirCode) make(pos, dirCode);

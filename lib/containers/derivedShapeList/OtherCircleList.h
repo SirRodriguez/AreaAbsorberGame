@@ -9,19 +9,19 @@
 class OtherCircleList: public ShapeList{
 protected:
 	std::list<OtherCircle> otherCircle;
+	olc::Pixel default_color;
+	uint8_t default_speed;
+	uint8_t default_max_radius;
 
 	virtual void make(olc::vi2d _loc, int dirCode) override {
-		const olc::Pixel otherCircleColor = olc::RED;
-		const uint8_t otherCircleSpeed = 4;
-		const uint8_t otherCircleMaxRadius = 50;
-		otherCircle.push_back(OtherCircle(*pixelGameEngine, _loc, otherCircleSpeed, otherCircleColor, rand() % otherCircleMaxRadius, dirCode));
+		otherCircle.push_back(OtherCircle(*pixelGameEngine, _loc, default_speed, default_color, rand() % default_max_radius, dirCode));
 	}
 
 public:
 	OtherCircleList()
 	: ShapeList(ENEMYCODE){}
-	OtherCircleList(olc::PixelGameEngine& pge)
-	: ShapeList(pge, ENEMYCODE){}
+	OtherCircleList(olc::PixelGameEngine& pge, olc::Pixel _color, uint8_t _speed, uint8_t _radius)
+	: ShapeList(pge, ENEMYCODE), default_color(_color), default_speed(_speed), default_max_radius(_radius){}
 
 	virtual void deleteAll() override {
 		otherCircle.clear();

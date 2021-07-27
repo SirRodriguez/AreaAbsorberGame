@@ -9,20 +9,19 @@
 class NeedleList: public ShapeList{
 protected:
 	std::list<Needle> needles;
+	olc::Pixel default_color;
+	uint8_t default_speed;
+	uint8_t default_max_length;
 
 	virtual void make(olc::vi2d _loc, int dirCode) override {
-		const olc::Pixel needleColor = olc::BLACK;
-		const uint8_t needleSpeed = 6;
-		const uint8_t maxNeedleLength = 50;
-
-		needles.push_back(Needle(*pixelGameEngine, _loc, needleSpeed, needleColor, rand() % maxNeedleLength, rand() % maxNeedleLength, dirCode));
+		needles.push_back(Needle(*pixelGameEngine, _loc, default_speed, default_color, rand() % default_max_length, rand() % default_max_length, dirCode));
 	}
 
 public:
 	NeedleList()
 	: ShapeList(ENEMYCODE){}
-	NeedleList(olc::PixelGameEngine& pge)
-	: ShapeList(pge, ENEMYCODE){}
+	NeedleList(olc::PixelGameEngine& pge, olc::Pixel _color, uint8_t _speed, uint8_t _length)
+	: ShapeList(pge, ENEMYCODE), default_color(_color), default_speed(_speed), default_max_length(_length){}
 
 	virtual void deleteAll() override {
 		needles.clear();

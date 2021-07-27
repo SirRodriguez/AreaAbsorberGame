@@ -9,22 +9,20 @@
 class CircleCarList: public ShapeList{
 protected:
 	std::list<CircleCar> circleCars;
+	olc::Pixel default_color;
+	olc::Pixel default_wheel_color;
+	uint8_t default_speed;
+	uint8_t default_radius;
 
 	virtual void make(olc::vi2d _loc, int dirCode) override {
-		const olc::Pixel circleCarColor = olc::BLUE;
-		const olc::Pixel circleCarWheelColor = olc::BLACK;
-		const uint8_t circleCarSpeed = 2;
-		const uint8_t circleCarRadius = 40;
-
-		circleCars.push_back(CircleCar(*pixelGameEngine, _loc, circleCarSpeed, circleCarColor, circleCarWheelColor, circleCarRadius, dirCode));
-
+		circleCars.push_back(CircleCar(*pixelGameEngine, _loc, default_speed, default_color, default_wheel_color, default_radius, dirCode));
 	}
 
 public:
 	CircleCarList()
 	: ShapeList(POWERUPCODE){}
-	CircleCarList(olc::PixelGameEngine& pge)
-	: ShapeList(pge, POWERUPCODE){}
+	CircleCarList(olc::PixelGameEngine& pge, olc::Pixel _color, olc::Pixel _wheel_color, uint8_t _speed, uint8_t _radius)
+	: ShapeList(pge, POWERUPCODE), default_color(_color), default_wheel_color(_wheel_color), default_speed(_speed), default_radius(_radius){}
 
 	virtual void deleteAll() override {
 		circleCars.clear();

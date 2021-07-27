@@ -11,38 +11,56 @@
 class MainCircleList: public ShapeList{
 protected:
 	MainCircle mainCircle;
+	uint8_t default_speed;
+	olc::Pixel default_color;
+	uint8_t default_initial_size;
+	olc::Pixel default_circle_car_color;
+	olc::Pixel default_circle_car_wheel_color;
+	uint8_t default_circle_car_radius;
+	uint8_t default_buddy_circle_speed;
+	olc::Pixel default_buddy_circle_color;
 
 	virtual void make(olc::vi2d _loc, int dirCode) override {}
 
 public:
 	MainCircleList()
 	: ShapeList(MAINCIRCLECODE){}
-	MainCircleList(olc::PixelGameEngine& pge)
-	: ShapeList(pge, MAINCIRCLECODE){
-		const uint8_t mainCircleSpeed = 5;
-		const olc::Pixel mainCircleColor = olc::BLACK;
-		const uint8_t initialMainCircleSize = 10;
-		const olc::Pixel circleCarColor = olc::BLUE;
-		const olc::Pixel circleCarWheelColor = olc::BLACK;
-		const uint8_t circleCarRadius = 40;
-		const uint8_t buddyCircleSpeed = 2;
-		const olc::Pixel buddyCircleColor = olc::DARK_GREY;
-
+	MainCircleList(
+		olc::PixelGameEngine& pge, 
+		uint32_t _speed, 
+		olc::Pixel _color, 
+		uint8_t _initial_size, 
+		olc::Pixel _circle_car_color, 
+		olc::Pixel _cirlce_car_wheel_color, 
+		uint8_t _circle_car_radius, 
+		uint8_t _buddy_circle_speed, 
+		olc::Pixel _buddy_circle_color
+	)
+	: ShapeList(pge, MAINCIRCLECODE), 
+		default_speed(_speed),
+		default_color(_color),
+		default_initial_size(_initial_size),
+		default_circle_car_color(_circle_car_color),
+		default_circle_car_wheel_color(_cirlce_car_wheel_color),
+		default_circle_car_radius(_circle_car_radius),
+		default_buddy_circle_speed(_buddy_circle_speed),
+		default_buddy_circle_color(_buddy_circle_color)
+		{
 		olc::vi2d centerPos = olc::vi2d(pixelGameEngine->ScreenWidth() / 2, pixelGameEngine->ScreenHeight() / 2);
 		uint8_t numLives = 0;
 		mainCircle = MainCircle(
 			pge,
 			centerPos,
-			mainCircleSpeed,
-			mainCircleColor, 
-			initialMainCircleSize, 
+			default_speed,
+			default_color, 
+			default_initial_size, 
 			numLives,
-			circleCarColor,
-			circleCarWheelColor,
-			circleCarRadius,
-			buddyCircleSpeed,
-			buddyCircleColor
-			);
+			default_circle_car_color,
+			default_circle_car_wheel_color,
+			default_circle_car_radius,
+			default_buddy_circle_speed,
+			default_buddy_circle_color
+		);
 	}
 
 	virtual void deleteAll() override {}

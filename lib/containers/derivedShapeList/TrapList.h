@@ -9,21 +9,19 @@
 class TrapList: public ShapeList{
 protected:
 	std::list<Trap> traps;
+	olc::Pixel default_color;
+	uint8_t default_speed;
+	uint8_t default_length;
 
 	virtual void make(olc::vi2d _loc, int dirCode) override {
-		const olc::Pixel trapColor = olc::BLUE;
-		const uint8_t trapSpeed = 4;
-		const uint8_t trapLength = 40;
-
-		traps.push_back(Trap(*pixelGameEngine, _loc, trapSpeed, trapColor, trapLength, dirCode));
-
+		traps.push_back(Trap(*pixelGameEngine, _loc, default_speed, default_color, default_length, dirCode));
 	}
 
 public:
 	TrapList()
 	: ShapeList(ENEMYCODE){}
-	TrapList(olc::PixelGameEngine& pge)
-	: ShapeList(pge, ENEMYCODE){}
+	TrapList(olc::PixelGameEngine& pge, olc::Pixel _color, uint8_t _speed, uint8_t _length)
+	: ShapeList(pge, ENEMYCODE), default_color(_color), default_speed(_speed), default_length(_length){}
 
 	virtual void deleteAll() override {
 		traps.clear();

@@ -9,22 +9,20 @@
 class NukeList: public ShapeList{
 protected:
 	std::list<Nuke> nukes;
+	olc::Pixel default_color;
+	olc::Pixel default_pedal_color;
+	uint8_t default_speed;
+	uint8_t default_radius;
 
 	virtual void make(olc::vi2d _loc, int dirCode) override {
-		const olc::Pixel nukeColor = olc::BLACK;
-		const olc::Pixel nukePedalColor = olc::DARK_RED;
-		const uint8_t nukeSpeed = 6;
-		const uint8_t nukeRadius = 30;
-
-		nukes.push_back(Nuke(*pixelGameEngine, _loc, nukeSpeed, nukeColor, nukePedalColor, nukeRadius, dirCode));
-
+		nukes.push_back(Nuke(*pixelGameEngine, _loc, default_speed, default_color, default_pedal_color, default_radius, dirCode));
 	}
 
 public:
 	NukeList()
 	: ShapeList(POWERUPCODE){}
-	NukeList(olc::PixelGameEngine& pge)
-	: ShapeList(pge, POWERUPCODE){}
+	NukeList(olc::PixelGameEngine& pge, olc::Pixel _color, olc::Pixel _pedal_color, uint8_t _speed, uint8_t _radius)
+	: ShapeList(pge, POWERUPCODE), default_color(_color), default_pedal_color(_pedal_color), default_speed(_speed), default_radius(_radius){}
 
 	virtual void deleteAll() override {
 		nukes.clear();

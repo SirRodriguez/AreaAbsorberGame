@@ -9,21 +9,19 @@
 class BuddyPowerUpList: public ShapeList{
 protected:
 	std::list<BuddyPowerUp> buddyPowerUps;
+	olc::Pixel default_color;
+	uint8_t default_speed;
+	uint8_t default_length;
 
 	virtual void make(olc::vi2d _loc, int dirCode) override {
-		const olc::Pixel buddyPowerUpColor = olc::YELLOW;
-		const uint8_t buddyPowerUpSpeed = 2;
-		const uint8_t buddyPowerUpLength = 40;
-
-		buddyPowerUps.push_back(BuddyPowerUp(*pixelGameEngine, _loc, buddyPowerUpSpeed, buddyPowerUpColor, buddyPowerUpLength, dirCode));
-
+		buddyPowerUps.push_back(BuddyPowerUp(*pixelGameEngine, _loc, default_speed, default_color, default_length, dirCode));
 	}
 
 public:
 	BuddyPowerUpList()
 	: ShapeList(POWERUPCODE){}
-	BuddyPowerUpList(olc::PixelGameEngine& pge)
-	: ShapeList(pge, POWERUPCODE){}
+	BuddyPowerUpList(olc::PixelGameEngine& pge, olc::Pixel _color, uint8_t _speed, uint8_t _length)
+	: ShapeList(pge, POWERUPCODE), default_color(_color), default_speed(_speed), default_length(_length){}
 
 	virtual void deleteAll() override {
 		buddyPowerUps.clear();

@@ -13,39 +13,63 @@
 #include "derivedShapeList/PowerUpCircleList.h"
 #include "derivedShapeList/MainCircleList.h"
 
+//////////////
 // Colors
+//////////////
+
+// MainCircle
 const olc::Pixel mainCircleColor = olc::BLACK;
+
+// Enemies
 const olc::Pixel otherCircleColor = olc::RED;
+const olc::Pixel needleColor = olc::BLACK;
+const olc::Pixel trapColor = olc::BLUE;
+
+// PowerUps
 const olc::Pixel powerUpColor = olc::GREEN;
 const olc::Pixel powerUpCircleColor = olc::GREY;
-const olc::Pixel needleColor = olc::BLACK;
 const olc::Pixel buddyPowerUpColor = olc::YELLOW;
 const olc::Pixel buddyCircleColor = olc::DARK_GREY;
-const olc::Pixel trapColor = olc::BLUE;
 const olc::Pixel circleCarColor = olc::BLUE;
 const olc::Pixel circleCarWheelColor = olc::BLACK;
 const olc::Pixel nukeColor = olc::BLACK;
 const olc::Pixel nukePedalColor = olc::DARK_RED;
 
+///////////////
 // Speeds
+///////////////
+
+// MainCircle
+const uint8_t mainCircleSpeed = 5;
+
+// Enemies
 const uint8_t otherCircleSpeed = 4;
+const uint8_t needleSpeed = 6;
+const uint8_t trapSpeed = 4;
+
+// PowerUps
 const uint8_t powerUpSpeed = 2;
 const uint8_t powerUpCircleSpeed = 5;
-const uint8_t needleSpeed = 6;
 const uint8_t buddyPowerUpSpeed = 2;
 const uint8_t buddyCircleSpeed = 2;
-const uint8_t mainCircleSpeed = 5;
-const uint8_t trapSpeed = 4;
 const uint8_t circleCarSpeed = 2;
 const uint8_t nukeSpeed = 6;
 
+///////////////
 // Sizes
+///////////////
+
+// MainCircle
 const uint8_t initialMainCircleSize = 10;
+
+// Enemies
 const uint8_t otherCircleMaxRadius = 50;
-const uint8_t powerUpHeight = 50;
 const uint8_t maxNeedleLength = 50;
-const uint8_t buddyPowerUpLength = 40;
 const uint8_t trapLength = 40;
+
+// PowerUps
+const uint8_t powerUpHeight = 50;
+const uint8_t buddyPowerUpLength = 40;
 const uint8_t circleCarRadius = 40;
 const uint8_t nukeRadius = 30;
 
@@ -59,28 +83,48 @@ public:
 	ShapesContainer(olc::PixelGameEngine& pge)
 	: pixelGameEngine(&pge){
 		// Main circle
-		shapeLists.push_back(new MainCircleList(pge)); 
+		shapeLists.push_back(
+			new MainCircleList(
+				pge, 
+				mainCircleSpeed, 
+				mainCircleColor, 
+				initialMainCircleSize,
+				circleCarColor,
+				circleCarWheelColor,
+				circleCarRadius,
+				buddyCircleSpeed,
+				buddyCircleColor
+			)
+		); 
 		#define mainCircleDef dynamic_cast<MainCircleList*>(shapeLists[0])
 
 		// Power ups
-		shapeLists.push_back(new PowerUpList(pge));
+		shapeLists.push_back(new PowerUpList(pge, powerUpColor, powerUpSpeed, powerUpHeight));
 		#define powerUpsDef dynamic_cast<PowerUpList*>(shapeLists[1])
-		shapeLists.push_back(new CircleCarList(pge));
+		shapeLists.push_back(new CircleCarList(pge, circleCarColor, circleCarWheelColor, circleCarSpeed, circleCarRadius));
 		#define circleCarsDef dynamic_cast<CircleCarList*>(shapeLists[2])
-		shapeLists.push_back(new NukeList(pge));
+		shapeLists.push_back(new NukeList(pge, nukeColor, nukePedalColor, nukeSpeed, nukeRadius));
 		#define nukesDef dynamic_cast<NukeList*>(shapeLists[3])
-		shapeLists.push_back(new BuddyPowerUpList(pge));
+		shapeLists.push_back(new BuddyPowerUpList(pge, buddyPowerUpColor, buddyPowerUpSpeed, buddyPowerUpLength));
 		#define buddyPowerUpsDef dynamic_cast<BuddyPowerUpList*>(shapeLists[4])
-		shapeLists.push_back(new PowerUpCircleList(pge));
+
+		// Buddies
+		shapeLists.push_back(new PowerUpCircleList(pge, powerUpCircleColor, buddyCircleSpeed, 0));
 		#define powerUpCirclesDef dynamic_cast<PowerUpCircleList*>(shapeLists[5])
 
 		// Enemies
-		shapeLists.push_back(new OtherCircleList(pge));
+		shapeLists.push_back(new OtherCircleList(pge, otherCircleColor, otherCircleSpeed, otherCircleMaxRadius));
 		#define otherCirclesDef dynamic_cast<OtherCircleList*>(shapeLists[6])
-		shapeLists.push_back(new TrapList(pge));
+		shapeLists.push_back(new TrapList(pge, trapColor, trapSpeed, trapLength));
 		#define trapsDef dynamic_cast<TrapList*>(shapeLists[7])
-		shapeLists.push_back(new NeedleList(pge));
+		shapeLists.push_back(new NeedleList(pge, needleColor, needleSpeed, maxNeedleLength));
 		#define needlesDef dynamic_cast<NeedleList*>(shapeLists[8])
+	}
+
+	~ShapesContainer(){
+		for(auto it = shapeLists.begin(); it != shapeLists.end(); ++it){
+			delete *it;
+		}
 	}
 
 	void reset(){

@@ -9,21 +9,19 @@
 class PowerUpList: public ShapeList{
 protected:
 	std::list<PowerUp> powerUps;
+	olc::Pixel default_color;
+	uint8_t default_speed;
+	uint8_t default_height;
 
 	virtual void make(olc::vi2d _loc, int dirCode) override {
-		const olc::Pixel powerUpColor = olc::GREEN;
-		const uint8_t powerUpSpeed = 2;
-		const uint8_t powerUpHeight = 50;
-
-		powerUps.push_back(PowerUp(*pixelGameEngine, _loc, powerUpSpeed, powerUpColor, powerUpHeight, dirCode));
-
+		powerUps.push_back(PowerUp(*pixelGameEngine, _loc, default_speed, default_color, default_height, dirCode));
 	}
 
 public:
 	PowerUpList()
 	: ShapeList(POWERUPCODE){}
-	PowerUpList(olc::PixelGameEngine& pge)
-	: ShapeList(pge, POWERUPCODE){}
+	PowerUpList(olc::PixelGameEngine& pge, olc::Pixel _color, uint8_t _speed, uint8_t _height)
+	: ShapeList(pge, POWERUPCODE), default_color(_color), default_speed(_speed), default_height(_height){}
 
 	virtual void deleteAll() override {
 		powerUps.clear();
