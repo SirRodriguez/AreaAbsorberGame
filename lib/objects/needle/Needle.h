@@ -43,7 +43,7 @@ public:
 			default: dir = Direction::UP; break;
 		}
 
-		aura = Aura(pge, pos, 0, olc::RED, getLength() / 2, 255/4);
+		aura = Aura(pge, pos, 0, olc::RED, getLength() / 2, 25);
 	}
 
 	void move(){
