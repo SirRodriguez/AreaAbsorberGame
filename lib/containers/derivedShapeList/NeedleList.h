@@ -1,7 +1,7 @@
 #ifndef NEEDLELIST_H
 #define NEEDLELIST_H
 
-#include "../../objects/Needle.h"
+#include "../../objects/needle/Needle.h"
 #include "../ShapeList.h"
 
 #define ENEMYCODE 0

@@ -82,7 +82,6 @@ public:
 	: pixelGameEngine(nullptr){}
 	ShapesContainer(olc::PixelGameEngine& pge)
 	: pixelGameEngine(&pge){
-		std::cout << "Making maincircle" << std::endl;
 		// Main circle
 		shapeLists.push_back(
 			new MainCircleList(
@@ -99,7 +98,6 @@ public:
 		); 
 		#define mainCircleDef dynamic_cast<MainCircleList*>(shapeLists[0])
 
-		std::cout << "Making power ups" << std::endl;
 		// Power ups
 		shapeLists.push_back(new PowerUpList(pge, powerUpColor, powerUpSpeed, powerUpHeight));
 		#define powerUpsDef dynamic_cast<PowerUpList*>(shapeLists[1])
@@ -110,12 +108,10 @@ public:
 		shapeLists.push_back(new BuddyPowerUpList(pge, buddyPowerUpColor, buddyPowerUpSpeed, buddyPowerUpLength));
 		#define buddyPowerUpsDef dynamic_cast<BuddyPowerUpList*>(shapeLists[4])
 
-		std::cout << "Making buddies" << std::endl;
 		// Buddies
-		shapeLists.push_back(new PowerUpCircleList(pge, powerUpCircleColor, buddyCircleSpeed, 0));
+		shapeLists.push_back(new PowerUpCircleList(pge, powerUpCircleColor, powerUpCircleSpeed, 0));
 		#define powerUpCirclesDef dynamic_cast<PowerUpCircleList*>(shapeLists[5])
 
-		std::cout << "Making enemies" << std::endl;
 		// Enemies
 		shapeLists.push_back(new OtherCircleList(pge, otherCircleColor, otherCircleSpeed, otherCircleMaxRadius));
 		#define otherCirclesDef dynamic_cast<OtherCircleList*>(shapeLists[6])
