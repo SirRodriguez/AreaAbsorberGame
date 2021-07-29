@@ -1,7 +1,7 @@
 #ifndef SHAPESCONTAINER
 #define SHAPESCONTAINER
 
-#include "../utils.h"
+#include "../collisions.h"
 
 #include "derivedShapeList/OtherCircleList.h"
 #include "derivedShapeList/TrapList.h"
