@@ -2,21 +2,10 @@
 #define NEEDLE_H
 
 #include "../../shapes/derivedShapes/Line.h"
+#include "../../Direction.h"
 #include "./Aura.h"
 
 class Needle: public Line{
-private:
-	enum Direction{
-		UP,
-		DOWN,
-		LEFT,
-		RIGHT,
-		UPLEFT,
-		UPRIGHT,
-		DOWNLEFT,
-		DOWNRIGHT
-	};
-
 protected:
 	Direction dir;
 	Aura aura;
@@ -29,22 +18,8 @@ protected:
 public:
 	Needle()
 	: Line(){}
-	Needle(olc::PixelGameEngine& pge, olc::vi2d& pos, int _speed, const olc::Pixel& _color, int _dx, int _dy, int directionCode)
-	: Line(pge, pos, _speed, _color, _dx, _dy){
-		switch(directionCode){
-			case 0: dir = Direction::UP; break;
-			case 1: dir = Direction::DOWN; break;
-			case 2: dir = Direction::LEFT; break;
-			case 3: dir = Direction::RIGHT; break;
-			case 4: dir = Direction::UPLEFT; break;
-			case 5: dir = Direction::UPRIGHT; break;
-			case 6: dir = Direction::DOWNLEFT; break;
-			case 7: dir = Direction::DOWNRIGHT; break;
-			default: dir = Direction::UP; break;
-		}
-
-		aura = Aura(pge, pos, 0, olc::RED, getLength() / 2, 25);
-	}
+	Needle(olc::PixelGameEngine& pge, olc::vi2d& pos, int _speed, const olc::Pixel& _color, int _dx, int _dy, Direction directionCode)
+	: Line(pge, pos, _speed, _color, _dx, _dy), dir(directionCode), aura(Aura(pge, pos, 0, olc::RED, getLength() / 2, 25)){}
 
 	void move(){
 		switch(dir){

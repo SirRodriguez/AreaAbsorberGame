@@ -2,43 +2,20 @@
 #define NUKE_H
 
 #include "../shapes/derivedShapes/flower/Flower.h"
+#include "../Direction.h"
 
 #define NUMPEDALS 7
 #define PEDALANGLEOFFSET 0.0
 
 class Nuke: public Flower{
-private:
-	enum Direction{
-		UP,
-		DOWN,
-		LEFT,
-		RIGHT,
-		UPLEFT,
-		UPRIGHT,
-		DOWNLEFT,
-		DOWNRIGHT
-	};
-
 protected:
 	Direction dir;
 
 public:
 	Nuke()
 	: Flower(){}
-	Nuke(olc::PixelGameEngine& pge, olc::vi2d& pos, int _speed, const olc::Pixel& _color, const olc::Pixel& _pedalColor, int newRadius, int directionCode)
-	: Flower(pge, pos, _speed, _color, _pedalColor, newRadius, NUMPEDALS, PEDALANGLEOFFSET){
-		switch(directionCode){
-			case 0: dir = Direction::UP; break;
-			case 1: dir = Direction::DOWN; break;
-			case 2: dir = Direction::LEFT; break;
-			case 3: dir = Direction::RIGHT; break;
-			case 4: dir = Direction::UPLEFT; break;
-			case 5: dir = Direction::UPRIGHT; break;
-			case 6: dir = Direction::DOWNLEFT; break;
-			case 7: dir = Direction::DOWNRIGHT; break;
-			default: dir = Direction::UP; break;
-		}
-	}
+	Nuke(olc::PixelGameEngine& pge, olc::vi2d& pos, int _speed, const olc::Pixel& _color, const olc::Pixel& _pedalColor, int newRadius, Direction directionCode)
+	: Flower(pge, pos, _speed, _color, _pedalColor, newRadius, NUMPEDALS, PEDALANGLEOFFSET), dir(directionCode){}
 
 	void move() override{
 		switch(dir){

@@ -5,6 +5,7 @@
 
 #include "../../objects/mainCircle/MainCircle.h"
 #include "../ShapeList.h"
+#include "../../Direction.h"
 
 #define MAINCIRCLECODE 3
 
@@ -20,7 +21,7 @@ protected:
 	uint8_t default_buddy_circle_speed;
 	olc::Pixel default_buddy_circle_color;
 
-	virtual void make(olc::vi2d _loc, int dirCode) override {}
+	virtual void make(olc::vi2d _loc, Direction dirCode) override {}
 
 public:
 	MainCircleList()
@@ -110,8 +111,8 @@ public:
 	}
 
 	// Trap Square functions
-	void activateTrap(int dirCode){
-		mainCircle.activateTrap(dirCode);
+	void activateTrap(){
+		mainCircle.activateTrap();
 	}
 	void inactivateTrap(){
 		mainCircle.inactivateTrap();

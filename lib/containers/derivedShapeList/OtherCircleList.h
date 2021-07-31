@@ -3,6 +3,7 @@
 
 #include "../ShapeList.h"
 #include "../../objects/OtherCircle.h"
+#include "../../Direction.h"
 
 #define ENEMYCODE 0
 
@@ -13,7 +14,7 @@ protected:
 	uint8_t default_speed;
 	uint8_t default_max_radius;
 
-	virtual void make(olc::vi2d _loc, int dirCode) override {
+	virtual void make(olc::vi2d _loc, Direction dirCode) override {
 		otherCircle.push_back(OtherCircle(*pixelGameEngine, _loc, default_speed, default_color, rand() % default_max_radius, dirCode));
 	}
 

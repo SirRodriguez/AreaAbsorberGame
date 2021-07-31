@@ -13,6 +13,8 @@
 #include "derivedShapeList/PowerUpCircleList.h"
 #include "derivedShapeList/MainCircleList.h"
 
+#include "../Direction.h"
+
 //////////////
 // Colors
 //////////////
@@ -290,7 +292,7 @@ public:
 	int checkCollisionForTraps(){
 		int collideNum = trapsDef->checkCollisionsWith(*mainCircleDef);
 		if(collideNum > 0){
-			mainCircleDef->activateTrap(collideNum);
+			mainCircleDef->activateTrap();
 			return -1;
 		}
 		return 0;

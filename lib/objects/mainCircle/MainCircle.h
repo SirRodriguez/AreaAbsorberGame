@@ -2,23 +2,12 @@
 #define MAINCIRCLE_H
 
 #include "../../shapes/derivedShapes/Circle.h"
+#include "../../Direction.h"
 #include "TrapSquare.h"
 #include "Car.h"
 #include "BuddyCircle.h"
 
 class MainCircle: public Circle{
-private:
-	enum Direction{
-		UP,
-		DOWN,
-		LEFT,
-		RIGHT,
-		UPLEFT,
-		UPRIGHT,
-		DOWNLEFT,
-		DOWNRIGHT
-	};
-
 protected:
 	TrapSquare trapSquare;
 	Car car;
@@ -104,21 +93,6 @@ public:
 				moveRight();
 			}
 
-		}else if(aboveBottomOfScreen()){
-			// Move the main circle
-			// moveDown(getTrappedSpeed());
-			// Direction the trap was going
-			switch(dir){
-				case 0: moveUp(getTrappedSpeed()); break;
-				case 1: moveDown(getTrappedSpeed()); break;
-				case 2: moveLeft(getTrappedSpeed()); break;
-				case 3: moveRight(getTrappedSpeed()); break;
-				case 4: moveUpLeft(getTrappedSpeed()); break;
-				case 5: moveUpRight(getTrappedSpeed()); break;
-				case 6: moveDownLeft(getTrappedSpeed()); break;
-				case 7: moveDownRight(getTrappedSpeed()); break;
-				default: break;
-			}
 		}
 
 		// Move the trap to the main circle
@@ -143,20 +117,7 @@ public:
 	// 
 	// Trap Square functions
 	// 
-	void activateTrap(int directionCode){
-		// Direction the trap was going
-		switch(directionCode){
-			case 0: dir = Direction::UP; break;
-			case 1: dir = Direction::DOWN; break;
-			case 2: dir = Direction::LEFT; break;
-			case 3: dir = Direction::RIGHT; break;
-			case 4: dir = Direction::UPLEFT; break;
-			case 5: dir = Direction::UPRIGHT; break;
-			case 6: dir = Direction::DOWNLEFT; break;
-			case 7: dir = Direction::DOWNRIGHT; break;
-			default: dir = Direction::DOWN; break;
-		}
-
+	void activateTrap(){
 		if(inCar()){
 			trapSquare.setLength(40 + 20);
 		}else{

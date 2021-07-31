@@ -3,6 +3,7 @@
 
 #include "../ShapeList.h"
 #include "../../objects/CircleCar.h"
+#include "../../Direction.h"
 
 #define POWERUPCODE 2
 
@@ -14,7 +15,7 @@ protected:
 	uint8_t default_speed;
 	uint8_t default_radius;
 
-	virtual void make(olc::vi2d _loc, int dirCode) override {
+	virtual void make(olc::vi2d _loc, Direction dirCode) override {
 		circleCars.push_back(CircleCar(*pixelGameEngine, _loc, default_speed, default_color, default_wheel_color, default_radius, dirCode));
 	}
 

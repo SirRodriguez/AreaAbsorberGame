@@ -3,6 +3,7 @@
 
 #include "../ShapeList.h"
 #include "../../objects/BuddyPowerUp.h"
+#include "../../Direction.h"
 
 #define POWERUPCODE 2
 
@@ -13,7 +14,7 @@ protected:
 	uint8_t default_speed;
 	uint8_t default_length;
 
-	virtual void make(olc::vi2d _loc, int dirCode) override {
+	virtual void make(olc::vi2d _loc, Direction dirCode) override {
 		buddyPowerUps.push_back(BuddyPowerUp(*pixelGameEngine, _loc, default_speed, default_color, default_length, dirCode));
 	}
 

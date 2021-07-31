@@ -3,6 +3,7 @@
 
 #include "../../objects/needle/Needle.h"
 #include "../ShapeList.h"
+#include "../../Direction.h"
 
 #define ENEMYCODE 0
 
@@ -13,7 +14,7 @@ protected:
 	uint8_t default_speed;
 	uint8_t default_max_length;
 
-	virtual void make(olc::vi2d _loc, int dirCode) override {
+	virtual void make(olc::vi2d _loc, Direction dirCode) override {
 		needles.push_back(Needle(*pixelGameEngine, _loc, default_speed, default_color, rand() % default_max_length, rand() % default_max_length, dirCode));
 	}
 

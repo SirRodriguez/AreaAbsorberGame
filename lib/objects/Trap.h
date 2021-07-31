@@ -2,40 +2,17 @@
 #define TRAP_H
 
 #include "../shapes/derivedShapes/Box.h"
+#include "../Direction.h"
 
 class Trap: public Box{
-private:
-	enum Direction{
-		UP,
-		DOWN,
-		LEFT,
-		RIGHT,
-		UPLEFT,
-		UPRIGHT,
-		DOWNLEFT,
-		DOWNRIGHT
-	};
-
 protected:
 	Direction dir;
 
 public:
 	Trap()
 	: Box(){}
-	Trap(olc::PixelGameEngine& pge, olc::vi2d& pos, int _speed, const olc::Pixel& _color, int newLength, int directionCode)
-	: Box(pge, pos, _speed, _color, newLength){
-		switch(directionCode){
-			case 0: dir = Direction::UP; break;
-			case 1: dir = Direction::DOWN; break;
-			case 2: dir = Direction::LEFT; break;
-			case 3: dir = Direction::RIGHT; break;
-			case 4: dir = Direction::UPLEFT; break;
-			case 5: dir = Direction::UPRIGHT; break;
-			case 6: dir = Direction::DOWNLEFT; break;
-			case 7: dir = Direction::DOWNRIGHT; break;
-			default: dir = Direction::UP; break;
-		}
-	}
+	Trap(olc::PixelGameEngine& pge, olc::vi2d& pos, int _speed, const olc::Pixel& _color, int newLength, Direction directionCode)
+	: Box(pge, pos, _speed, _color, newLength), dir(directionCode){}
 
 	void move() override {
 		switch(dir){
@@ -65,18 +42,8 @@ public:
 		}
 	}
 
-	uint8_t getDirectionCode(){
-		switch(dir){
-			case Direction::UP: return 0;
-			case Direction::DOWN: return 1;
-			case Direction::LEFT: return 2;
-			case Direction::RIGHT: return 3;
-			case Direction::UPRIGHT: return 5;
-			case Direction::UPLEFT: return 4;
-			case Direction::DOWNLEFT: return 6;
-			case Direction::DOWNRIGHT: return 7;
-			default: return 1;
-		}
+	Direction getDirectionCode(){
+		return dir;
 	}
 };
 

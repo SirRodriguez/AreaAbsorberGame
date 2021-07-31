@@ -2,40 +2,17 @@
 #define POWERUP_H
 
 #include "../../shapes/derivedShapes/Triangle.h"
+#include "../../Direction.h"
 
 class PowerUp: public Triangle{
-private:
-	enum Direction{
-		UP,
-		DOWN,
-		LEFT,
-		RIGHT,
-		UPLEFT,
-		UPRIGHT,
-		DOWNLEFT,
-		DOWNRIGHT
-	};
-
 protected:
 	Direction dir;
 
 public:
 	PowerUp()
 	: Triangle(){}
-	PowerUp(olc::PixelGameEngine& pge, olc::vi2d& pos, int _speed, const olc::Pixel& _color, int newHeight, int directionCode)
-	: Triangle(pge, pos, _speed, _color, newHeight){
-		switch(directionCode){
-			case 0: dir = Direction::UP; break;
-			case 1: dir = Direction::DOWN; break;
-			case 2: dir = Direction::LEFT; break;
-			case 3: dir = Direction::RIGHT; break;
-			case 4: dir = Direction::UPLEFT; break;
-			case 5: dir = Direction::UPRIGHT; break;
-			case 6: dir = Direction::DOWNLEFT; break;
-			case 7: dir = Direction::DOWNRIGHT; break;
-			default: dir = Direction::UP; break;
-		}
-	}
+	PowerUp(olc::PixelGameEngine& pge, olc::vi2d& pos, int _speed, const olc::Pixel& _color, int newHeight, Direction directionCode)
+	: Triangle(pge, pos, _speed, _color, newHeight){}
 
 	void move() override {
 		switch(dir){

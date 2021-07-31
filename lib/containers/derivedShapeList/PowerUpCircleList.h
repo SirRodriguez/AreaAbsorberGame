@@ -3,6 +3,7 @@
 
 #include "../ShapeList.h"
 #include "../../objects/powerUp/PowerUpCircle.h"
+#include "../../Direction.h"
 
 #define BUDDYCODE 1
 
@@ -13,12 +14,12 @@ protected:
 	uint8_t default_speed;
 	uint8_t default_size;
 
-	virtual void make(olc::vi2d _loc, int dirCode) override {
-		powerUpCircles.push_back(PowerUpCircle(*pixelGameEngine, _loc, default_speed, default_color, default_size, dirCode));
+	virtual void make(olc::vi2d _loc, Direction dirCode, uint8_t _size){
+		powerUpCircles.push_back(PowerUpCircle(*pixelGameEngine, _loc, default_speed, default_color, _size, dirCode));
 	}
 
-	virtual void make(olc::vi2d _loc, int dirCode, uint8_t _size){
-		powerUpCircles.push_back(PowerUpCircle(*pixelGameEngine, _loc, default_speed, default_color, _size, dirCode));
+	virtual void make(olc::vi2d _loc, Direction dirCode) override {
+		powerUpCircles.push_back(PowerUpCircle(*pixelGameEngine, _loc, default_speed, default_color, default_size, dirCode));
 	}
 
 public:
@@ -28,11 +29,25 @@ public:
 	: ShapeList(pge, BUDDYCODE), default_color(_color), default_speed(_speed), default_size(_size){}
 
 	virtual void add(olc::vi2d pos) {
-		for(uint8_t dirCode = 0; dirCode <= 7; ++dirCode) make(pos, dirCode);
+		make(pos, Direction::UP);
+		make(pos, Direction::DOWN);
+		make(pos, Direction::LEFT);
+		make(pos, Direction::RIGHT);
+		make(pos, Direction::UPLEFT);
+		make(pos, Direction::UPRIGHT);
+		make(pos, Direction::DOWNLEFT);
+		make(pos, Direction::DOWNRIGHT);
 	}
 
 	virtual void add(olc::vi2d pos, uint8_t _size){
-		for(uint8_t dirCode = 0; dirCode <= 7; ++dirCode) make(pos, dirCode, _size);
+		make(pos, Direction::UP, _size);
+		make(pos, Direction::DOWN, _size);
+		make(pos, Direction::LEFT, _size);
+		make(pos, Direction::RIGHT, _size);
+		make(pos, Direction::UPLEFT, _size);
+		make(pos, Direction::UPRIGHT, _size);
+		make(pos, Direction::DOWNLEFT, _size);
+		make(pos, Direction::DOWNRIGHT, _size);
 	}
 
 	virtual void deleteAll() override {
