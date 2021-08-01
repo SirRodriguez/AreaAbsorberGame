@@ -12,7 +12,7 @@ public:
 	OtherCircle()
 	: Circle(){}
 	OtherCircle(olc::PixelGameEngine& pge, olc::vi2d& pos, int _speed, const olc::Pixel& _color, int newRadius, Direction directionCode)
-	: Circle(pge, pos, _speed, _color, newRadius){}
+	: Circle(pge, pos, _speed, _color, newRadius), dir(directionCode){}
 
 	void move() override {
 		switch(dir){

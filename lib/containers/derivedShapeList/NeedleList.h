@@ -4,8 +4,7 @@
 #include "../../objects/needle/Needle.h"
 #include "../ShapeList.h"
 #include "../../Direction.h"
-
-#define ENEMYCODE 0
+#include "../../ShapeType.h"
 
 class NeedleList: public ShapeList{
 protected:
@@ -20,9 +19,9 @@ protected:
 
 public:
 	NeedleList()
-	: ShapeList(ENEMYCODE){}
+	: ShapeList(ShapeType::ENEMY){}
 	NeedleList(olc::PixelGameEngine& pge, olc::Pixel _color, uint8_t _speed, uint8_t _length)
-	: ShapeList(pge, ENEMYCODE), default_color(_color), default_speed(_speed), default_max_length(_length){}
+	: ShapeList(pge, ShapeType::ENEMY), default_color(_color), default_speed(_speed), default_max_length(_length){}
 
 	virtual void deleteAll() override {
 		needles.clear();

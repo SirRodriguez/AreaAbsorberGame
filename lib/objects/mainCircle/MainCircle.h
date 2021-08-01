@@ -64,7 +64,7 @@ protected:
 
 public:
 	MainCircle()
-	: Circle(), lives(0), trapSquare(TrapSquare()), car(Car()), buddy(BuddyCircle()){}
+	: Circle(), lives(0), trapSquare(TrapSquare()), car(Car()), buddy(BuddyCircle()), dir(Direction::DOWN){}
 	MainCircle(olc::PixelGameEngine& pge, olc::vi2d& pos, int _speed, const olc::Pixel& _color, int newRadius, int newLives, const olc::Pixel& carColor, const olc::Pixel& wheelColor, int carRadius, int buddySpeed, const olc::Pixel& buddyColor)
 	: Circle(pge, pos, _speed, _color, newRadius), 
 		lives(newLives), 	

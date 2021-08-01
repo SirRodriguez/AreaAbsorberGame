@@ -2,31 +2,9 @@
 #define SHAPELIST_H
 
 #include "../Direction.h"
-
-#define ENEMYCODE 0
-#define BUDDYCODE 1
-#define POWERUPCODE 2
-#define MAINCIRCLECODE 3
+#include "../ShapeType.h"
 
 class ShapeList{
-private:
-	enum ShapeType{
-		ENEMY,
-		BUDDY,
-		POWERUP,
-		MAINCIRCLE
-	};
-
-	void assignShapeType(int typeCode){
-		switch(typeCode){
-			case ENEMYCODE: shapeType = ShapeType::ENEMY; break;
-			case BUDDYCODE: shapeType = ShapeType::BUDDY; break;
-			case POWERUPCODE: shapeType = ShapeType::POWERUP; break;
-			case MAINCIRCLECODE: shapeType = ShapeType::MAINCIRCLE; break;
-			default: shapeType = ShapeType::ENEMY; break;
-		}
-	}
-
 protected:
 	olc::PixelGameEngine* pixelGameEngine;
 
@@ -38,27 +16,11 @@ public:
 	ShapeList()
 	: pixelGameEngine(nullptr){}
 	ShapeList(int typeCode)
-	: pixelGameEngine(nullptr){
-		assignShapeType(typeCode);
-	}
-	ShapeList(olc::PixelGameEngine& pge, int typeCode)
-	: pixelGameEngine(&pge){
-		assignShapeType(typeCode);
-	}
+	: pixelGameEngine(nullptr){}
+	ShapeList(olc::PixelGameEngine& pge, ShapeType typeCode)
+	: pixelGameEngine(&pge), shapeType(typeCode){}
 
-	int getType(){
-		switch(shapeType){
-			case ShapeType::ENEMY: return ENEMYCODE;
-			case ShapeType::BUDDY: return BUDDYCODE;
-			case ShapeType::POWERUP: return POWERUPCODE;
-			case ShapeType::MAINCIRCLE: return MAINCIRCLECODE;
-			default: return ENEMYCODE;
-		}
-	}
-
-	bool isEnemy(){
-		return getType() == ENEMYCODE;
-	}
+	bool isEnemy(){ return shapeType == ShapeType::ENEMY; }
 
 	// Direction code tells the direction where the circle is comming from on the screen
 	// It is a bitwise code, so:

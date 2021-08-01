@@ -4,8 +4,7 @@
 #include "../ShapeList.h"
 #include "../../objects/Trap.h"
 #include "../../Direction.h"
-
-#define ENEMYCODE 0
+#include "../../ShapeType.h"
 
 class TrapList: public ShapeList{
 protected:
@@ -20,9 +19,9 @@ protected:
 
 public:
 	TrapList()
-	: ShapeList(ENEMYCODE){}
+	: ShapeList(ShapeType::ENEMY){}
 	TrapList(olc::PixelGameEngine& pge, olc::Pixel _color, uint8_t _speed, uint8_t _length)
-	: ShapeList(pge, ENEMYCODE), default_color(_color), default_speed(_speed), default_length(_length){}
+	: ShapeList(pge, ShapeType::ENEMY), default_color(_color), default_speed(_speed), default_length(_length){}
 
 	virtual void deleteAll() override {
 		traps.clear();

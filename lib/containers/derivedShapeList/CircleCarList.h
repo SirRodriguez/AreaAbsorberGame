@@ -4,8 +4,7 @@
 #include "../ShapeList.h"
 #include "../../objects/CircleCar.h"
 #include "../../Direction.h"
-
-#define POWERUPCODE 2
+#include "../../ShapeType.h"
 
 class CircleCarList: public ShapeList{
 protected:
@@ -21,9 +20,9 @@ protected:
 
 public:
 	CircleCarList()
-	: ShapeList(POWERUPCODE){}
+	: ShapeList(ShapeType::POWERUP){}
 	CircleCarList(olc::PixelGameEngine& pge, olc::Pixel _color, olc::Pixel _wheel_color, uint8_t _speed, uint8_t _radius)
-	: ShapeList(pge, POWERUPCODE), default_color(_color), default_wheel_color(_wheel_color), default_speed(_speed), default_radius(_radius){}
+	: ShapeList(pge, ShapeType::POWERUP), default_color(_color), default_wheel_color(_wheel_color), default_speed(_speed), default_radius(_radius){}
 
 	virtual void deleteAll() override {
 		circleCars.clear();

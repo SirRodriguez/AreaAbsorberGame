@@ -4,8 +4,7 @@
 #include "../ShapeList.h"
 #include "../../objects/OtherCircle.h"
 #include "../../Direction.h"
-
-#define ENEMYCODE 0
+#include "../../ShapeType.h"
 
 class OtherCircleList: public ShapeList{
 protected:
@@ -20,9 +19,9 @@ protected:
 
 public:
 	OtherCircleList()
-	: ShapeList(ENEMYCODE){}
+	: ShapeList(ShapeType::ENEMY){}
 	OtherCircleList(olc::PixelGameEngine& pge, olc::Pixel _color, uint8_t _speed, uint8_t _radius)
-	: ShapeList(pge, ENEMYCODE), default_color(_color), default_speed(_speed), default_max_radius(_radius){}
+	: ShapeList(pge, ShapeType::ENEMY), default_color(_color), default_speed(_speed), default_max_radius(_radius){}
 
 	virtual void deleteAll() override {
 		otherCircle.clear();

@@ -4,8 +4,7 @@
 #include "../ShapeList.h"
 #include "../../objects/BuddyPowerUp.h"
 #include "../../Direction.h"
-
-#define POWERUPCODE 2
+#include "../../ShapeType.h"
 
 class BuddyPowerUpList: public ShapeList{
 protected:
@@ -20,9 +19,9 @@ protected:
 
 public:
 	BuddyPowerUpList()
-	: ShapeList(POWERUPCODE){}
+	: ShapeList(ShapeType::POWERUP){}
 	BuddyPowerUpList(olc::PixelGameEngine& pge, olc::Pixel _color, uint8_t _speed, uint8_t _length)
-	: ShapeList(pge, POWERUPCODE), default_color(_color), default_speed(_speed), default_length(_length){}
+	: ShapeList(pge, ShapeType::POWERUP), default_color(_color), default_speed(_speed), default_length(_length){}
 
 	virtual void deleteAll() override {
 		buddyPowerUps.clear();

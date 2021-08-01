@@ -6,8 +6,7 @@
 #include "../../objects/mainCircle/MainCircle.h"
 #include "../ShapeList.h"
 #include "../../Direction.h"
-
-#define MAINCIRCLECODE 3
+#include "../../ShapeType.h"
 
 class MainCircleList: public ShapeList{
 protected:
@@ -25,7 +24,7 @@ protected:
 
 public:
 	MainCircleList()
-	: ShapeList(MAINCIRCLECODE){}
+	: ShapeList(ShapeType::MAINCIRCLE){}
 	MainCircleList(
 		olc::PixelGameEngine& pge, 
 		uint32_t _speed, 
@@ -37,7 +36,7 @@ public:
 		uint8_t _buddy_circle_speed, 
 		olc::Pixel _buddy_circle_color
 	)
-	: ShapeList(pge, MAINCIRCLECODE), 
+	: ShapeList(pge, ShapeType::MAINCIRCLE), 
 		default_speed(_speed),
 		default_color(_color),
 		default_initial_size(_initial_size),

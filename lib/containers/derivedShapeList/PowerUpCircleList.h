@@ -4,8 +4,7 @@
 #include "../ShapeList.h"
 #include "../../objects/powerUp/PowerUpCircle.h"
 #include "../../Direction.h"
-
-#define BUDDYCODE 1
+#include "../../ShapeType.h"
 
 class PowerUpCircleList: public ShapeList{
 protected:
@@ -24,9 +23,9 @@ protected:
 
 public:
 	PowerUpCircleList()
-	: ShapeList(BUDDYCODE){}
+	: ShapeList(ShapeType::BUDDY){}
 	PowerUpCircleList(olc::PixelGameEngine& pge, olc::Pixel _color, uint8_t _speed, uint8_t _size)
-	: ShapeList(pge, BUDDYCODE), default_color(_color), default_speed(_speed), default_size(_size){}
+	: ShapeList(pge, ShapeType::BUDDY), default_color(_color), default_speed(_speed), default_size(_size){}
 
 	virtual void add(olc::vi2d pos) {
 		make(pos, Direction::UP);

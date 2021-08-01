@@ -4,8 +4,7 @@
 #include "../ShapeList.h"
 #include "../../objects/Nuke.h"
 #include "../../Direction.h"
-
-#define POWERUPCODE 2
+#include "../../ShapeType.h"
 
 class NukeList: public ShapeList{
 protected:
@@ -21,9 +20,9 @@ protected:
 
 public:
 	NukeList()
-	: ShapeList(POWERUPCODE){}
+	: ShapeList(ShapeType::POWERUP){}
 	NukeList(olc::PixelGameEngine& pge, olc::Pixel _color, olc::Pixel _pedal_color, uint8_t _speed, uint8_t _radius)
-	: ShapeList(pge, POWERUPCODE), default_color(_color), default_pedal_color(_pedal_color), default_speed(_speed), default_radius(_radius){}
+	: ShapeList(pge, ShapeType::POWERUP), default_color(_color), default_pedal_color(_pedal_color), default_speed(_speed), default_radius(_radius){}
 
 	virtual void deleteAll() override {
 		nukes.clear();
