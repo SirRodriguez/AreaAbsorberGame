@@ -19,36 +19,43 @@
 // Colors
 //////////////
 
+// 
 // MainCircle
-const olc::Pixel mainCircleColor = olc::BLACK;
+const olc::Pixel mainCircleColor = olc::BLUE;
 
+// 
 // Enemies
+// 
 const olc::Pixel otherCircleColor = olc::RED;
 const olc::Pixel needleColor = olc::BLACK;
-const olc::Pixel trapColor = olc::BLUE;
+const olc::Pixel trapColor = olc::RED;
 
+// 
 // PowerUps
 const olc::Pixel powerUpColor = olc::GREEN;
-const olc::Pixel powerUpCircleColor = olc::GREY;
-const olc::Pixel buddyPowerUpColor = olc::YELLOW;
-const olc::Pixel buddyCircleColor = olc::DARK_GREY;
-const olc::Pixel circleCarColor = olc::BLUE;
+const olc::Pixel powerUpCircleColor = olc::VERY_DARK_BLUE;
+const olc::Pixel buddyPowerUpColor = olc::GREEN;
+const olc::Pixel buddyCircleColor = olc::DARK_BLUE;
+const olc::Pixel circleCarColor = olc::GREEN;
 const olc::Pixel circleCarWheelColor = olc::BLACK;
 const olc::Pixel nukeColor = olc::BLACK;
-const olc::Pixel nukePedalColor = olc::DARK_RED;
+const olc::Pixel nukePedalColor = olc::DARK_GREEN;
 
 ///////////////
 // Speeds
 ///////////////
 
+// 
 // MainCircle
 const uint8_t mainCircleSpeed = 5;
 
+// 
 // Enemies
 const uint8_t otherCircleSpeed = 4;
 const uint8_t needleSpeed = 6;
 const uint8_t trapSpeed = 4;
 
+// 
 // PowerUps
 const uint8_t powerUpSpeed = 2;
 const uint8_t powerUpCircleSpeed = 5;
@@ -61,14 +68,17 @@ const uint8_t nukeSpeed = 6;
 // Sizes
 ///////////////
 
+// 
 // MainCircle
 const uint8_t initialMainCircleSize = 10;
 
+// 
 // Enemies
 const uint8_t otherCircleMaxRadius = 50;
 const uint8_t maxNeedleLength = 50;
 const uint8_t trapLength = 40;
 
+// 
 // PowerUps
 const uint8_t powerUpHeight = 50;
 const uint8_t buddyPowerUpLength = 40;
