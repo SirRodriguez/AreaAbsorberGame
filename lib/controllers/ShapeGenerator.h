@@ -95,6 +95,13 @@ class ShapeGenerator{
 			shapesContainer->addNuke(makeDirectionCode());
 	}
 
+	void generateBoss(){
+		int level = scoreContainer->getLevel();
+		if(level >= 20 || level % 5 == 0){
+			shapesContainer->addBoss(makeDirectionCode());
+		}
+	}
+
 public:
 	ShapeGenerator()
 	: shapesContainer(nullptr), scoreContainer(nullptr){
@@ -113,6 +120,7 @@ public:
 		generateTraps();
 		generateCircleCars();
 		generateNukes();
+		generateBoss();
 	}
 };
 

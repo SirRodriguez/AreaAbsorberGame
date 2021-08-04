@@ -12,6 +12,7 @@
 #include "derivedShapeList/BuddyPowerUpList.h"
 #include "derivedShapeList/PowerUpCircleList.h"
 #include "derivedShapeList/MainCircleList.h"
+#include "derivedShapeList/BossCircleList.h"
 
 #include "../Direction.h"
 
@@ -29,6 +30,7 @@ const olc::Pixel mainCircleColor = olc::BLUE;
 const olc::Pixel otherCircleColor = olc::RED;
 const olc::Pixel needleColor = olc::BLACK;
 const olc::Pixel trapColor = olc::RED;
+const olc::Pixel bossColor = olc::DARK_RED;
 
 // 
 // PowerUps
@@ -54,6 +56,7 @@ const uint8_t mainCircleSpeed = 5;
 const uint8_t otherCircleSpeed = 4;
 const uint8_t needleSpeed = 6;
 const uint8_t trapSpeed = 4;
+const uint8_t bossSpeed = 2;
 
 // 
 // PowerUps
@@ -131,6 +134,9 @@ public:
 		#define trapsDef dynamic_cast<TrapList*>(shapeLists[7])
 		shapeLists.push_back(new NeedleList(pge, needleColor, needleSpeed, maxNeedleLength));
 		#define needlesDef dynamic_cast<NeedleList*>(shapeLists[8])
+
+		shapeLists.push_back(new BossCircleList(pge, bossColor, bossSpeed));
+		#define bossCircleDef dynamic_cast<BossCircleList*>(shapeLists[9])
 	}
 
 	// ~ShapesContainer(){
@@ -193,6 +199,7 @@ public:
 	void addTrap(uint8_t dirFromCode){ trapsDef->add(dirFromCode); }
 	void addCircleCar(uint8_t dirFromCode){ circleCarsDef->add(dirFromCode); }
 	void addNuke(uint8_t dirFromCode){ nukesDef->add(dirFromCode); }
+	void addBoss(uint8_t dirFromCode){ bossCircleDef->add(dirFromCode); }
 
 	void addPowerUpCircles(){
 		powerUpCirclesDef->add(mainCircleDef->getPosition(), mainCircleDef->getRadius());
@@ -322,6 +329,12 @@ public:
 	// Return -1 for collision
 	int checkCollisionForNukes(){
 		return nukesDef->checkCollisionsWith(*mainCircleDef) > 0 ? -1 : 0;
+	}
+
+	// return 0 for no collision
+	// return positive number for collision
+	int checkCollisionForBossCircle(){
+		return bossCircleDef->checkCollisionsWith(*mainCircleDef);
 	}
 
 	// 

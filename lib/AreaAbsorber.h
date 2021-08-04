@@ -189,7 +189,10 @@ public:
 			shapesContainer.runNuke();
 		}
 
-		return collideNumber == -1 || needleCollideNumber == -1;
+		// Check collision with boss circle
+		int bossCollideNumber = shapesContainer.checkCollisionForBossCircle();
+
+		return collideNumber == -1 || needleCollideNumber == -1 || bossCollideNumber > 0;
 	}
 
 	void drawTheScreen(){
