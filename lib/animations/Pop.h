@@ -1,8 +1,8 @@
 #ifndef POP_H
 #define POP_H
 
-#include "../Animation.h"
-#include "../shapes/AnimationLine.h"
+#include "./Animation.h"
+#include "./shapes/AnimationLine.h"
 
 class Pop: public Animation{
 protected:

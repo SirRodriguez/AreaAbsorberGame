@@ -2,7 +2,7 @@
 #define ANIMATIONCONTAINER_H
 
 #include "../animations/Animation.h"
-#include "../animations/pop/Pop.h"
+#include "../animations/Pop.h"
 
 class AnimationContainer{
 protected:
