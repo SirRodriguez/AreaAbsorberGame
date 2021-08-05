@@ -15,14 +15,14 @@ protected:
 	uint8_t default_radius;
 
 	virtual void make(olc::vi2d _loc, Direction dirCode) override {
-		circleCars.push_back(CircleCar(*pixelGameEngine, _loc, default_speed, default_color, default_wheel_color, default_radius, dirCode));
+		circleCars.push_back(CircleCar(*pixelGameEngine, *animationContainer, _loc, default_speed, default_color, default_wheel_color, default_radius, dirCode));
 	}
 
 public:
 	CircleCarList()
 	: ShapeList(ShapeType::POWERUP){}
-	CircleCarList(olc::PixelGameEngine& pge, olc::Pixel _color, olc::Pixel _wheel_color, uint8_t _speed, uint8_t _radius)
-	: ShapeList(pge, ShapeType::POWERUP), default_color(_color), default_wheel_color(_wheel_color), default_speed(_speed), default_radius(_radius){}
+	CircleCarList(olc::PixelGameEngine& pge, AnimationContainer& ac, olc::Pixel _color, olc::Pixel _wheel_color, uint8_t _speed, uint8_t _radius)
+	: ShapeList(pge, ac, ShapeType::POWERUP), default_color(_color), default_wheel_color(_wheel_color), default_speed(_speed), default_radius(_radius){}
 
 	virtual void deleteAll() override {
 		circleCars.clear();

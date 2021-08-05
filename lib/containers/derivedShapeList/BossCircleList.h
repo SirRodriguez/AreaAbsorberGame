@@ -44,15 +44,15 @@ protected:
 				default: break;
 			}
 
-			boss = BossCircle(*pixelGameEngine, _loc, default_speed, default_color, radius, dirCode);
+			boss = BossCircle(*pixelGameEngine, *animationContainer, _loc, default_speed, default_color, radius, dirCode);
 		}
 	}
 
 public:
 	BossCircleList()
 	: ShapeList(ShapeType::ENEMY), alive(false){}
-	BossCircleList(olc::PixelGameEngine& pge, olc::Pixel _color, uint8_t _speed)
-	: ShapeList(pge, ShapeType::ENEMY), default_color(_color), default_speed(_speed), alive(false){}
+	BossCircleList(olc::PixelGameEngine& pge, AnimationContainer& ac, olc::Pixel _color, uint8_t _speed)
+	: ShapeList(pge, ac, ShapeType::ENEMY), default_color(_color), default_speed(_speed), alive(false){}
 
 	virtual void deleteAll() override {
 		alive = false;

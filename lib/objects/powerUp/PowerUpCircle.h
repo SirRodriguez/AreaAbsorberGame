@@ -11,8 +11,8 @@ protected:
 public:
 	PowerUpCircle()
 	: Circle(){}
-	PowerUpCircle(olc::PixelGameEngine& pge, olc::vi2d& pos, int _speed, const olc::Pixel& _color, int newRadius, Direction directionCode)
-	: Circle(pge, pos, _speed, _color, newRadius), dir(directionCode){}
+	PowerUpCircle(olc::PixelGameEngine& pge, AnimationContainer& ac, olc::vi2d& pos, int _speed, const olc::Pixel& _color, int newRadius, Direction directionCode)
+	: Circle(pge, ac, pos, _speed, _color, newRadius), dir(directionCode){}
 
 	// moving
 	void move() override {

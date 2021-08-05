@@ -3,10 +3,12 @@
 
 #include "../Direction.h"
 #include "../ShapeType.h"
+#include "./AnimationContainer.h"
 
 class ShapeList{
 protected:
 	olc::PixelGameEngine* pixelGameEngine;
+	AnimationContainer* animationContainer;
 
 	ShapeType shapeType;
 
@@ -14,11 +16,11 @@ protected:
 
 public:
 	ShapeList()
-	: pixelGameEngine(nullptr){}
+	: pixelGameEngine(nullptr), animationContainer(nullptr){}
 	ShapeList(int typeCode)
-	: pixelGameEngine(nullptr){}
-	ShapeList(olc::PixelGameEngine& pge, ShapeType typeCode)
-	: pixelGameEngine(&pge), shapeType(typeCode){}
+	: pixelGameEngine(nullptr), animationContainer(nullptr){}
+	ShapeList(olc::PixelGameEngine& pge, AnimationContainer& ac, ShapeType typeCode)
+	: pixelGameEngine(&pge), animationContainer(&ac), shapeType(typeCode){}
 
 	bool isEnemy(){ return shapeType == ShapeType::ENEMY; }
 

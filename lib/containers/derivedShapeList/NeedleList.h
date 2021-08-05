@@ -14,14 +14,14 @@ protected:
 	uint8_t default_max_length;
 
 	virtual void make(olc::vi2d _loc, Direction dirCode) override {
-		needles.push_back(Needle(*pixelGameEngine, _loc, default_speed, default_color, rand() % default_max_length, rand() % default_max_length, dirCode));
+		needles.push_back(Needle(*pixelGameEngine, *animationContainer, _loc, default_speed, default_color, rand() % default_max_length, rand() % default_max_length, dirCode));
 	}
 
 public:
 	NeedleList()
 	: ShapeList(ShapeType::ENEMY){}
-	NeedleList(olc::PixelGameEngine& pge, olc::Pixel _color, uint8_t _speed, uint8_t _length)
-	: ShapeList(pge, ShapeType::ENEMY), default_color(_color), default_speed(_speed), default_max_length(_length){}
+	NeedleList(olc::PixelGameEngine& pge, AnimationContainer& ac, olc::Pixel _color, uint8_t _speed, uint8_t _length)
+	: ShapeList(pge, ac, ShapeType::ENEMY), default_color(_color), default_speed(_speed), default_max_length(_length){}
 
 	virtual void deleteAll() override {
 		needles.clear();

@@ -14,8 +14,8 @@ protected:
 public:
 	CircleCar()
 	: Flower(){}
-	CircleCar(olc::PixelGameEngine& pge, olc::vi2d& pos, int _speed, const olc::Pixel& _color, const olc::Pixel& _wheelColor, int newRadius, Direction directionCode)
-	: Flower(pge, pos, _speed, _color, _wheelColor, newRadius, NUMWHEELS, WHEELANGLEOFFSET), dir(directionCode){}
+	CircleCar(olc::PixelGameEngine& pge, AnimationContainer& ac, olc::vi2d& pos, int _speed, const olc::Pixel& _color, const olc::Pixel& _wheelColor, int newRadius, Direction directionCode)
+	: Flower(pge, ac, pos, _speed, _color, _wheelColor, newRadius, NUMWHEELS, WHEELANGLEOFFSET), dir(directionCode){}
 
 	void move() override{
 		switch(dir){

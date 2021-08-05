@@ -14,14 +14,14 @@ protected:
 	uint8_t default_length;
 
 	virtual void make(olc::vi2d _loc, Direction dirCode) override {
-		buddyPowerUps.push_back(BuddyPowerUp(*pixelGameEngine, _loc, default_speed, default_color, default_length, dirCode));
+		buddyPowerUps.push_back(BuddyPowerUp(*pixelGameEngine, *animationContainer, _loc, default_speed, default_color, default_length, dirCode));
 	}
 
 public:
 	BuddyPowerUpList()
 	: ShapeList(ShapeType::POWERUP){}
-	BuddyPowerUpList(olc::PixelGameEngine& pge, olc::Pixel _color, uint8_t _speed, uint8_t _length)
-	: ShapeList(pge, ShapeType::POWERUP), default_color(_color), default_speed(_speed), default_length(_length){}
+	BuddyPowerUpList(olc::PixelGameEngine& pge, AnimationContainer& ac, olc::Pixel _color, uint8_t _speed, uint8_t _length)
+	: ShapeList(pge, ac, ShapeType::POWERUP), default_color(_color), default_speed(_speed), default_length(_length){}
 
 	virtual void deleteAll() override {
 		buddyPowerUps.clear();

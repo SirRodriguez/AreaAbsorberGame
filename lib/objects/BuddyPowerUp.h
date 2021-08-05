@@ -11,8 +11,8 @@ protected:
 public:
 	BuddyPowerUp()
 	: Square(){}
-	BuddyPowerUp(olc::PixelGameEngine& pge, olc::vi2d& pos, int _speed, const olc::Pixel& _color, int newLength, Direction directionCode)
-	: Square(pge, pos, _speed, _color, newLength), dir(directionCode){}
+	BuddyPowerUp(olc::PixelGameEngine& pge, AnimationContainer& ac, olc::vi2d& pos, int _speed, const olc::Pixel& _color, int newLength, Direction directionCode)
+	: Square(pge, ac, pos, _speed, _color, newLength), dir(directionCode){}
 
 	void move() override {
 		switch(dir){

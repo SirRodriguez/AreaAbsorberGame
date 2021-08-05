@@ -15,14 +15,14 @@ protected:
 	uint8_t default_radius;
 
 	virtual void make(olc::vi2d _loc, Direction dirCode) override {
-		nukes.push_back(Nuke(*pixelGameEngine, _loc, default_speed, default_color, default_pedal_color, default_radius, dirCode));
+		nukes.push_back(Nuke(*pixelGameEngine, *animationContainer, _loc, default_speed, default_color, default_pedal_color, default_radius, dirCode));
 	}
 
 public:
 	NukeList()
 	: ShapeList(ShapeType::POWERUP){}
-	NukeList(olc::PixelGameEngine& pge, olc::Pixel _color, olc::Pixel _pedal_color, uint8_t _speed, uint8_t _radius)
-	: ShapeList(pge, ShapeType::POWERUP), default_color(_color), default_pedal_color(_pedal_color), default_speed(_speed), default_radius(_radius){}
+	NukeList(olc::PixelGameEngine& pge, AnimationContainer& ac, olc::Pixel _color, olc::Pixel _pedal_color, uint8_t _speed, uint8_t _radius)
+	: ShapeList(pge, ac, ShapeType::POWERUP), default_color(_color), default_pedal_color(_pedal_color), default_speed(_speed), default_radius(_radius){}
 
 	virtual void deleteAll() override {
 		nukes.clear();

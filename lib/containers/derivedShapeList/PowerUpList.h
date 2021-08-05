@@ -14,14 +14,14 @@ protected:
 	uint8_t default_height;
 
 	virtual void make(olc::vi2d _loc, Direction dirCode) override {
-		powerUps.push_back(PowerUp(*pixelGameEngine, _loc, default_speed, default_color, default_height, dirCode));
+		powerUps.push_back(PowerUp(*pixelGameEngine, *animationContainer, _loc, default_speed, default_color, default_height, dirCode));
 	}
 
 public:
 	PowerUpList()
 	: ShapeList(ShapeType::POWERUP){}
-	PowerUpList(olc::PixelGameEngine& pge, olc::Pixel _color, uint8_t _speed, uint8_t _height)
-	: ShapeList(pge, ShapeType::POWERUP), default_color(_color), default_speed(_speed), default_height(_height){}
+	PowerUpList(olc::PixelGameEngine& pge, AnimationContainer& ac, olc::Pixel _color, uint8_t _speed, uint8_t _height)
+	: ShapeList(pge, ac, ShapeType::POWERUP), default_color(_color), default_speed(_speed), default_height(_height){}
 
 	virtual void deleteAll() override {
 		powerUps.clear();

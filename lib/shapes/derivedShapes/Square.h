@@ -14,8 +14,8 @@ protected:
 public:
 	Square()
 	: Shape(), length(0){}
-	Square(olc::PixelGameEngine& pge, olc::vi2d& pos, int _speed, const olc::Pixel& _color, int newLength)
-	: Shape(pge, pos, _speed, _color), length(newLength){}
+	Square(olc::PixelGameEngine& pge, AnimationContainer& ac, olc::vi2d& pos, int _speed, const olc::Pixel& _color, int newLength)
+	: Shape(pge, ac, pos, _speed, _color), length(newLength){}
 	
 	// Moving ---
 	virtual void move() = 0;

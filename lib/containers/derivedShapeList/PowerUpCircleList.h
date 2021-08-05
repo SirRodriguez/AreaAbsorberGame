@@ -14,18 +14,18 @@ protected:
 	uint8_t default_size;
 
 	virtual void make(olc::vi2d _loc, Direction dirCode, uint8_t _size){
-		powerUpCircles.push_back(PowerUpCircle(*pixelGameEngine, _loc, default_speed, default_color, _size, dirCode));
+		powerUpCircles.push_back(PowerUpCircle(*pixelGameEngine, *animationContainer, _loc, default_speed, default_color, _size, dirCode));
 	}
 
 	virtual void make(olc::vi2d _loc, Direction dirCode) override {
-		powerUpCircles.push_back(PowerUpCircle(*pixelGameEngine, _loc, default_speed, default_color, default_size, dirCode));
+		powerUpCircles.push_back(PowerUpCircle(*pixelGameEngine, *animationContainer, _loc, default_speed, default_color, default_size, dirCode));
 	}
 
 public:
 	PowerUpCircleList()
 	: ShapeList(ShapeType::BUDDY){}
-	PowerUpCircleList(olc::PixelGameEngine& pge, olc::Pixel _color, uint8_t _speed, uint8_t _size)
-	: ShapeList(pge, ShapeType::BUDDY), default_color(_color), default_speed(_speed), default_size(_size){}
+	PowerUpCircleList(olc::PixelGameEngine& pge, AnimationContainer& ac, olc::Pixel _color, uint8_t _speed, uint8_t _size)
+	: ShapeList(pge, ac, ShapeType::BUDDY), default_color(_color), default_speed(_speed), default_size(_size){}
 
 	virtual void add(olc::vi2d pos) {
 		make(pos, Direction::UP);

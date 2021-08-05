@@ -15,7 +15,7 @@ protected:
 	int getPedalRadius(int r){ return r / 2; }
 	int getPedalRadius(){ return getPedalRadius(getRadius()); }
 
-	virtual olc::vi2d getLocationOffsetFromDeg(double d){
+	olc::vi2d getLocationOffsetFromDeg(double d){
 		int r = getRadius() + getPedalRadius();
 		int x = r * std::cos(d * PI() / 180);
 		int y = r * std::sin(d * PI() / 180);
@@ -35,7 +35,7 @@ protected:
 		}
 	}
 
-	virtual void fixPedalsToPosition(){
+	void fixPedalsToPosition(){
 		if(numPedals > 0){
 			double increment = 360 / numPedals;
 			double deg = increment + degOffset;	
@@ -52,8 +52,8 @@ protected:
 public:
 	Flower()
 	: Circle(){}
-	Flower(olc::PixelGameEngine& pge, olc::vi2d& pos, int _speed, const olc::Pixel& _color, const olc::Pixel& _pedalColor, int newRadius, int _numPedals, double _degOffset)
-	: Circle(pge, pos, _speed, _color, newRadius), numPedals(_numPedals), degOffset(_degOffset){
+	Flower(olc::PixelGameEngine& pge, AnimationContainer& ac, olc::vi2d& pos, int _speed, const olc::Pixel& _color, const olc::Pixel& _pedalColor, int newRadius, int _numPedals, double _degOffset)
+	: Circle(pge, ac, pos, _speed, _color, newRadius), numPedals(_numPedals), degOffset(_degOffset){
 		if(numPedals > 0){
 			double increment = 360 / numPedals;
 			double deg = increment + degOffset;
@@ -61,7 +61,7 @@ public:
 			for(int i = 0; i < numPedals; ++i){
 				olc::vi2d locOffset = getLocationOffsetFromDeg(deg);
 				olc::vi2d loc = pos + locOffset;
-				pedals.push_back(Pedal(pge, loc, _speed, _pedalColor, getPedalRadius()));
+				pedals.push_back(Pedal(pge, ac, loc, _speed, _pedalColor, getPedalRadius()));
 				deg += increment;
 			}
 		}

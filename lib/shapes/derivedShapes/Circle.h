@@ -14,8 +14,10 @@ protected:
 public:
 	Circle()
 	: Shape(), radius(0){}
-	Circle(olc::PixelGameEngine& pge, olc::vi2d& pos, int _speed, const olc::Pixel& _color, int newRadius)
-	: Shape(pge, pos, _speed, _color), radius(newRadius){}
+	Circle(olc::PixelGameEngine& pge, AnimationContainer& ac, olc::vi2d& pos, int _speed, const olc::Pixel& _color, int newRadius)
+	: Shape(pge, ac, pos, _speed, _color), radius(newRadius){}
+
+	virtual ~Circle(){}
 
 	// PI
 	double PI(){ return 355.0 / 113.0; }
@@ -28,8 +30,6 @@ public:
 
 	// Moving
 	virtual void move() = 0;
-
-	~Circle(){}
 };
 
 #endif

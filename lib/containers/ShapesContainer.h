@@ -90,17 +90,19 @@ const uint8_t nukeRadius = 30;
 
 class ShapesContainer{
 	olc::PixelGameEngine* pixelGameEngine;
+	AnimationContainer* animationContainer;
 	std::vector<ShapeList*> shapeLists;
 
 public:
 	ShapesContainer()
-	: pixelGameEngine(nullptr){}
-	ShapesContainer(olc::PixelGameEngine& pge)
-	: pixelGameEngine(&pge){
+	: pixelGameEngine(nullptr), animationContainer(nullptr){}
+	ShapesContainer(olc::PixelGameEngine& pge, AnimationContainer& ac)
+	: pixelGameEngine(&pge), animationContainer(&ac){
 		// Main circle
 		shapeLists.push_back(
 			new MainCircleList(
 				pge, 
+				ac, 
 				mainCircleSpeed, 
 				mainCircleColor, 
 				initialMainCircleSize,
@@ -114,37 +116,32 @@ public:
 		#define mainCircleDef dynamic_cast<MainCircleList*>(shapeLists[0])
 
 		// Power ups
-		shapeLists.push_back(new PowerUpList(pge, powerUpColor, powerUpSpeed, powerUpHeight));
+		shapeLists.push_back(new PowerUpList(pge, ac, powerUpColor, powerUpSpeed, powerUpHeight));
 		#define powerUpsDef dynamic_cast<PowerUpList*>(shapeLists[1])
-		shapeLists.push_back(new CircleCarList(pge, circleCarColor, circleCarWheelColor, circleCarSpeed, circleCarRadius));
+		shapeLists.push_back(new CircleCarList(pge, ac, circleCarColor, circleCarWheelColor, circleCarSpeed, circleCarRadius));
 		#define circleCarsDef dynamic_cast<CircleCarList*>(shapeLists[2])
-		shapeLists.push_back(new NukeList(pge, nukeColor, nukePedalColor, nukeSpeed, nukeRadius));
+		shapeLists.push_back(new NukeList(pge, ac, nukeColor, nukePedalColor, nukeSpeed, nukeRadius));
 		#define nukesDef dynamic_cast<NukeList*>(shapeLists[3])
-		shapeLists.push_back(new BuddyPowerUpList(pge, buddyPowerUpColor, buddyPowerUpSpeed, buddyPowerUpLength));
+		shapeLists.push_back(new BuddyPowerUpList(pge, ac, buddyPowerUpColor, buddyPowerUpSpeed, buddyPowerUpLength));
 		#define buddyPowerUpsDef dynamic_cast<BuddyPowerUpList*>(shapeLists[4])
 
 		// Buddies
-		shapeLists.push_back(new PowerUpCircleList(pge, powerUpCircleColor, powerUpCircleSpeed, 0));
+		shapeLists.push_back(new PowerUpCircleList(pge, ac, powerUpCircleColor, powerUpCircleSpeed, 0));
 		#define powerUpCirclesDef dynamic_cast<PowerUpCircleList*>(shapeLists[5])
 
 		// Enemies
-		shapeLists.push_back(new OtherCircleList(pge, otherCircleColor, otherCircleSpeed, otherCircleMaxRadius));
+		shapeLists.push_back(new OtherCircleList(pge, ac, otherCircleColor, otherCircleSpeed, otherCircleMaxRadius));
 		#define otherCirclesDef dynamic_cast<OtherCircleList*>(shapeLists[6])
-		shapeLists.push_back(new TrapList(pge, trapColor, trapSpeed, trapLength));
+		shapeLists.push_back(new TrapList(pge, ac, trapColor, trapSpeed, trapLength));
 		#define trapsDef dynamic_cast<TrapList*>(shapeLists[7])
-		shapeLists.push_back(new NeedleList(pge, needleColor, needleSpeed, maxNeedleLength));
+		shapeLists.push_back(new NeedleList(pge, ac, needleColor, needleSpeed, maxNeedleLength));
 		#define needlesDef dynamic_cast<NeedleList*>(shapeLists[8])
 
-		shapeLists.push_back(new BossCircleList(pge, bossColor, bossSpeed));
+		shapeLists.push_back(new BossCircleList(pge, ac, bossColor, bossSpeed));
 		#define bossCircleDef dynamic_cast<BossCircleList*>(shapeLists[9])
 	}
 
-	// ~ShapesContainer(){
-	// 	std::cout << "Called Destructor" << std::endl;
-	// 	for(auto it = shapeLists.begin(); it != shapeLists.end(); ++it){
-	// 		delete *it;
-	// 	}
-	// }
+	~ShapesContainer(){}
 
 	void reset(){
 		mainCircleDef->setRadius(initialMainCircleSize);

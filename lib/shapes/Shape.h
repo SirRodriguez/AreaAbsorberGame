@@ -1,9 +1,12 @@
 #ifndef SHAPE_H
 #define SHAPE_H
 
+#include "../containers/AnimationContainer.h"
+
 class Shape{
 protected:
 	olc::PixelGameEngine* pixelGameEngine;
+	AnimationContainer* animationContainer;
 	olc::vi2d position;
 	int speed;
 	olc::Pixel color;
@@ -21,9 +24,11 @@ protected:
 
 public:
 	Shape()
-	: pixelGameEngine(nullptr), position(olc::vi2d(0,0)), speed(0), color(olc::WHITE){}
-	Shape(olc::PixelGameEngine& pge, olc::vi2d& pos, int _speed, const olc::Pixel& _color)
-	: pixelGameEngine(&pge), position(pos), speed(_speed), color(_color){}
+	: pixelGameEngine(nullptr), animationContainer(nullptr), position(olc::vi2d(0,0)), speed(0), color(olc::WHITE){}
+	Shape(olc::PixelGameEngine& pge, AnimationContainer& ac, olc::vi2d& pos, int _speed, const olc::Pixel& _color)
+	: pixelGameEngine(&pge), animationContainer(&ac), position(pos), speed(_speed), color(_color){}
+
+	virtual ~Shape(){}
 
 	// Out of bounds
 	virtual bool belowTopOfScreen(){ return position.y > 0; }
@@ -48,8 +53,6 @@ public:
 
 	// Moving
 	virtual void move() = 0;
-
-	virtual ~Shape(){}
 };
 
 #endif

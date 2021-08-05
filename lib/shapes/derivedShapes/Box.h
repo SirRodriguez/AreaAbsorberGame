@@ -12,8 +12,8 @@ protected:
 public:
 	Box()
 	: Square(){}
-	Box(olc::PixelGameEngine& pge, olc::vi2d& pos, int _speed, const olc::Pixel& _color, int newLength)
-	: Square(pge, pos, _speed, _color, newLength){}
+	Box(olc::PixelGameEngine& pge, AnimationContainer& ac, olc::vi2d& pos, int _speed, const olc::Pixel& _color, int newLength)
+	: Square(pge, ac, pos, _speed, _color, newLength){}
 
 	// Moving ---
 	virtual void move() = 0;

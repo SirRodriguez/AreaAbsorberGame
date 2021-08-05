@@ -11,8 +11,14 @@ protected:
 public:
 	OtherCircle()
 	: Circle(){}
-	OtherCircle(olc::PixelGameEngine& pge, olc::vi2d& pos, int _speed, const olc::Pixel& _color, int newRadius, Direction directionCode)
-	: Circle(pge, pos, _speed, _color, newRadius), dir(directionCode){}
+	OtherCircle(olc::PixelGameEngine& pge, AnimationContainer& ac, olc::vi2d& pos, int _speed, const olc::Pixel& _color, int newRadius, Direction directionCode)
+	: Circle(pge, ac, pos, _speed, _color, newRadius), dir(directionCode){}
+
+	virtual ~OtherCircle(){
+		int frames = 60;
+		int lines = 16;
+		animationContainer->addPopAnimation(*pixelGameEngine, position, frames, color, radius, lines, 0.0);
+	}
 
 	void move() override {
 		switch(dir){

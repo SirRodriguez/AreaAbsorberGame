@@ -18,8 +18,8 @@ protected:
 public:
 	TrapSquare()
 	: Box(), lifeTimeInFrames(0){}
-	TrapSquare(olc::PixelGameEngine& pge, olc::vi2d& pos, int _speed, const olc::Pixel& _color, int newLength)
-	: Box(pge, pos, _speed, _color, newLength), lifeTimeInFrames(0){}
+	TrapSquare(olc::PixelGameEngine& pge, AnimationContainer& ac, olc::vi2d& pos, int _speed, const olc::Pixel& _color, int newLength)
+	: Box(pge, ac, pos, _speed, _color, newLength), lifeTimeInFrames(0){}
 
 	// Moving  ---
 	void move(){

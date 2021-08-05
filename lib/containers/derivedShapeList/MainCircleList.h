@@ -27,6 +27,7 @@ public:
 	: ShapeList(ShapeType::MAINCIRCLE){}
 	MainCircleList(
 		olc::PixelGameEngine& pge, 
+		AnimationContainer& ac, 
 		uint32_t _speed, 
 		olc::Pixel _color, 
 		uint8_t _initial_size, 
@@ -36,7 +37,7 @@ public:
 		uint8_t _buddy_circle_speed, 
 		olc::Pixel _buddy_circle_color
 	)
-	: ShapeList(pge, ShapeType::MAINCIRCLE), 
+	: ShapeList(pge, ac, ShapeType::MAINCIRCLE), 
 		default_speed(_speed),
 		default_color(_color),
 		default_initial_size(_initial_size),
@@ -50,6 +51,7 @@ public:
 		uint8_t numLives = 0;
 		mainCircle = MainCircle(
 			pge,
+			ac, 
 			centerPos,
 			default_speed,
 			default_color, 

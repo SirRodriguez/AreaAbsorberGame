@@ -17,8 +17,8 @@ protected:
 public:
 	Triangle()
 	: Shape(), height(0){}
-	Triangle(olc::PixelGameEngine& pge, olc::vi2d& pos, int _speed, const olc::Pixel& _color, int newHeight)
-	: Shape(pge, pos, _speed, _color), height(newHeight){}
+	Triangle(olc::PixelGameEngine& pge, AnimationContainer& ac, olc::vi2d& pos, int _speed, const olc::Pixel& _color, int newHeight)
+	: Shape(pge, ac, pos, _speed, _color), height(newHeight){}
 	
 	// Moving ---
 	virtual void move() = 0;

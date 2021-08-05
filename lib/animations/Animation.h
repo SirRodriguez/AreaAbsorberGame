@@ -8,22 +8,19 @@ protected:
 	int maxFrames;
 	int currentFrame;
 
+	void incrementFrame(){ ++currentFrame; }
+	void decreaseFrame(){ --currentFrame; }
+
 public:
 	Animation()
 	: pixelGameEngine(nullptr), position(olc::vi2d(0,0)), maxFrames(0), currentFrame(0){}
-	Animation(olc::PixelGameEngine& pge)
-	: pixelGameEngine(&pge), position(olc::vi2d(0,0)), maxFrames(0), currentFrame(0){}
-	Animation(olc::PixelGameEngine& pge, olc::vi2d& pos)
-	: pixelGameEngine(&pge), position(pos), maxFrames(0), currentFrame(0){}
 	Animation(olc::PixelGameEngine& pge, olc::vi2d& pos, int newmaxFrames)
-	: pixelGameEngine(&pge), position(pos), maxFrames(newFrames), currentFrame(0){}
-	Animation(olc::PixelGameEngine& pge, olc::vi2d& pos, int newmaxFrames, int newCurrentFrame)
-	: pixelGameEngine(&pge), position(pos), maxFrames(newFrames), currentFrame(newCurrentFrame){}
+	: pixelGameEngine(&pge), position(pos), maxFrames(newmaxFrames), currentFrame(0){}
 
 	virtual void drawFrame() = 0;
+	virtual void clear() = 0;
 
-	void incrementFrame(){ ++currentFrame; }
-	bool is
+	bool framesMaxed(){ return currentFrame >= maxFrames; }
 };
 
 #endif

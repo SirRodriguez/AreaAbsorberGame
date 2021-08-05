@@ -8,6 +8,7 @@
 
 #include "containers/ScoreContainer.h"
 #include "containers/ShapesContainer.h"
+#include "containers/AnimationContainer.h"
 
 // Command to compile 
 // g++ -o AreaAbsorber.exe main.cpp -luser32 -lgdi32 -lopengl32 -lgdiplus -lShlwapi -ldwmapi -lstdc++fs -static -std=c++17
@@ -24,9 +25,10 @@ class AreaAbsorber : public olc::PixelGameEngine {
 	// Shape generator
 	ShapeGenerator shapeGenerator;
 
-	// Other shapes containers
+	// Containers
 	ShapesContainer shapesContainer;
 	ScoreContainer scoreContainer;
+	AnimationContainer animationContainer;
 
 public:
 	AreaAbsorber(){
@@ -36,8 +38,10 @@ public:
 	void constructObjects(){
 		// Initialize the input controls class
 		inputControls = InputControls(*this);
+		// Initialize Animation Container
+		animationContainer = AnimationContainer();
 		// Initialize the hape container
-		shapesContainer = ShapesContainer(*this);
+		shapesContainer = ShapesContainer(*this, animationContainer);
 		// Initialize the scoreContainer
 		scoreContainer = ScoreContainer();
 		// Initialize the shape Generator
@@ -196,6 +200,7 @@ public:
 	}
 
 	void drawTheScreen(){
+		animationContainer.drawAnimationsFrame();
 		shapesContainer.drawAllShapes();
 		drawInfoText();
 	}
@@ -224,6 +229,7 @@ public:
 			// Clear the Screen where it needs to
 			clearInfoText();
 			shapesContainer.hideAll();
+			animationContainer.clearAnimations();
 
 			// Shape Generation
 			shapeGenerator.runShapeGenerationFrame();

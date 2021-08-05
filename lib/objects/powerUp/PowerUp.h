@@ -11,8 +11,8 @@ protected:
 public:
 	PowerUp()
 	: Triangle(){}
-	PowerUp(olc::PixelGameEngine& pge, olc::vi2d& pos, int _speed, const olc::Pixel& _color, int newHeight, Direction directionCode)
-	: Triangle(pge, pos, _speed, _color, newHeight), dir(directionCode){}
+	PowerUp(olc::PixelGameEngine& pge, AnimationContainer& ac, olc::vi2d& pos, int _speed, const olc::Pixel& _color, int newHeight, Direction directionCode)
+	: Triangle(pge, ac, pos, _speed, _color, newHeight), dir(directionCode){}
 
 	void move() override {
 		switch(dir){

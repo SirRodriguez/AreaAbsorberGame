@@ -18,8 +18,8 @@ protected:
 public:
 	Needle()
 	: Line(){}
-	Needle(olc::PixelGameEngine& pge, olc::vi2d& pos, int _speed, const olc::Pixel& _color, int _dx, int _dy, Direction directionCode)
-	: Line(pge, pos, _speed, _color, _dx, _dy), dir(directionCode), aura(Aura(pge, pos, 0, olc::RED, getLength() / 2, 25)){}
+	Needle(olc::PixelGameEngine& pge, AnimationContainer& ac, olc::vi2d& pos, int _speed, const olc::Pixel& _color, int _dx, int _dy, Direction directionCode)
+	: Line(pge, ac, pos, _speed, _color, _dx, _dy), dir(directionCode), aura(Aura(pge, ac, pos, 0, olc::RED, getLength() / 2, 25)){}
 
 	void move(){
 		switch(dir){

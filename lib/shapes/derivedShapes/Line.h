@@ -14,8 +14,8 @@ protected:
 public:
 	Line()
 	: Shape(), dx(0), dy(0){}
-	Line(olc::PixelGameEngine& pge, olc::vi2d& pos, int _speed, const olc::Pixel& _color, int _dx, int _dy)
-	: Shape(pge, pos, _speed, _color), dx(_dx), dy(_dy){}
+	Line(olc::PixelGameEngine& pge, AnimationContainer& ac, olc::vi2d& pos, int _speed, const olc::Pixel& _color, int _dx, int _dy)
+	: Shape(pge, ac, pos, _speed, _color), dx(_dx), dy(_dy){}
 
 	// Moving ---
 	virtual void move() = 0;

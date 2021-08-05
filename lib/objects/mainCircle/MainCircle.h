@@ -65,12 +65,12 @@ protected:
 public:
 	MainCircle()
 	: Circle(), lives(0), trapSquare(TrapSquare()), car(Car()), buddy(BuddyCircle()), dir(Direction::DOWN){}
-	MainCircle(olc::PixelGameEngine& pge, olc::vi2d& pos, int _speed, const olc::Pixel& _color, int newRadius, int newLives, const olc::Pixel& carColor, const olc::Pixel& wheelColor, int carRadius, int buddySpeed, const olc::Pixel& buddyColor)
-	: Circle(pge, pos, _speed, _color, newRadius), 
+	MainCircle(olc::PixelGameEngine& pge, AnimationContainer& ac, olc::vi2d& pos, int _speed, const olc::Pixel& _color, int newRadius, int newLives, const olc::Pixel& carColor, const olc::Pixel& wheelColor, int carRadius, int buddySpeed, const olc::Pixel& buddyColor)
+	: Circle(pge, ac, pos, _speed, _color, newRadius), 
 		lives(newLives), 	
-		trapSquare(TrapSquare(pge, pos, _speed, _color, newRadius)), 
-		car(Car(pge, pos, _speed, carColor, wheelColor, carRadius)),
-		buddy(BuddyCircle(pge, pos, buddySpeed, buddyColor, 0, 0)),
+		trapSquare(TrapSquare(pge, ac, pos, _speed, _color, newRadius)), 
+		car(Car(pge, ac, pos, _speed, carColor, wheelColor, carRadius)),
+		buddy(BuddyCircle(pge, ac, pos, buddySpeed, buddyColor, 0, 0)),
 		dir(Direction::DOWN){}
 
 	// Lives

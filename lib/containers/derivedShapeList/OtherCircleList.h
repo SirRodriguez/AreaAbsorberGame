@@ -14,14 +14,14 @@ protected:
 	uint8_t default_max_radius;
 
 	virtual void make(olc::vi2d _loc, Direction dirCode) override {
-		otherCircle.push_back(OtherCircle(*pixelGameEngine, _loc, default_speed, default_color, rand() % default_max_radius, dirCode));
+		otherCircle.push_back(OtherCircle(*pixelGameEngine, *animationContainer, _loc, default_speed, default_color, rand() % default_max_radius, dirCode));
 	}
 
 public:
 	OtherCircleList()
 	: ShapeList(ShapeType::ENEMY){}
-	OtherCircleList(olc::PixelGameEngine& pge, olc::Pixel _color, uint8_t _speed, uint8_t _radius)
-	: ShapeList(pge, ShapeType::ENEMY), default_color(_color), default_speed(_speed), default_max_radius(_radius){}
+	OtherCircleList(olc::PixelGameEngine& pge, AnimationContainer& ac, olc::Pixel _color, uint8_t _speed, uint8_t _radius)
+	: ShapeList(pge, ac, ShapeType::ENEMY), default_color(_color), default_speed(_speed), default_max_radius(_radius){}
 
 	virtual void deleteAll() override {
 		otherCircle.clear();

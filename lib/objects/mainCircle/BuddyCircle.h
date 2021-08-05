@@ -37,8 +37,8 @@ protected:
 public:
 	BuddyCircle()
 	: Circle(), lives(0){}
-	BuddyCircle(olc::PixelGameEngine& pge, olc::vi2d& pos, int _speed, const olc::Pixel& _color, int newRadius, int newLives)
-	: Circle(pge, pos, _speed, _color, newRadius), lives(newLives){}
+	BuddyCircle(olc::PixelGameEngine& pge, AnimationContainer& ac, olc::vi2d& pos, int _speed, const olc::Pixel& _color, int newRadius, int newLives)
+	: Circle(pge, ac, pos, _speed, _color, newRadius), lives(newLives){}
 
 	// Life ---
 	bool alive(){
