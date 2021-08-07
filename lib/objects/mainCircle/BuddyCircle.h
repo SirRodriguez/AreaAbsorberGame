@@ -1,6 +1,7 @@
 #ifndef BUDDYCIRCLE_H
 #define BUDDYCIRCLE_H
 
+#include "../../Direction.h"
 #include "../../shapes/derivedShapes/Circle.h"
 
 // Forward declaration for this function only
@@ -34,6 +35,20 @@ protected:
 		}
 	}
 
+	void createHoveringTextAnimation(std::string text, Direction dir){
+		int numFrames = 60;
+		int dist = 50;
+		int scale = 2;
+
+		olc::vi2d pos;
+		switch(dir){
+			case Direction::UP: pos = position + olc::vi2d(0, -getRadius()); break;
+			case Direction::DOWN: pos = position + olc::vi2d(0, getRadius()); break;
+			default: pos = position + olc::vi2d(0, -getRadius()); break;
+		}
+		animationContainer->addHoveringTextAnimation(*pixelGameEngine, pos, numFrames, color, text, dist, scale, dir);
+	}
+
 public:
 	BuddyCircle()
 	: Circle(), lives(0){}
@@ -52,30 +67,16 @@ public:
 		setRadius(0);
 	}
 	void addLife(int amount){
-		// Create the hovering text animation
-		int numFrames = 60;
-		std::string text = "+" + std::to_string(amount);
-		int upHeight = 50;
-		int scale = 2;
-		olc::vi2d pos = position + olc::vi2d(0, -getRadius());
-		animationContainer->addHoveringTextAnimation(*pixelGameEngine, pos, numFrames, color, text, upHeight, scale);
-
-		// Increment the amount
+		createHoveringTextAnimation("+" + std::to_string(amount), Direction::UP);
 		lives += amount;
 	}
 	void subtractLife(int amount){
-		// Create the hovering text animation
-		int numFrames = 60;
-		std::string text = "-" + std::to_string(amount);
-		int upHeight = 50;
-		int scale = 2;
-		olc::vi2d pos = position + olc::vi2d(0, -getRadius());
-		animationContainer->addHoveringTextAnimation(*pixelGameEngine, pos, numFrames, olc::RED, text, upHeight, scale);
+		createHoveringTextAnimation("-" + std::to_string(amount), Direction::DOWN);
 
 		if(alive()){
 			lives -= amount;
 			// If it dies
-			if(!alive()){
+			if(notAlive()){
 				setRadius(0);
 			}
 		}
