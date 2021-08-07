@@ -8,15 +8,14 @@ protected:
 	int maxFrames;
 	int currentFrame;
 
-	void incrementFrame(){ ++currentFrame; }
-	void decreaseFrame(){ --currentFrame; }
-
 public:
 	Animation()
 	: pixelGameEngine(nullptr), position(olc::vi2d(0,0)), maxFrames(0), currentFrame(0){}
 	Animation(olc::PixelGameEngine& pge, olc::vi2d& pos, int newmaxFrames)
 	: pixelGameEngine(&pge), position(pos), maxFrames(newmaxFrames), currentFrame(0){}
 
+	void incrementFrame(){ ++currentFrame; }
+	void decrementFrame(){ --currentFrame; }
 	virtual void drawFrame() = 0;
 	virtual void clear() = 0;
 

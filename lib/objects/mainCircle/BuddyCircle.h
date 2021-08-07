@@ -52,9 +52,26 @@ public:
 		setRadius(0);
 	}
 	void addLife(int amount){
+		// Create the hovering text animation
+		int numFrames = 60;
+		std::string text = "+" + std::to_string(amount);
+		int upHeight = 50;
+		int scale = 2;
+		olc::vi2d pos = position + olc::vi2d(0, -getRadius());
+		animationContainer->addHoveringTextAnimation(*pixelGameEngine, pos, numFrames, color, text, upHeight, scale);
+
+		// Increment the amount
 		lives += amount;
 	}
 	void subtractLife(int amount){
+		// Create the hovering text animation
+		int numFrames = 60;
+		std::string text = "-" + std::to_string(amount);
+		int upHeight = 50;
+		int scale = 2;
+		olc::vi2d pos = position + olc::vi2d(0, -getRadius());
+		animationContainer->addHoveringTextAnimation(*pixelGameEngine, pos, numFrames, olc::RED, text, upHeight, scale);
+
 		if(alive()){
 			lives -= amount;
 			// If it dies
