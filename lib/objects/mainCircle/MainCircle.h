@@ -16,6 +16,8 @@ protected:
 	Direction dir;
 
 	int lives;
+	int initialRadius;
+	int baseSpeed;
 
 	int getTrappedSpeed(){ return speed / 2; }
 
@@ -64,11 +66,13 @@ protected:
 
 public:
 	MainCircle()
-	: Circle(), lives(0), trapSquare(TrapSquare()), car(Car()), buddy(BuddyCircle()), dir(Direction::DOWN){}
-	MainCircle(olc::PixelGameEngine& pge, AnimationContainer& ac, olc::vi2d& pos, int _speed, const olc::Pixel& _color, int newRadius, int newLives, const olc::Pixel& carColor, const olc::Pixel& wheelColor, int carRadius, int buddySpeed, const olc::Pixel& buddyColor)
-	: Circle(pge, ac, pos, _speed, _color, newRadius), 
-		lives(newLives), 	
-		trapSquare(TrapSquare(pge, ac, pos, _speed, _color, newRadius)), 
+	: Circle(), lives(0), initialRadius(0), baseSpeed(0), trapSquare(TrapSquare()), car(Car()), buddy(BuddyCircle()), dir(Direction::DOWN){}
+	MainCircle(olc::PixelGameEngine& pge, AnimationContainer& ac, olc::vi2d& pos, int _speed, const olc::Pixel& _color, int _initialRadius, int newLives, const olc::Pixel& carColor, const olc::Pixel& wheelColor, int carRadius, int buddySpeed, const olc::Pixel& buddyColor)
+	: Circle(pge, ac, pos, _speed, _color, _initialRadius), 
+		lives(newLives),
+		initialRadius(_initialRadius),
+		baseSpeed(_speed),
+		trapSquare(TrapSquare(pge, ac, pos, _speed, _color, _initialRadius)), 
 		car(Car(pge, ac, pos, _speed, carColor, wheelColor, carRadius)),
 		buddy(BuddyCircle(pge, ac, pos, buddySpeed, buddyColor, 0, 0)),
 		dir(Direction::DOWN){}
@@ -79,6 +83,13 @@ public:
 	// Movement
 	void move() override {
 		if(trapSquare.isNotActive()){
+			if(shiftButton.bHeld && getRadius() > 1){
+				speed = baseSpeed * 2;
+				grow(-1);
+			}else{
+				speed = baseSpeed;
+			}
+
 			// Move the main circle
 			if(upButton.bHeld && belowTopOfScreen()){
 				moveUp();

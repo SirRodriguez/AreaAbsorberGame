@@ -7,7 +7,6 @@
 // A power up balloon that will raise you up from all the balls
 // There is a towel that will go over you or your pet and will block all the needles and other balls. still get score.
 // Power up that freezes other balls
-// A Boss Level
 // Star that makes you invincible
 // Wave that you can ride that will absorbe other circles
 // slime that you turn into the size of the slime and absorbs other circle, then you turn into the size of the slime.

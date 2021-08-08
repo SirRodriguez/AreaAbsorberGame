@@ -12,5 +12,6 @@ inline olc::HWButton leftButton;
 inline olc::HWButton rightButton;
 inline olc::HWButton spaceButton;
 inline olc::HWButton escButton;
+inline olc::HWButton shiftButton;
 
 #endif

@@ -44,7 +44,13 @@ protected:
 		switch(dir){
 			case Direction::UP: pos = position + olc::vi2d(0, -getRadius()); break;
 			case Direction::DOWN: pos = position + olc::vi2d(0, getRadius()); break;
-			default: pos = position + olc::vi2d(0, -getRadius()); break;
+			case Direction::LEFT: pos = position + olc::vi2d(-getRadius(), 0); break;
+			case Direction::RIGHT: pos = position + olc::vi2d(getRadius(), 0); break;
+			case Direction::UPLEFT: pos = position + olc::vi2d(-getRadius(), -getRadius()); break;
+			case Direction::UPRIGHT: pos = position + olc::vi2d(getRadius(), -getRadius()); break;
+			case Direction::DOWNLEFT: pos = position + olc::vi2d(-getRadius(), getRadius()); break;
+			case Direction::DOWNRIGHT: pos = position + olc::vi2d(getRadius(), getRadius()); break;
+			default: pos = position; break;
 		}
 		animationContainer->addHoveringTextAnimation(*pixelGameEngine, pos, numFrames, color, text, dist, scale, dir);
 	}

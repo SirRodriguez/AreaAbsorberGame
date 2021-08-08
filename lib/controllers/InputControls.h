@@ -15,6 +15,9 @@ class InputControls{
 
 		// Check the escape button
 		escButton = pixelGameEngine->GetKey(olc::Key::ESCAPE);
+
+		// Check the shift button
+		shiftButton = pixelGameEngine->GetKey(olc::Key::SHIFT);
 	}
 
 public:
