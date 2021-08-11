@@ -49,6 +49,12 @@ protected:
 		}
 	}
 
+	void rotateDegOffset(double deg){
+		degOffset += deg;
+		if(degOffset > 360.0) degOffset -= 360.0;
+		if(degOffset < 0.0) degOffset += 360.0;
+	}
+
 public:
 	Flower()
 	: Circle(){}

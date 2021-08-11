@@ -75,6 +75,60 @@ public:
 		}
 	}
 
+	// 
+	// Movemets to shape
+	// 
+
+	virtual void attract(ShapeList& list) override {
+		list.attract(boss);
+	}
+
+	virtual void attract(Circle& c) override {
+		if(!collision(c, boss)){
+			boss.moveToPos(c.getPosition(), getSuckSpeed(boss.getPosition(), c.getPosition()));
+			c.moveToPos(boss.getPosition(), getSuckSpeed(c.getPosition(), boss.getPosition()));
+		}
+	}
+
+	virtual void attract(Flower& f) override {
+		if(!collision(f, boss)){
+			boss.moveToPos(f.getPosition(), getSuckSpeed(boss.getPosition(), f.getPosition()));
+			f.moveToPos(boss.getPosition(), getSuckSpeed(f.getPosition(), boss.getPosition()));
+		}
+	}
+
+	virtual void attract(Line& l) override {
+		if(!collision(l, boss)){
+			boss.moveToPos(l.getPosition(), getSuckSpeed(boss.getPosition(), l.getPosition()));
+			l.moveToPos(boss.getPosition(), getSuckSpeed(l.getPosition(), boss.getPosition()));
+		}
+	}
+
+	virtual void attract(Square& s) override {
+		if(!collision(s, boss)){
+			boss.moveToPos(s.getPosition(), getSuckSpeed(boss.getPosition(), s.getPosition()));
+			s.moveToPos(boss.getPosition(), getSuckSpeed(s.getPosition(), boss.getPosition()));
+		}
+	}
+
+	virtual void attract(Triangle& t) override {
+		if(!collision(t, boss)){
+			boss.moveToPos(t.getPosition(), getSuckSpeed(boss.getPosition(), t.getPosition()));
+			t.moveToPos(boss.getPosition(), getSuckSpeed(t.getPosition(), boss.getPosition()));
+		}
+	}
+
+	virtual void attract(MainCircle& mc) override {
+		if(!collision(mc, boss)){
+			boss.moveToPos(mc.getPosition(), getSuckSpeed(boss.getPosition(), mc.getPosition()));
+			mc.moveToPos(boss.getPosition(), getSuckSpeed(mc.getPosition(), boss.getPosition()));
+		}
+	}
+
+	// 
+	// Collision Detections
+	// 
+
 	virtual int checkCollisionsWith(ShapeList& list, bool removeOnCollision = true) override {
 		if(alive && list.checkCollisionsWith(boss) > 0){
 			int radius = boss.getRadius();

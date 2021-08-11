@@ -16,6 +16,7 @@ class ShapeGenerator{
 	int likelyHoodOfTraps = 500;
 	int likelyHoodOfCircleCars = 2000;
 	int likelyHoodOfNukes = 3000;
+	int likelyHoodOfVortex = 3000;
 
 	bool generateChecker(int likelyHood){
 		int module = likelyHood - (scoreContainer->getLevel() - 1) * likelyHood / 10;
@@ -102,6 +103,11 @@ class ShapeGenerator{
 		}
 	}
 
+	void generateVortex(){
+		if(generateChecker(likelyHoodOfVortex))
+			shapesContainer->addVortex(makeDirectionCode());
+	}
+
 public:
 	ShapeGenerator()
 	: shapesContainer(nullptr), scoreContainer(nullptr){
@@ -121,6 +127,7 @@ public:
 		generateCircleCars();
 		generateNukes();
 		generateBoss();
+		generateVortex();
 	}
 };
 

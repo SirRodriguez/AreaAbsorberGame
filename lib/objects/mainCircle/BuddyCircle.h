@@ -13,13 +13,13 @@ class BuddyCircle: public Circle{
 protected:
 	int lives;
 
-	// Internal movements
-	void moveToCord(int x, int y, int pixels){
-		movePosition(olc::vi2d( x < position.x ? -pixels : pixels, y < position.y ? -pixels : pixels ));
-	}
-	void moveToPos(const olc::vi2d& pos, int pixels){
-		moveToCord(pos.x, pos.y, pixels);
-	}
+	// // Internal movements
+	// void moveToCord(int x, int y, int pixels){
+	// 	movePosition(olc::vi2d( x < position.x ? -pixels : pixels, y < position.y ? -pixels : pixels ));
+	// }
+	// void moveToPos(const olc::vi2d& pos, int pixels){
+	// 	moveToCord(pos.x, pos.y, pixels);
+	// }
 
 	// Drawing ---
 	void drawWithColor(const olc::Pixel& colorToDraw) override {

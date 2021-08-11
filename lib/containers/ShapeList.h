@@ -12,6 +12,30 @@ protected:
 
 	ShapeType shapeType;
 
+	double getDistance(const olc::vi2d& p1, const olc::vi2d& p2){
+		return std::sqrt(square(p1.x - p2.x) + square(p1.y - p2.y));
+	}
+
+	int getSuckSpeed(double dist){
+		double maxD = 200.0;
+
+		if(dist <= maxD * 0.25){
+			return 4;
+		}else if(dist <= maxD * 0.50){
+			return 3;
+		}else if(dist <= maxD * 0.75){
+			return 2;
+		}else if(dist <= maxD){
+			return 1;
+		}else{
+			return 0;
+		}
+	}
+
+	int getSuckSpeed(const olc::vi2d& p1, const olc::vi2d& p2){
+		return getSuckSpeed(getDistance(p1, p2));
+	}
+
 	virtual void make(olc::vi2d _loc, Direction dirCode) = 0;
 
 public:
@@ -22,7 +46,12 @@ public:
 	ShapeList(olc::PixelGameEngine& pge, AnimationContainer& ac, ShapeType typeCode)
 	: pixelGameEngine(&pge), animationContainer(&ac), shapeType(typeCode){}
 
+	ShapeType getShapeType(){ return shapeType; }
+	bool isObject(){ return shapeType == ShapeType::OBJECT; }
 	bool isEnemy(){ return shapeType == ShapeType::ENEMY; }
+	bool isBuddy(){ return shapeType == ShapeType::BUDDY; }
+	bool isPowerUp(){ return shapeType == ShapeType::POWERUP; }
+	bool isMainCircle(){ return shapeType == ShapeType::MAINCIRCLE; }
 
 	// Direction code tells the direction where the circle is comming from on the screen
 	// It is a bitwise code, so:
@@ -91,6 +120,15 @@ public:
 	virtual void hideAll() = 0;
 	virtual void drawAll() = 0;
 	virtual void moveAll() = 0;
+
+	virtual void attract(ShapeList& list) = 0;
+	virtual void attract(Circle& c) = 0;
+	virtual void attract(Flower& f) = 0;
+	virtual void attract(Line& l) = 0;
+	virtual void attract(Square& s) = 0;
+	virtual void attract(Triangle& t) = 0;
+	virtual void attract(MainCircle& mc) = 0;
+
 	virtual int checkCollisionsWith(ShapeList& list, bool removeOnCollision = true) = 0;
 	virtual int checkCollisionsWith(Circle& c, bool removeOnCollision = true) = 0;
 	virtual int checkCollisionsWith(Flower& f, bool removeOnCollision = true) = 0;

@@ -13,6 +13,7 @@
 #include "derivedShapeList/PowerUpCircleList.h"
 #include "derivedShapeList/MainCircleList.h"
 #include "derivedShapeList/BossCircleList.h"
+#include "derivedShapeList/VortexList.h"
 
 #include "../Direction.h"
 
@@ -139,6 +140,9 @@ public:
 
 		shapeLists.push_back(new BossCircleList(pge, ac, bossColor, bossSpeed));
 		#define bossCircleDef dynamic_cast<BossCircleList*>(shapeLists[9])
+
+		shapeLists.push_back(new VortexList(pge, ac, olc::VERY_DARK_MAGENTA, olc::VERY_DARK_MAGENTA, 1, 25));
+		#define vortexDef dynamic_cast<VortexList*>(shapeLists[10])
 	}
 
 	~ShapesContainer(){}
@@ -197,6 +201,7 @@ public:
 	void addCircleCar(uint8_t dirFromCode){ circleCarsDef->add(dirFromCode); }
 	void addNuke(uint8_t dirFromCode){ nukesDef->add(dirFromCode); }
 	void addBoss(uint8_t dirFromCode){ bossCircleDef->add(dirFromCode); }
+	void addVortex(uint8_t dirFromCode){ vortexDef->add(dirFromCode); }
 
 	void addPowerUpCircles(){
 		powerUpCirclesDef->add(mainCircleDef->getPosition(), mainCircleDef->getRadius());
@@ -207,8 +212,14 @@ public:
 	// 
 
 	void moveAllShapes(){
-		for(auto it = shapeLists.begin(); it != shapeLists.end(); ++it)
+		for(auto it = shapeLists.begin(); it != shapeLists.end(); ++it){
 			(*it)->moveAll();
+
+			// Make enemies and main circle move towards vortex
+			if((*it)->isEnemy() || (*it)->isMainCircle() || (*it)->isBuddy()){
+				(*it)->attract(*vortexDef);
+			}
+		}
 	}
 
 	// 

@@ -2,6 +2,7 @@
 #define SHAPETYPE_H
 
 enum ShapeType{
+	OBJECT,
 	ENEMY,
 	BUDDY,
 	POWERUP,

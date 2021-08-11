@@ -50,6 +50,67 @@ public:
 		}
 	}
 
+	// 
+	// Movemets to shape
+	// 
+
+	virtual void attract(ShapeList& list) override {
+		for(auto it = powerUps.begin(); it != powerUps.end(); ++it)
+			list.attract(*it);
+	}
+
+	virtual void attract(Circle& c) override {
+		for(auto it = powerUps.begin(); it != powerUps.end(); ++it)
+			if(!collision(c, *it)){
+				it->moveToPos(c.getPosition(), getSuckSpeed(it->getPosition(), c.getPosition()));
+				c.moveToPos(it->getPosition(), getSuckSpeed(c.getPosition(), it->getPosition()));
+			}
+	}
+
+	virtual void attract(Flower& f) override {
+		for(auto it = powerUps.begin(); it != powerUps.end(); ++it)
+			if(!collision(f, *it)){
+				it->moveToPos(f.getPosition(), getSuckSpeed(it->getPosition(), f.getPosition()));
+				f.moveToPos(it->getPosition(), getSuckSpeed(f.getPosition(), it->getPosition()));
+			}
+	}
+
+	virtual void attract(Line& l) override {
+		for(auto it = powerUps.begin(); it != powerUps.end(); ++it)
+			if(!collision(l, *it)){
+				it->moveToPos(l.getPosition(), getSuckSpeed(it->getPosition(), l.getPosition()));
+				l.moveToPos(it->getPosition(), getSuckSpeed(l.getPosition(), it->getPosition()));
+			}
+	}
+
+	virtual void attract(Square& s) override {
+		for(auto it = powerUps.begin(); it != powerUps.end(); ++it)
+			if(!collision(s, *it)){
+				it->moveToPos(s.getPosition(), getSuckSpeed(it->getPosition(), s.getPosition()));
+				s.moveToPos(it->getPosition(), getSuckSpeed(s.getPosition(), it->getPosition()));
+			}
+	}
+
+	virtual void attract(Triangle& t) override {
+		for(auto it = powerUps.begin(); it != powerUps.end(); ++it)
+			if(!collision(t, *it)){
+				it->moveToPos(t.getPosition(), getSuckSpeed(it->getPosition(), t.getPosition()));
+				t.moveToPos(it->getPosition(), getSuckSpeed(t.getPosition(), it->getPosition()));
+			}
+	}
+
+	virtual void attract(MainCircle& mc) override {
+		for(auto it = powerUps.begin(); it != powerUps.end(); ++it)
+			if(!collision(mc, *it)){
+				it->moveToPos(mc.getPosition(), getSuckSpeed(it->getPosition(), mc.getPosition()));
+				mc.moveToPos(it->getPosition(), getSuckSpeed(mc.getPosition(), it->getPosition()));
+			}
+	}
+
+	// 
+	// Collision Detections
+	// 
+
 	virtual int checkCollisionsWith(ShapeList& list, bool removeOnCollision = true) override {
 		for(auto it = powerUps.begin(); it != powerUps.end(); ++it){
 			if(list.checkCollisionsWith(*it) > 0){

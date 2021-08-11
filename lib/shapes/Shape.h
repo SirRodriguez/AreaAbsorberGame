@@ -53,6 +53,12 @@ public:
 
 	// Moving
 	virtual void move() = 0;
+	void moveToCord(int x, int y, int pixels){
+		movePosition(olc::vi2d( x < position.x ? -pixels : pixels, y < position.y ? -pixels : pixels ));
+	}
+	void moveToPos(const olc::vi2d& pos, int pixels){
+		moveToCord(pos.x, pos.y, pixels);
+	}
 };
 
 #endif

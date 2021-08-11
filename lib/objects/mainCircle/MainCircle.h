@@ -83,6 +83,7 @@ public:
 	// Movement
 	void move() override {
 		if(trapSquare.isNotActive()){
+			// Check if the shift is held for speed boost
 			if(shiftButton.bHeld && getRadius() > 1){
 				speed = baseSpeed * 2;
 				grow(-1);

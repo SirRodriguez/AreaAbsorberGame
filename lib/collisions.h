@@ -1,5 +1,5 @@
-#ifndef UTILS_H
-#define UTILS_H
+#ifndef COLLISIONS_H
+#define COLLISIONS_H
 
 #include "./objects/mainCircle/MainCircle.h"
 #include "./shapes/derivedShapes/Triangle.h"
