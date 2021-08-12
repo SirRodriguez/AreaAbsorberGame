@@ -43,7 +43,7 @@ public:
 		// Initialize the hape container
 		shapesContainer = ShapesContainer(*this, animationContainer);
 		// Initialize the scoreContainer
-		scoreContainer = ScoreContainer();
+		scoreContainer = ScoreContainer(*this, animationContainer);
 		// Initialize the shape Generator
 		shapeGenerator = ShapeGenerator(shapesContainer, scoreContainer);
 	}
