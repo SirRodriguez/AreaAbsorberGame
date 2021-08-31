@@ -115,32 +115,34 @@ public:
 			)
 		); 
 		#define mainCircleDef dynamic_cast<MainCircleList*>(shapeLists[0])
-
-		// Power ups
+		// Power Ups
 		shapeLists.push_back(new PowerUpList(pge, ac, powerUpColor, powerUpSpeed, powerUpHeight));
 		#define powerUpsDef dynamic_cast<PowerUpList*>(shapeLists[1])
+		// Circle Car power ups
 		shapeLists.push_back(new CircleCarList(pge, ac, circleCarColor, circleCarWheelColor, circleCarSpeed, circleCarRadius));
 		#define circleCarsDef dynamic_cast<CircleCarList*>(shapeLists[2])
+		// Nukes
 		shapeLists.push_back(new NukeList(pge, ac, nukeColor, nukePedalColor, nukeSpeed, nukeRadius));
 		#define nukesDef dynamic_cast<NukeList*>(shapeLists[3])
+		// Buddy Power ups
 		shapeLists.push_back(new BuddyPowerUpList(pge, ac, buddyPowerUpColor, buddyPowerUpSpeed, buddyPowerUpLength));
 		#define buddyPowerUpsDef dynamic_cast<BuddyPowerUpList*>(shapeLists[4])
-
-		// Buddies
+		// Power Up Circles
 		shapeLists.push_back(new PowerUpCircleList(pge, ac, powerUpCircleColor, powerUpCircleSpeed, 0));
 		#define powerUpCirclesDef dynamic_cast<PowerUpCircleList*>(shapeLists[5])
-
-		// Enemies
+		// Other circles
 		shapeLists.push_back(new OtherCircleList(pge, ac, otherCircleColor, otherCircleSpeed, otherCircleMaxRadius));
 		#define otherCirclesDef dynamic_cast<OtherCircleList*>(shapeLists[6])
+		// Traps
 		shapeLists.push_back(new TrapList(pge, ac, trapColor, trapSpeed, trapLength));
 		#define trapsDef dynamic_cast<TrapList*>(shapeLists[7])
+		// Needles
 		shapeLists.push_back(new NeedleList(pge, ac, needleColor, needleSpeed, maxNeedleLength));
 		#define needlesDef dynamic_cast<NeedleList*>(shapeLists[8])
-
+		// Boss Circle
 		shapeLists.push_back(new BossCircleList(pge, ac, bossColor, bossSpeed));
 		#define bossCircleDef dynamic_cast<BossCircleList*>(shapeLists[9])
-
+		// Vortexes
 		shapeLists.push_back(new VortexList(pge, ac, olc::VERY_DARK_MAGENTA, olc::VERY_DARK_MAGENTA, 1, 25));
 		#define vortexDef dynamic_cast<VortexList*>(shapeLists[10])
 	}
@@ -159,7 +161,7 @@ public:
 		mainCircleDef->setRadius(initialMainCircleSize);
 
 		for(auto it = shapeLists.begin(); it != shapeLists.end(); ++it)
-			if((*it)->isEnemy())
+			if((*it)->isEnemy() || (*it)->isObject())
 				(*it)->deleteAll();
 	}
 
@@ -216,9 +218,8 @@ public:
 			(*it)->moveAll();
 
 			// Make enemies and main circle move towards vortex
-			if((*it)->isEnemy() || (*it)->isMainCircle() || (*it)->isBuddy()){
+			if((*it)->isEnemy() || (*it)->isMainCircle() || (*it)->isBuddy())
 				(*it)->attract(*vortexDef);
-			}
 		}
 	}
 

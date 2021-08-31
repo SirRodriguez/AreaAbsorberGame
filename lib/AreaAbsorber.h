@@ -1,6 +1,7 @@
 #ifndef AREAABSORBER_H
 #define AREAABSORBER_H
 
+#include "GlobalConstants.h"
 #include "GlobalFlags.h"
 
 #include "controllers/InputControls.h"
@@ -205,9 +206,17 @@ public:
 		drawInfoText();
 	}
 
+	void clearTheScreen(){
+		clearInfoText();
+		shapesContainer.hideAll();
+		animationContainer.clearAnimations();
+	}
+
 
 public:
 	bool OnUserCreate() override {
+		whiteCircleSprite = new olc::Sprite(whiteCircleFile);
+
 		// Called once at the start, so create things here
 		constructObjects();
 		initializeGame();
@@ -227,9 +236,7 @@ public:
 			}
 		}else{
 			// Clear the Screen where it needs to
-			clearInfoText();
-			shapesContainer.hideAll();
-			animationContainer.clearAnimations();
+			clearTheScreen();
 
 			// Shape Generation
 			shapeGenerator.runShapeGenerationFrame();

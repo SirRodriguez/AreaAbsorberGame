@@ -7,7 +7,7 @@
 
 class Flower: public Circle{
 protected:
-	std::vector<Pedal> pedals;
+	std::list<Pedal*> pedals;
 	int numPedals;
 	double degOffset;
 
@@ -28,9 +28,9 @@ protected:
 
 		for(auto it = pedals.begin(); it != pedals.end(); ++it){
 			if(colorToDraw == olc::WHITE){
-				it->clear();
+				(*it)->clear();
 			}else{
-				it->draw();
+				(*it)->draw();
 			}
 		}
 	}
@@ -43,7 +43,7 @@ protected:
 			for(auto it = pedals.begin(); it != pedals.end(); ++it){
 				olc::vi2d locOffset = getLocationOffsetFromDeg(deg);
 				olc::vi2d loc = position + locOffset;
-				it->setPosition(loc);
+				(*it)->setPosition(loc);
 				deg += increment;
 			}
 		}
@@ -67,29 +67,34 @@ public:
 			for(int i = 0; i < numPedals; ++i){
 				olc::vi2d locOffset = getLocationOffsetFromDeg(deg);
 				olc::vi2d loc = pos + locOffset;
-				pedals.push_back(Pedal(pge, ac, loc, _speed, _pedalColor, getPedalRadius()));
+				pedals.push_back(new Pedal(pge, ac, loc, _speed, _pedalColor, getPedalRadius()));
 				deg += increment;
 			}
 		}
+	}
+
+	~Flower(){
+		for(auto it = pedals.begin(); it != pedals.end(); ++it)
+			delete *it;
 	}
 
 	// Moving
 	virtual void move() = 0;
 
 	// Pedals
-	virtual std::vector<Pedal>& getPedals(){ return pedals; }
+	virtual std::list<Pedal*>& getPedals(){ return pedals; }
 
 	// growing
 	virtual void setRadius(int r) override {
 		radius = r;
 		for(auto it = pedals.begin(); it != pedals.end(); ++it){
-			it->setRadius(getPedalRadius(r));
+			(*it)->setRadius(getPedalRadius(r));
 		}
 	}
 	virtual void addRadius(int r) override {
 		radius += r;
 		for(auto it = pedals.begin(); it != pedals.end(); ++it){
-			it->addRadius(getPedalRadius(r));
+			(*it)->addRadius(getPedalRadius(r));
 		}
 	}
 

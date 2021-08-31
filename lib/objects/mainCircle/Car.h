@@ -17,11 +17,8 @@ protected:
 			pixelGameEngine->FillCircle(position, radius, colorToDraw);
 
 			for(auto it = pedals.begin(); it != pedals.end(); ++it){
-				if(colorToDraw == olc::WHITE){
-					it->clear();
-				}else{
-					it->draw();
-				}
+				if(colorToDraw == olc::WHITE) 	(*it)->clear();
+				else 							(*it)->draw();
 			}
 		}
 	}

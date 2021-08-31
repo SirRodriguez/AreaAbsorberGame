@@ -231,9 +231,9 @@ bool squareTriangleCollision(Square& s, Triangle& t){
 // Circle Flower Collision Functions
 // 
 
-bool circlePedalsCollision(Circle& c, std::vector<Pedal>& pedals){
+bool circlePedalsCollision(Circle& c, std::list<Pedal*>& pedals){
 	for(auto it = pedals.begin(); it != pedals.end(); ++it)
-		if(circleCircleCollision(c, *it))
+		if(circleCircleCollision(c, *(*it)))
 			return true;
 
 	return false;
@@ -247,9 +247,9 @@ bool circleFlowerCollision(Circle& c, Flower& f){
 // Line Flower Collision Functions
 // 
 
-bool linePedalsCollision(Line& l, std::vector<Pedal>& pedals){
+bool linePedalsCollision(Line& l, std::list<Pedal*>& pedals){
 	for(auto it = pedals.begin(); it != pedals.end(); ++it)
-		if(circleLineCollision(*it, l))
+		if(circleLineCollision(*(*it), l))
 			return true;
 
 	return false;
@@ -263,9 +263,9 @@ bool lineFlowerCollision(Line& l, Flower& f){
 // Triangle Flower Collision Functions
 // 
 
-bool trianglePedalsCollision(Triangle& t, std::vector<Pedal>& pedals){
+bool trianglePedalsCollision(Triangle& t, std::list<Pedal*>& pedals){
 	for(auto it = pedals.begin(); it != pedals.end(); ++it)
-		if(circleTriangleCollision(*it, t))
+		if(circleTriangleCollision(*(*it), t))
 			return true;
 
 	return false;
@@ -279,9 +279,9 @@ bool triangleFlowerCollision(Triangle& t, Flower& f){
 // Square Flower Collision Functions
 // 
 
-bool squarePedalsCollision(Square& s, std::vector<Pedal>& pedals){
+bool squarePedalsCollision(Square& s, std::list<Pedal*>& pedals){
 	for(auto it = pedals.begin(); it != pedals.end(); ++it)
-		if(circleSquareCollision(*it, s))
+		if(circleSquareCollision(*(*it), s))
 			return true;
 
 	return false;
@@ -295,10 +295,10 @@ bool squareFlowerCollision(Square& s, Flower& f){
 // Flower Flower Collision Functions
 // 
 
-bool pedalsPedalsCollision(std::vector<Pedal>& p, std::vector<Pedal>& p2){
+bool pedalsPedalsCollision(std::list<Pedal*>& p, std::list<Pedal*>& p2){
 	for(auto it = p.begin(); it != p.end(); ++it)
 		for(auto it2 = p2.begin(); it2 != p2.end(); ++it2)
-			if(circleCircleCollision(*it, *it2))
+			if(circleCircleCollision(*(*it), *(*it2)))
 				return true;
 
 	return false;

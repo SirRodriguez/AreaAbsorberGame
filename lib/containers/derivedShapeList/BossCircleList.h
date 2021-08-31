@@ -8,7 +8,7 @@
 
 class BossCircleList: public ShapeList{
 protected:
-	BossCircle boss;
+	BossCircle* boss;
 	bool alive;
 	olc::Pixel default_color;
 	uint8_t default_speed;
@@ -17,19 +17,23 @@ protected:
 		if(!alive){
 			alive = true;
 
+			// Adjust direction
+			boss->changeDirection(dirCode);
+
 			// Adjust radius
-			uint8_t radius;
+			int radius;
 			switch(dirCode){
 				case Direction::UP:
-				case Direction::DOWN: radius = pixelGameEngine->ScreenWidth(); break;
+				case Direction::DOWN: radius = pixelGameEngine->ScreenWidth() / 2; break;
 				case Direction::LEFT:
-				case Direction::RIGHT: radius = pixelGameEngine->ScreenHeight(); break;
+				case Direction::RIGHT: radius = pixelGameEngine->ScreenHeight() / 2; break;
 				case Direction::UPRIGHT:
 				case Direction::UPLEFT:
 				case Direction::DOWNLEFT:
 				case Direction::DOWNRIGHT:
-				default: radius = std::max(pixelGameEngine->ScreenWidth(), pixelGameEngine->ScreenHeight()); break;
+				default: radius = std::max(pixelGameEngine->ScreenWidth(), pixelGameEngine->ScreenHeight()) / 2; break;
 			}
+			boss->setRadius(radius);
 
 			// Adjust Location
 			switch(dirCode){
@@ -43,36 +47,40 @@ protected:
 				case Direction::DOWNRIGHT: _loc += olc::vi2d(-radius, -radius); break;
 				default: break;
 			}
-
-			boss = BossCircle(*pixelGameEngine, *animationContainer, _loc, default_speed, default_color, radius, dirCode);
+			boss->setPosition(_loc);
 		}
 	}
 
 public:
-	BossCircleList()
-	: ShapeList(ShapeType::ENEMY), alive(false){}
 	BossCircleList(olc::PixelGameEngine& pge, AnimationContainer& ac, olc::Pixel _color, uint8_t _speed)
-	: ShapeList(pge, ac, ShapeType::ENEMY), default_color(_color), default_speed(_speed), alive(false){}
+	: ShapeList(pge, ac, ShapeType::ENEMY), 
+		default_color(_color), 
+		default_speed(_speed), 
+		alive(false), 
+		boss(new BossCircle(pge, ac, olc::vi2d(0,0), _speed, _color, 0, Direction::DOWN)){}
+
+	~BossCircleList(){
+		deleteAll();
+		delete boss;
+	}
 
 	virtual void deleteAll() override {
 		alive = false;
 	}
 
 	virtual void hideAll() override {
-		if(alive) boss.clear();
+		if(alive) boss->clear();
 	}
 
 	virtual void drawAll() override {
-		if(alive) boss.draw();
+		if(alive) boss->draw();
 	}
 
 	virtual void moveAll() override {
 		if(!alive) return;
 
-		boss.move();
-		if(boss.outOfBounds()){
-			alive = false;
-		}
+		boss->move();
+		if(boss->outOfBounds()) deleteAll();
 	}
 
 	// 
@@ -80,48 +88,48 @@ public:
 	// 
 
 	virtual void attract(ShapeList& list) override {
-		list.attract(boss);
+		if(alive) list.attract(*boss);
 	}
 
 	virtual void attract(Circle& c) override {
-		if(!collision(c, boss)){
-			boss.moveToPos(c.getPosition(), getSuckSpeed(boss.getPosition(), c.getPosition()));
-			c.moveToPos(boss.getPosition(), getSuckSpeed(c.getPosition(), boss.getPosition()));
+		if(!collision(c, *boss)){
+			boss->moveToPos(c.getPosition(), getSuckSpeed(boss->getPosition(), c.getPosition()));
+			c.moveToPos(boss->getPosition(), getSuckSpeed(c.getPosition(), boss->getPosition()));
 		}
 	}
 
 	virtual void attract(Flower& f) override {
-		if(!collision(f, boss)){
-			boss.moveToPos(f.getPosition(), getSuckSpeed(boss.getPosition(), f.getPosition()));
-			f.moveToPos(boss.getPosition(), getSuckSpeed(f.getPosition(), boss.getPosition()));
+		if(!collision(f, *boss)){
+			boss->moveToPos(f.getPosition(), getSuckSpeed(boss->getPosition(), f.getPosition()));
+			f.moveToPos(boss->getPosition(), getSuckSpeed(f.getPosition(), boss->getPosition()));
 		}
 	}
 
 	virtual void attract(Line& l) override {
-		if(!collision(l, boss)){
-			boss.moveToPos(l.getPosition(), getSuckSpeed(boss.getPosition(), l.getPosition()));
-			l.moveToPos(boss.getPosition(), getSuckSpeed(l.getPosition(), boss.getPosition()));
+		if(!collision(l, *boss)){
+			boss->moveToPos(l.getPosition(), getSuckSpeed(boss->getPosition(), l.getPosition()));
+			l.moveToPos(boss->getPosition(), getSuckSpeed(l.getPosition(), boss->getPosition()));
 		}
 	}
 
 	virtual void attract(Square& s) override {
-		if(!collision(s, boss)){
-			boss.moveToPos(s.getPosition(), getSuckSpeed(boss.getPosition(), s.getPosition()));
-			s.moveToPos(boss.getPosition(), getSuckSpeed(s.getPosition(), boss.getPosition()));
+		if(!collision(s, *boss)){
+			boss->moveToPos(s.getPosition(), getSuckSpeed(boss->getPosition(), s.getPosition()));
+			s.moveToPos(boss->getPosition(), getSuckSpeed(s.getPosition(), boss->getPosition()));
 		}
 	}
 
 	virtual void attract(Triangle& t) override {
-		if(!collision(t, boss)){
-			boss.moveToPos(t.getPosition(), getSuckSpeed(boss.getPosition(), t.getPosition()));
-			t.moveToPos(boss.getPosition(), getSuckSpeed(t.getPosition(), boss.getPosition()));
+		if(!collision(t, *boss)){
+			boss->moveToPos(t.getPosition(), getSuckSpeed(boss->getPosition(), t.getPosition()));
+			t.moveToPos(boss->getPosition(), getSuckSpeed(t.getPosition(), boss->getPosition()));
 		}
 	}
 
 	virtual void attract(MainCircle& mc) override {
-		if(!collision(mc, boss)){
-			boss.moveToPos(mc.getPosition(), getSuckSpeed(boss.getPosition(), mc.getPosition()));
-			mc.moveToPos(boss.getPosition(), getSuckSpeed(mc.getPosition(), boss.getPosition()));
+		if(!collision(mc, *boss)){
+			boss->moveToPos(mc.getPosition(), getSuckSpeed(boss->getPosition(), mc.getPosition()));
+			mc.moveToPos(boss->getPosition(), getSuckSpeed(mc.getPosition(), boss->getPosition()));
 		}
 	}
 
@@ -130,9 +138,9 @@ public:
 	// 
 
 	virtual int checkCollisionsWith(ShapeList& list, bool removeOnCollision = true) override {
-		if(alive && list.checkCollisionsWith(boss) > 0){
-			int radius = boss.getRadius();
-			if(removeOnCollision) alive = false;
+		if(alive && list.checkCollisionsWith(*boss) > 0){
+			int radius = boss->getRadius();
+			if(removeOnCollision) deleteAll();
 			return radius;
 		}
 
@@ -141,9 +149,9 @@ public:
 	}
 
 	virtual int checkCollisionsWith(Circle& c, bool removeOnCollision = true) override {
-		if(alive && collision(c, boss)){
-			int radius = boss.getRadius();
-			if(removeOnCollision) alive = false;
+		if(alive && collision(c, *boss)){
+			int radius = boss->getRadius();
+			if(removeOnCollision) deleteAll();
 			return radius;
 		}
 
@@ -151,9 +159,9 @@ public:
 	}
 
 	virtual int checkCollisionsWith(Flower& f, bool removeOnCollision = true) override {
-		if(alive && collision(f, boss)){
-			int radius = boss.getRadius();
-			if(removeOnCollision) alive = false;
+		if(alive && collision(f, *boss)){
+			int radius = boss->getRadius();
+			if(removeOnCollision) deleteAll();
 			return radius;
 		}
 
@@ -161,9 +169,9 @@ public:
 	}
 
 	virtual int checkCollisionsWith(Line& l, bool removeOnCollision = true) override {
-		if(alive && collision(l, boss)){
-			int radius = boss.getRadius();
-			if(removeOnCollision) alive = false;
+		if(alive && collision(l, *boss)){
+			int radius = boss->getRadius();
+			if(removeOnCollision) deleteAll();
 			return radius;
 		}
 
@@ -171,9 +179,9 @@ public:
 	}
 
 	virtual int checkCollisionsWith(Square& s, bool removeOnCollision = true) override {
-		if(alive && collision(s, boss)){
-			int radius = boss.getRadius();
-			if(removeOnCollision) alive = false;
+		if(alive && collision(s, *boss)){
+			int radius = boss->getRadius();
+			if(removeOnCollision) deleteAll();
 			return radius;
 		}
 
@@ -181,9 +189,9 @@ public:
 	}
 
 	virtual checkCollisionsWith(Triangle& t, bool removeOnCollision = true) override {
-		if(alive && collision(t, boss)){
-			int radius = boss.getRadius();
-			if(removeOnCollision) alive = false;
+		if(alive && collision(t, *boss)){
+			int radius = boss->getRadius();
+			if(removeOnCollision) deleteAll();
 			return radius;
 		}
 
@@ -191,9 +199,9 @@ public:
 	}
 
 	virtual int checkCollisionsWith(MainCircle& mc, bool removeOnCollision = true) override {
-		if(alive && collision(mc, boss)){
-			int radius = boss.getRadius();
-			if(removeOnCollision) alive = false;
+		if(alive && collision(mc, *boss)){
+			int radius = boss->getRadius();
+			if(removeOnCollision) deleteAll();
 			return radius;
 		}
 
