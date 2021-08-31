@@ -109,28 +109,17 @@ public:
 
 	// Draw score and level
 	void drawInfoText(){
+		const olc::vf2d position = olc::vf2d(0,0);
 		const olc::Pixel textColor = olc::BLACK;
 		const std::string infoText = "Score - " + std::to_string(scoreContainer.getScore()) + " " + "Car Life - " + std::to_string(shapesContainer.getMainCircleCarLife()) + '\n'
 			+ "Level - " + std::to_string(scoreContainer.getLevel());
+		const olc::vf2d scale = olc::vf2d(1.0f, 1.0f) * textScale;
 
-		DrawString(
-			0,
-			0,
+		DrawStringDecal(
+			position,
 			infoText,
 			textColor,
-			textScale
-		);
-	}
-
-	void clearInfoText(){
-		const std::string infoText = "Score - " + std::to_string(scoreContainer.getScore()) + " " + "Car Life - " + std::to_string(shapesContainer.getMainCircleCarLife()) + '\n'
-			+ "Level - " + std::to_string(scoreContainer.getLevel());
-		DrawString(
-			0,
-			0,
-			infoText,
-			olc::WHITE,
-			textScale
+			scale
 		);
 	}
 
@@ -207,7 +196,6 @@ public:
 	}
 
 	void clearTheScreen(){
-		clearInfoText();
 		shapesContainer.hideAll();
 		animationContainer.clearAnimations();
 	}
