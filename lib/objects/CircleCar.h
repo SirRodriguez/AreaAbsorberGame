@@ -15,6 +15,8 @@ public:
 	CircleCar(olc::PixelGameEngine& pge, AnimationContainer& ac, olc::vi2d& pos, int _speed, const olc::Pixel& _color, const olc::Pixel& _wheelColor, int newRadius, Direction directionCode)
 	: Flower(pge, ac, pos, _speed, _color, _wheelColor, newRadius, NUMWHEELS, WHEELANGLEOFFSET), dir(directionCode){}
 
+	virtual ~CircleCar(){}
+
 	void move() override{
 		switch(dir){
 			case Direction::UP: moveUp(); break;

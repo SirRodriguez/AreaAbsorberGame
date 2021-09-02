@@ -10,6 +10,7 @@ protected:
 	olc::vi2d textSize;
 	int dist;
 	int scale;
+	olc::vf2d scaleV;
 	Direction dir;
 
 	olc::vi2d getLocOffset(){
@@ -27,33 +28,32 @@ protected:
 		}
 	}
 
-	void printText(){ printText(color); }
-	void printText(olc::Pixel colorToDraw){
+	void printText(){
 		olc::vi2d loc = position + getLocOffset();
-		pixelGameEngine->DrawString(
-			loc.x - scale * (textSize.x / 2),
-			loc.y - scale * (textSize.y / 2),
+		olc::vf2d scaleV = { float(scale), float(scale) };
+
+		pixelGameEngine->DrawStringDecal(
+			loc,
 			text,
-			colorToDraw,
-			scale
+			color,
+			scaleV
 		);
 	}
 
 public:
-	HoveringText()
-	: Animation(){}
 	HoveringText(olc::PixelGameEngine& pge, olc::vi2d& pos, int _maxFrames, const olc::Pixel _color, const std::string& _text, int _dist, int _scale, Direction _dir)
-	: Animation(pge, pos, _maxFrames), color(_color), text(_text), textSize(pixelGameEngine->GetTextSize(text)), dist( _dist), scale(_scale), dir(_dir){}
+	: Animation(pge, pos, _maxFrames), 
+		color(_color), 
+		text(_text), 
+		textSize(pixelGameEngine->GetTextSize(text)), 
+		dist( _dist), 
+		scale(_scale), 
+		dir(_dir), 
+		scaleV({float(_scale), float(_scale)}){}
 
-	virtual void drawFrame() override {
-		printText();
-	}
+	virtual ~HoveringText(){}
 
-	virtual void clear() override {
-		decrementFrame();
-		printText(olc::WHITE);
-		incrementFrame();
-	}
+	virtual void drawFrame() override { printText(); }
 };
 
 #endif

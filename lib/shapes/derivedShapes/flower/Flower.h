@@ -59,7 +59,7 @@ public:
 		}
 	}
 
-	~Flower(){
+	virtual ~Flower(){
 		for(auto it = pedals.begin(); it != pedals.end(); ++it)
 			delete *it;
 	}

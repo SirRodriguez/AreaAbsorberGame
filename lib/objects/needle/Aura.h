@@ -11,6 +11,8 @@ public:
 	Aura(olc::PixelGameEngine& pge, AnimationContainer& ac, olc::vi2d pos, int _speed, const olc::Pixel& _color, int newRadius, uint8_t newAlpha)
 	: Circle(pge, ac, pos, _speed, _color, newRadius), alpha(std::max(std::min(newAlpha, (uint8_t)100), (uint8_t)0)){}
 
+	virtual ~Aura(){}
+
 	// Drawing ---
 	virtual void draw() override {
 		uint8_t c = 100 - alpha;

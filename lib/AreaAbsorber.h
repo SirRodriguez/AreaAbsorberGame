@@ -195,11 +195,6 @@ public:
 		drawInfoText();
 	}
 
-	void clearTheScreen(){
-		animationContainer.clearAnimations();
-	}
-
-
 public:
 	bool OnUserCreate() override {
 		// Load the sprites
@@ -226,9 +221,6 @@ public:
 				scoreContainer.resetLevelAndScore();
 			}
 		}else{
-			// Clear the Screen where it needs to
-			clearTheScreen();
-
 			// Shape Generation
 			shapeGenerator.runShapeGenerationFrame();
 

@@ -22,19 +22,12 @@ public:
 			(*it)->drawFrame();
 			(*it)->incrementFrame();
 			if((*it)->framesMaxed()){
-				(*it)->clear();
 				Animation* an = *it;
 				animations.erase(it++);
 				delete an;
 			}else{
 				++it;
 			}
-		}
-	}
-
-	void clearAnimations(){
-		for(auto it = animations.begin(); it != animations.end(); ++it){
-			(*it)->clear();
 		}
 	}
 

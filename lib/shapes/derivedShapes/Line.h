@@ -12,7 +12,7 @@ public:
 	Line(olc::PixelGameEngine& pge, AnimationContainer& ac, olc::vi2d& pos, int _speed, const olc::Pixel& _color, int _dx, int _dy)
 	: Shape(pge, ac, pos, _speed, _color), dx(_dx), dy(_dy), lineDecal(new olc::Decal(whiteLineSprite)){}
 
-	~Line(){
+	virtual ~Line(){
 		if(lineDecal != nullptr) delete lineDecal;
 	}
 

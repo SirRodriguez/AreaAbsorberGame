@@ -12,6 +12,8 @@ public:
 	PowerUp(olc::PixelGameEngine& pge, AnimationContainer& ac, olc::vi2d& pos, int _speed, const olc::Pixel& _color, int newHeight, Direction directionCode)
 	: Triangle(pge, ac, pos, _speed, _color, newHeight), dir(directionCode){}
 
+	virtual ~PowerUp(){}
+
 	void move() override {
 		switch(dir){
 			case Direction::UP: moveUp(); break;

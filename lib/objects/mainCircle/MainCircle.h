@@ -52,6 +52,8 @@ public:
 		buddy(BuddyCircle(pge, ac, pos, buddySpeed, buddyColor, 0, 0)),
 		dir(Direction::DOWN){}
 
+	virtual ~MainCircle(){}
+
 	// Lives
 	bool alive(){ return lives > 0; }
 

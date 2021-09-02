@@ -10,7 +10,7 @@ public:
 	Box(olc::PixelGameEngine& pge, AnimationContainer& ac, olc::vi2d& pos, int _speed, const olc::Pixel& _color, int newLength)
 	: Square(pge, ac, pos, _speed, _color, newLength), boxDecal(new olc::Decal(whiteSquareOutlineSprite)){}
 
-	~Box(){
+	virtual ~Box(){
 		if(boxDecal != nullptr) delete boxDecal;
 	}
 

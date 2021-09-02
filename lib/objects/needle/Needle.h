@@ -14,7 +14,7 @@ public:
 	Needle(olc::PixelGameEngine& pge, AnimationContainer& ac, olc::vi2d& pos, int _speed, const olc::Pixel& _color, int _dx, int _dy, Direction directionCode)
 	: Line(pge, ac, pos, _speed, _color, _dx, _dy), dir(directionCode), aura(Aura(pge, ac, pos, 0, olc::RED, getLength() / 2, 25)){}
 
-	~Needle(){}
+	virtual ~Needle(){}
 
 	// Drawing
 	virtual void draw() override {

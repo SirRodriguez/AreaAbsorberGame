@@ -13,6 +13,8 @@ public:
 	TrapSquare(olc::PixelGameEngine& pge, AnimationContainer& ac, olc::vi2d& pos, int _speed, const olc::Pixel& _color, int newLength)
 	: Box(pge, ac, pos, _speed, _color, newLength), lifeTimeInFrames(0){}
 
+	virtual ~TrapSquare(){}
+
 	// Drawing ---
 	virtual void draw() override {
 		if(isActive()){

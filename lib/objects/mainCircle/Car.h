@@ -16,6 +16,8 @@ public:
 	Car(olc::PixelGameEngine& pge, AnimationContainer& ac, olc::vi2d& pos, int _speed, const olc::Pixel& _color, const olc::Pixel& _wheelColor, int newRadius)
 	: Flower(pge, ac, pos, _speed, _color, _wheelColor, newRadius, NUMWHEELS, WHEELANGLEOFFSET), life(0){}
 
+	virtual ~Car(){}
+
 	// Drawing ---
 	virtual void draw() override {
 		if(isActive()){

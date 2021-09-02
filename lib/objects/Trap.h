@@ -12,6 +12,8 @@ public:
 	Trap(olc::PixelGameEngine& pge, AnimationContainer& ac, olc::vi2d& pos, int _speed, const olc::Pixel& _color, int newLength, Direction directionCode)
 	: Box(pge, ac, pos, _speed, _color, newLength), dir(directionCode){}
 
+	virtual ~Trap(){}
+
 	void move() override {
 		switch(dir){
 			case Direction::UP: moveUp(); break;

@@ -5,17 +5,26 @@
 
 class AnimationLine: public AnimationShape{
 protected:
+	// olc::Decal* lineDecal;
 	int dx, dy;
 
-	virtual void drawWithColor(const olc::Pixel& colorToDraw) override {
-		pixelGameEngine->DrawLine(getStartPoint(), getEndPoint(), colorToDraw);
+public:
+	AnimationLine(olc::PixelGameEngine& pge, olc::vi2d& pos, const olc::Pixel& _color, int _dx, int _dy)
+	: AnimationShape(pge, pos, _color), dx(_dx), dy(_dy)/*, lineDecal(new olc::Decal(whiteLineSprite))*/{}
+
+	virtual ~AnimationLine(){
+		// if(lineDecal != nullptr) delete lineDecal;
 	}
 
-public:
-	AnimationLine()
-	: AnimationShape(), dx(0), dy(0){}
-	AnimationLine(olc::PixelGameEngine& pge, olc::vi2d& pos, const olc::Pixel& _color, int _dx, int _dy)
-	: AnimationShape(pge, pos, _color), dx(_dx), dy(_dy){}
+	// Drawing ---
+	virtual void draw() override {
+		pixelGameEngine->DrawLine(getStartPoint(), getEndPoint(), color);
+		// olc::vf2d positionVector = { float(position.x), float(position.y) };
+		// float angle = - float(PI()) / 4.0f + std::atan(float(dy) / float(dx));
+		// olc::vf2d center = { float(whiteLineWidth / 2), float(whiteLineHeight / 2) };
+		// olc::vf2d scale = { float(whiteLineScaleToOneLength * getLength()), float(whiteLineScaleToOneLength * getLength()) };
+		// pixelGameEngine->DrawRotatedDecal(positionVector, lineDecal, angle, center, scale, color);
+	}
 
 	// Setting values ---
 	void setdx(int x){ dx = x; }

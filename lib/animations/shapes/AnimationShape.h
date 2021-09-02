@@ -7,15 +7,15 @@ protected:
 	olc::vi2d position;
 	olc::Pixel color;
 
-	virtual void drawWithColor(const olc::Pixel& colorToDraw) = 0;
-
 public:
-	AnimationShape()
-	: pixelGameEngine(nullptr), position(olc::vi2d(0,0)), color(olc::WHITE){}
 	AnimationShape(olc::PixelGameEngine& pge, olc::vi2d& pos, const olc::Pixel& _color)
 	: pixelGameEngine(&pge), position(pos), color(_color){}
 
 	virtual ~AnimationShape(){}
+
+	// PI
+	double PI(){ return 355.0 / 113.0; }
+	double RECPI(){ return 113.0 / 335.0; }
 
 	// Position
 	virtual void setPosition(olc::vi2d point){ position = point; }
@@ -23,8 +23,7 @@ public:
 	virtual const olc::vi2d& getPosition(){ return position; }
 
 	// Drawing
-	virtual void draw(){ drawWithColor(color); }
-	virtual void clear(){ drawWithColor(olc::WHITE); }
+	virtual void draw() = 0;
 };
 
 #endif
