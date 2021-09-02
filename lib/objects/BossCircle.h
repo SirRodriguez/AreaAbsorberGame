@@ -9,8 +9,6 @@ protected:
 	Direction dir;
 
 public:
-	BossCircle()
-	: Circle(){}
 	BossCircle(olc::PixelGameEngine& pge, AnimationContainer& ac, olc::vi2d pos, int _speed, const olc::Pixel& _color, int newRadius, Direction directionCode)
 	: Circle(pge, ac, pos, _speed, _color, newRadius), dir(directionCode){}
 

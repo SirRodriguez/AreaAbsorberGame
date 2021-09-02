@@ -19,8 +19,6 @@ protected:
 	}
 
 public:
-	CircleCarList()
-	: ShapeList(ShapeType::POWERUP){}
 	CircleCarList(olc::PixelGameEngine& pge, AnimationContainer& ac, olc::Pixel _color, olc::Pixel _wheel_color, uint8_t _speed, uint8_t _radius)
 	: ShapeList(pge, ac, ShapeType::POWERUP), default_color(_color), default_wheel_color(_wheel_color), default_speed(_speed), default_radius(_radius){}
 
@@ -32,11 +30,6 @@ public:
 		for(auto it = circleCars.begin(); it != circleCars.end(); ++it)
 			delete *it;
 		circleCars.clear();
-	}
-
-	virtual void hideAll() override {
-		for(auto it = circleCars.begin(); it != circleCars.end(); ++it)
-			(*it)->clear();
 	}
 
 	virtual void drawAll() override {

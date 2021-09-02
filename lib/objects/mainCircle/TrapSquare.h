@@ -9,17 +9,19 @@ class TrapSquare: public Box{
 protected:
 	uint8_t lifeTimeInFrames;
 
-	virtual void drawWithColor(const olc::Pixel& colorToDraw) override {
-		if(isActive() || colorToDraw == olc::WHITE){
-			pixelGameEngine->DrawRect(getTopLeftPoint(), olc::vi2d(length, length), colorToDraw);
-		}
-	}
-
 public:
-	TrapSquare()
-	: Box(), lifeTimeInFrames(0){}
 	TrapSquare(olc::PixelGameEngine& pge, AnimationContainer& ac, olc::vi2d& pos, int _speed, const olc::Pixel& _color, int newLength)
 	: Box(pge, ac, pos, _speed, _color, newLength), lifeTimeInFrames(0){}
+
+	// Drawing ---
+	virtual void draw() override {
+		if(isActive()){
+			olc::vf2d positionVector = { float(position.x), float(position.y) };
+			olc::vf2d offset = { (whiteSquareOutlineWidth * whiteSquareOutlineScaleToOneLength * length / 2), (whiteSquareOutlineHeight * whiteSquareOutlineScaleToOneLength * length / 2) };
+			olc::vf2d scale = { whiteSquareOutlineScaleToOneLength * length, whiteSquareOutlineScaleToOneLength * length };
+			pixelGameEngine->DrawDecal(positionVector - offset, boxDecal, scale, color);
+		}
+	}
 
 	// Moving  ---
 	void move(){

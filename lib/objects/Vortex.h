@@ -12,8 +12,6 @@ protected:
 	Direction dir;
 
 public:
-	Vortex()
-	: Flower(){}
 	Vortex(olc::PixelGameEngine& pge, AnimationContainer& ac, olc::vi2d& pos, int _speed, const olc::Pixel& _color, const olc::Pixel& _pedalColor, int newRadius, Direction directionCode)
 	: Flower(pge, ac, pos, _speed, _color, _pedalColor, newRadius, VORTEXNUMPEDALS, PEDALANGLEOFFSET), dir(directionCode){}
 

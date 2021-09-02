@@ -196,14 +196,17 @@ public:
 	}
 
 	void clearTheScreen(){
-		shapesContainer.hideAll();
 		animationContainer.clearAnimations();
 	}
 
 
 public:
 	bool OnUserCreate() override {
+		// Load the sprites
 		whiteCircleSprite = new olc::Sprite(whiteCircleFile);
+		whiteEquilateralTriangleSprite = new olc::Sprite(whiteEquilateralTriangleFile);
+		whiteLineSprite = new olc::Sprite(whiteLineFile);
+		whiteSquareOutlineSprite = new olc::Sprite(whiteSquareOutlineFile);
 
 		// Called once at the start, so create things here
 		constructObjects();
@@ -261,6 +264,15 @@ public:
 				initializeGame();
 			}
 		}
+
+		return true;
+	}
+
+	bool OnUserDestroy() override {
+		delete whiteCircleSprite;
+		delete whiteEquilateralTriangleSprite;
+		delete whiteLineSprite;
+		delete whiteSquareOutlineSprite;
 
 		return true;
 	}

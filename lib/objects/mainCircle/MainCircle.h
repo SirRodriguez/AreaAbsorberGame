@@ -41,29 +41,6 @@ protected:
 	void moveDownLeft() override { moveDownLeft(inCar() ? speed * 2 : speed); }
 	void moveDownRight() override { moveDownRight(inCar() ? speed * 2 : speed); }
 
-	// Drawing
-	void drawWithColor(const olc::Pixel& colorToDraw) override {
-		// if(alive() || colorToDraw == olc::WHITE){
-		// 	// Draw the circle
-		// 	pixelGameEngine->FillCircle(position, radius, colorToDraw);
-
-		// 	// Draw the amount of life
-		// 	int textScale = 2;
-		// 	std::string lives_string = std::to_string(lives);
-		// 	olc::vi2d livesStringSize = pixelGameEngine->GetTextSize(lives_string);
-		// 	pixelGameEngine->DrawString(position.x - textScale * (livesStringSize.x / 2), position.y, lives_string, colorToDraw == olc::WHITE ? olc::WHITE : olc::GREY, textScale);
-		// }
-
-
-		car.draw();
-
-		buddy.draw();
-
-		pixelGameEngine->FillCircle(position, radius, colorToDraw);
-
-		trapSquare.draw();
-	}
-
 public:
 	MainCircle(olc::PixelGameEngine& pge, AnimationContainer& ac, olc::vi2d pos, int _speed, const olc::Pixel& _color, int _initialRadius, int newLives, const olc::Pixel& carColor, const olc::Pixel& wheelColor, int carRadius, int buddySpeed, const olc::Pixel& buddyColor)
 	: Circle(pge, ac, pos, _speed, _color, _initialRadius), 
@@ -77,6 +54,20 @@ public:
 
 	// Lives
 	bool alive(){ return lives > 0; }
+
+	// Drawing
+	void draw() override {
+		car.draw();
+
+		buddy.draw();
+
+		// Draw the main circle
+		olc::vf2d positionVector = { float(position.x), float(position.y) };
+		olc::vf2d offset = { (whiteCirclePixelWidth * whiteCircleScaleToOneRadius * radius) / 2, (whiteCirclePixelHeight * whiteCircleScaleToOneRadius * radius) / 2 };
+		pixelGameEngine->DrawDecal(positionVector - offset, circleDecal, { whiteCircleScaleToOneRadius * radius, whiteCircleScaleToOneRadius * radius }, color);
+
+		trapSquare.draw();
+	}
 
 	// Movement
 	void move() override {
@@ -153,21 +144,6 @@ public:
 	void hitCar(int value){ car.loseLife(value); }
 
 	int getCarLife(){ return car.getLife(); }
-
-	// Drawing
-	void clear() override {
-		// Clear the main circle
-		drawWithColor(olc::WHITE);
-
-		// Clear the trap
-		trapSquare.clear();
-
-		// Clear the car
-		car.clear();
-
-		// Clear the buddy circle
-		buddy.clear();
-	}
 
 	// 
 	// Buddy Circle functions

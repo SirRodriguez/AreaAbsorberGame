@@ -7,18 +7,23 @@
 #define RECSQRT3 56 / 97
 class Triangle : public Shape{
 protected:
+	olc::Decal* triangleDecal;
 	int height;
 
-	// Drawing ---
-	virtual void drawWithColor(const olc::Pixel& colorToDraw) override {
-		pixelGameEngine->FillTriangle(topPoint(), botLeftPoint(), botRightPoint(), colorToDraw);
+public:
+	Triangle(olc::PixelGameEngine& pge, AnimationContainer& ac, olc::vi2d& pos, int _speed, const olc::Pixel& _color, int newHeight)
+	: Shape(pge, ac, pos, _speed, _color), height(newHeight), triangleDecal(new olc::Decal(whiteEquilateralTriangleSprite)){}
+
+	virtual ~Triangle(){
+		if(triangleDecal != nullptr) delete triangleDecal;
 	}
 
-public:
-	Triangle()
-	: Shape(), height(0){}
-	Triangle(olc::PixelGameEngine& pge, AnimationContainer& ac, olc::vi2d& pos, int _speed, const olc::Pixel& _color, int newHeight)
-	: Shape(pge, ac, pos, _speed, _color), height(newHeight){}
+	// Drawing ---
+	virtual void draw() override {
+		olc::vf2d positionVector = { float(position.x), float(position.y) };
+		olc::vf2d offset = { (whiteEquilateralTriangleWidth * whiteEquilateralTriangleScaleToOneHeight * height) / 2, (whiteEquilateralTriangleHeight * whiteEquilateralTriangleScaleToOneHeight * height) / 2 };
+		pixelGameEngine->DrawDecal(positionVector - offset, triangleDecal, { whiteEquilateralTriangleScaleToOneHeight * height, whiteEquilateralTriangleScaleToOneHeight * height }, color);
+	}
 	
 	// Moving ---
 	virtual void move() = 0;

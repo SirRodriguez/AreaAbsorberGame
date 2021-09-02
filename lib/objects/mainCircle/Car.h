@@ -12,23 +12,23 @@ class Car: public Flower{
 protected:
 	int life;
 
-	virtual void drawWithColor(const olc::Pixel& colorToDraw) override {
-		if(isActive() || colorToDraw == olc::WHITE){
-			pixelGameEngine->FillCircle(position, radius, colorToDraw);
-
-			for(auto it = pedals.begin(); it != pedals.end(); ++it){
-				if(colorToDraw == olc::WHITE) 	(*it)->clear();
-				else 							(*it)->draw();
-			}
-		}
-	}
-
 public:
-	Car()
-	: Flower(), life(0){}
 	Car(olc::PixelGameEngine& pge, AnimationContainer& ac, olc::vi2d& pos, int _speed, const olc::Pixel& _color, const olc::Pixel& _wheelColor, int newRadius)
 	: Flower(pge, ac, pos, _speed, _color, _wheelColor, newRadius, NUMWHEELS, WHEELANGLEOFFSET), life(0){}
 
+	// Drawing ---
+	virtual void draw() override {
+		if(isActive()){
+			// Draw the inner circle
+			olc::vf2d positionVector = { float(position.x), float(position.y) };
+			olc::vf2d offset = { (whiteCirclePixelWidth * whiteCircleScaleToOneRadius * radius) / 2, (whiteCirclePixelHeight * whiteCircleScaleToOneRadius * radius) / 2 };
+			pixelGameEngine->DrawDecal(positionVector - offset, circleDecal, { whiteCircleScaleToOneRadius * radius, whiteCircleScaleToOneRadius * radius }, color);
+
+			// Draw the wheels
+			for(auto it = pedals.begin(); it != pedals.end(); ++it)
+				(*it)->draw();
+		}
+	}
 
 	// Moving  ---
 	void move() override {

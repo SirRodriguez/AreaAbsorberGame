@@ -39,10 +39,6 @@ protected:
 	virtual void make(olc::vi2d _loc, Direction dirCode) = 0;
 
 public:
-	ShapeList()
-	: pixelGameEngine(nullptr), animationContainer(nullptr){}
-	ShapeList(int typeCode)
-	: pixelGameEngine(nullptr), animationContainer(nullptr){}
 	ShapeList(olc::PixelGameEngine& pge, AnimationContainer& ac, ShapeType typeCode)
 	: pixelGameEngine(&pge), animationContainer(&ac), shapeType(typeCode){}
 
@@ -117,7 +113,6 @@ public:
 
 
 	virtual void deleteAll() = 0;
-	virtual void hideAll() = 0;
 	virtual void drawAll() = 0;
 	virtual void moveAll() = 0;
 

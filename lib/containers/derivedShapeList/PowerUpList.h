@@ -18,8 +18,6 @@ protected:
 	}
 
 public:
-	PowerUpList()
-	: ShapeList(ShapeType::POWERUP){}
 	PowerUpList(olc::PixelGameEngine& pge, AnimationContainer& ac, olc::Pixel _color, uint8_t _speed, uint8_t _height)
 	: ShapeList(pge, ac, ShapeType::POWERUP), default_color(_color), default_speed(_speed), default_height(_height){}
 
@@ -31,11 +29,6 @@ public:
 		for(auto it = powerUps.begin(); it != powerUps.end(); ++it)
 			delete *it;
 		powerUps.clear();
-	}
-
-	virtual void hideAll() override {
-		for(auto it = powerUps.begin(); it != powerUps.end(); ++it)
-			(*it)->clear();
 	}
 
 	virtual void drawAll() override {

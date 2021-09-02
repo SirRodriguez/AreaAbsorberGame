@@ -170,8 +170,8 @@ public:
 	// 
 
 	void hideAll(){
-		for(auto it = shapeLists.begin(); it != shapeLists.end(); ++it)
-			(*it)->hideAll();
+		// for(auto it = shapeLists.begin(); it != shapeLists.end(); ++it)
+		// 	(*it)->hideAll();
 	}
 
 	void drawAllShapes(){

@@ -18,8 +18,6 @@ protected:
 	}
 
 public:
-	OtherCircleList()
-	: ShapeList(ShapeType::ENEMY){}
 	OtherCircleList(olc::PixelGameEngine& pge, AnimationContainer& ac, olc::Pixel _color, uint8_t _speed, uint8_t _radius)
 	: ShapeList(pge, ac, ShapeType::ENEMY), default_color(_color), default_speed(_speed), default_max_radius(_radius){}
 
@@ -31,11 +29,6 @@ public:
 		for(auto it = otherCircle.begin(); it != otherCircle.end(); ++it)
 			delete *it;
 		otherCircle.clear();
-	}
-
-	virtual void hideAll() override {
-		for(auto it = otherCircle.begin(); it != otherCircle.end(); ++it)
-			(*it)->clear();
 	}
 
 	virtual void drawAll() override {

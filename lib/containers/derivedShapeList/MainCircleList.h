@@ -23,8 +23,6 @@ protected:
 	virtual void make(olc::vi2d _loc, Direction dirCode) override {}
 
 public:
-	MainCircleList()
-	: ShapeList(ShapeType::MAINCIRCLE){}
 	MainCircleList(
 		olc::PixelGameEngine& pge, 
 		AnimationContainer& ac, 
@@ -69,10 +67,6 @@ public:
 	}
 
 	virtual void deleteAll() override {}
-
-	virtual void hideAll() override {
-		mainCircle->clear();
-	}
 
 	virtual void drawAll() override {
 		mainCircle->draw();

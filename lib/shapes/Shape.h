@@ -11,8 +11,6 @@ protected:
 	int speed;
 	olc::Pixel color;
 
-	virtual void drawWithColor(const olc::Pixel& colorToDraw) = 0;
-
 	virtual void moveUp(){ movePosition(olc::vi2d(0, -speed)); }
 	virtual void moveDown(){ movePosition(olc::vi2d(0, speed)); }
 	virtual void moveLeft(){ movePosition(olc::vi2d(-speed, 0)); }
@@ -23,12 +21,14 @@ protected:
 	virtual void moveDownRight(){ movePosition(olc::vi2d(speed, speed)); }
 
 public:
-	Shape()
-	: pixelGameEngine(nullptr), animationContainer(nullptr), position(olc::vi2d(0,0)), speed(0), color(olc::WHITE){}
 	Shape(olc::PixelGameEngine& pge, AnimationContainer& ac, olc::vi2d& pos, int _speed, const olc::Pixel& _color)
 	: pixelGameEngine(&pge), animationContainer(&ac), position(pos), speed(_speed), color(_color){}
 
 	virtual ~Shape(){}
+
+	// PI
+	double PI(){ return 355.0 / 113.0; }
+	double RECPI(){ return 113.0 / 335.0; }
 
 	// Out of bounds
 	virtual bool belowTopOfScreen(){ return position.y > 0; }
@@ -48,8 +48,7 @@ public:
 	virtual const olc::vi2d& getPosition(){ return position; }
 
 	// Drawing
-	virtual void draw(){ drawWithColor(color); }
-	virtual void clear(){ drawWithColor(olc::WHITE); }
+	virtual void draw() = 0;
 
 	// Moving
 	virtual void move() = 0;

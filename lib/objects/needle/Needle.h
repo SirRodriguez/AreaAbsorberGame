@@ -10,16 +10,24 @@ protected:
 	Direction dir;
 	Aura aura;
 
-	virtual void drawWithColor(const olc::Pixel& colorToDraw) override {
-		aura.draw();
-		pixelGameEngine->DrawLine(getStartPoint(), getEndPoint(), colorToDraw);
-	}
-
 public:
-	Needle()
-	: Line(){}
 	Needle(olc::PixelGameEngine& pge, AnimationContainer& ac, olc::vi2d& pos, int _speed, const olc::Pixel& _color, int _dx, int _dy, Direction directionCode)
 	: Line(pge, ac, pos, _speed, _color, _dx, _dy), dir(directionCode), aura(Aura(pge, ac, pos, 0, olc::RED, getLength() / 2, 25)){}
+
+	~Needle(){}
+
+	// Drawing
+	virtual void draw() override {
+		// Draw the arua
+		aura.draw();
+
+		// Draw the Line
+		olc::vf2d positionVector = { float(position.x), float(position.y) };
+		float angle = - float(PI()) / 4.0f + std::atan(float(dy) / float(dx));
+		olc::vf2d center = { float(whiteLineWidth / 2), float(whiteLineHeight / 2) };
+		olc::vf2d scale = { float(whiteLineScaleToOneLength * getLength()), float(whiteLineScaleToOneLength * getLength()) };
+		pixelGameEngine->DrawRotatedDecal(positionVector, lineDecal, angle, center, scale, color);
+	}
 
 	void move(){
 		switch(dir){
@@ -49,11 +57,6 @@ public:
 			case Direction::DOWNRIGHT: return !aboveBottomOfScreen() || !leftOfRightOfScreen();
 			default: return !belowTopOfScreen() || !aboveBottomOfScreen() || !rightOfLeftOfScreen() || !leftOfRightOfScreen();
 		}
-	}
-
-	virtual void clear() override {
-		drawWithColor(olc::WHITE);
-		aura.clear();
 	}
 };
 

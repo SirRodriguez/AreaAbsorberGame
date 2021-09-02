@@ -7,23 +7,20 @@ class Aura : public Circle{
 protected:
 	uint8_t alpha; // out of 100
 
-	virtual void drawWithColor(const olc::Pixel& colorToDraw) override {
-		if(colorToDraw == olc::WHITE){
-			pixelGameEngine->FillCircle(position, radius, colorToDraw);
-		}else{
-			uint8_t c = 100 - alpha;
-			uint8_t r = alpha * colorToDraw.r / 100 + c * 255 / 100;
-			uint8_t g = alpha * colorToDraw.g / 100 + c * 255 / 100;
-			uint8_t b = alpha * colorToDraw.b / 100 + c * 255 / 100;
-			pixelGameEngine->FillCircle(position, radius, olc::Pixel(r, g, b));
-		}
-	}
-
 public:
-	Aura()
-	: Circle(){}
 	Aura(olc::PixelGameEngine& pge, AnimationContainer& ac, olc::vi2d pos, int _speed, const olc::Pixel& _color, int newRadius, uint8_t newAlpha)
 	: Circle(pge, ac, pos, _speed, _color, newRadius), alpha(std::max(std::min(newAlpha, (uint8_t)100), (uint8_t)0)){}
+
+	// Drawing ---
+	virtual void draw() override {
+		uint8_t c = 100 - alpha;
+		uint8_t r = alpha * color.r / 100 + c * 255 / 100;
+		uint8_t g = alpha * color.g / 100 + c * 255 / 100;
+		uint8_t b = alpha * color.b / 100 + c * 255 / 100;
+		olc::vf2d positionVector = { float(position.x), float(position.y) };
+		olc::vf2d offset = { (whiteCirclePixelWidth * whiteCircleScaleToOneRadius * radius) / 2, (whiteCirclePixelHeight * whiteCircleScaleToOneRadius * radius) / 2 };
+		pixelGameEngine->DrawDecal(positionVector - offset, circleDecal, { whiteCircleScaleToOneRadius * radius, whiteCircleScaleToOneRadius * radius }, olc::Pixel(r, g, b));
+	}
 
 	virtual void move() override {
 		// Will move with the needle

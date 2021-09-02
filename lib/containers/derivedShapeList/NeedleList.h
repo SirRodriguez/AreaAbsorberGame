@@ -18,8 +18,6 @@ protected:
 	}
 
 public:
-	NeedleList()
-	: ShapeList(ShapeType::ENEMY){}
 	NeedleList(olc::PixelGameEngine& pge, AnimationContainer& ac, olc::Pixel _color, uint8_t _speed, uint8_t _length)
 	: ShapeList(pge, ac, ShapeType::ENEMY), default_color(_color), default_speed(_speed), default_max_length(_length){}
 
@@ -31,11 +29,6 @@ public:
 		for(auto it = needles.begin(); it != needles.end(); ++it)
 			delete *it;
 		needles.clear();
-	}
-
-	virtual void hideAll() override {
-		for(auto it = needles.begin(); it != needles.end(); ++it)
-			(*it)->clear();
 	}
 
 	virtual void drawAll() override {

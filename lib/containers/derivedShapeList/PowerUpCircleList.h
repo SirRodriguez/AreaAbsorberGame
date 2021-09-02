@@ -22,8 +22,6 @@ protected:
 	}
 
 public:
-	PowerUpCircleList()
-	: ShapeList(ShapeType::BUDDY){}
 	PowerUpCircleList(olc::PixelGameEngine& pge, AnimationContainer& ac, olc::Pixel _color, uint8_t _speed, uint8_t _size)
 	: ShapeList(pge, ac, ShapeType::BUDDY), default_color(_color), default_speed(_speed), default_size(_size){}
 
@@ -57,11 +55,6 @@ public:
 		for(auto it = powerUpCircles.begin(); it != powerUpCircles.end(); ++it)
 			delete *it;
 		powerUpCircles.clear();
-	}
-
-	virtual void hideAll() override {
-		for(auto it = powerUpCircles.begin(); it != powerUpCircles.end(); ++it)
-			(*it)->clear();
 	}
 
 	virtual void drawAll() override {

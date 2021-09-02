@@ -23,18 +23,6 @@ protected:
 		return olc::vi2d(x, y);
 	}
 
-	virtual void drawWithColor(const olc::Pixel& colorToDraw) override{
-		pixelGameEngine->FillCircle(position, radius, colorToDraw);
-
-		for(auto it = pedals.begin(); it != pedals.end(); ++it){
-			if(colorToDraw == olc::WHITE){
-				(*it)->clear();
-			}else{
-				(*it)->draw();
-			}
-		}
-	}
-
 	void fixPedalsToPosition(){
 		if(numPedals > 0){
 			double increment = 360 / numPedals;
@@ -56,8 +44,6 @@ protected:
 	}
 
 public:
-	Flower()
-	: Circle(){}
 	Flower(olc::PixelGameEngine& pge, AnimationContainer& ac, olc::vi2d& pos, int _speed, const olc::Pixel& _color, const olc::Pixel& _pedalColor, int newRadius, int _numPedals, double _degOffset)
 	: Circle(pge, ac, pos, _speed, _color, newRadius), numPedals(_numPedals), degOffset(_degOffset){
 		if(numPedals > 0){
@@ -76,6 +62,17 @@ public:
 	~Flower(){
 		for(auto it = pedals.begin(); it != pedals.end(); ++it)
 			delete *it;
+	}
+
+	// Drawing ---
+	virtual void draw() override{
+		// Draw the inner circle
+		olc::vf2d positionVector = { float(position.x), float(position.y) };
+		olc::vf2d offset = { (whiteCirclePixelWidth * whiteCircleScaleToOneRadius * radius) / 2, (whiteCirclePixelHeight * whiteCircleScaleToOneRadius * radius) / 2 };
+		pixelGameEngine->DrawDecal(positionVector - offset, circleDecal, { whiteCircleScaleToOneRadius * radius, whiteCircleScaleToOneRadius * radius }, color);
+
+		for(auto it = pedals.begin(); it != pedals.end(); ++it)
+			(*it)->draw();
 	}
 
 	// Moving

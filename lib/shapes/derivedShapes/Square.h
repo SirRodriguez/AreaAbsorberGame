@@ -7,15 +7,13 @@ class Square: public Shape{
 protected:
 	int length;
 
-	virtual void drawWithColor(const olc::Pixel& colorToDraw) override {
-		pixelGameEngine->FillRect(getTopLeftPoint(), olc::vi2d(length, length), colorToDraw);
-	}
-
 public:
-	Square()
-	: Shape(), length(0){}
 	Square(olc::PixelGameEngine& pge, AnimationContainer& ac, olc::vi2d& pos, int _speed, const olc::Pixel& _color, int newLength)
 	: Shape(pge, ac, pos, _speed, _color), length(newLength){}
+
+	virtual void draw() override {
+		pixelGameEngine->FillRectDecal(getTopLeftPoint(), olc::vi2d(length, length), color);
+	}
 	
 	// Moving ---
 	virtual void move() = 0;

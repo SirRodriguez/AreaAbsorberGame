@@ -19,8 +19,6 @@ protected:
 	}
 
 public:
-	VortexList()
-	: ShapeList(ShapeType::OBJECT){}
 	VortexList(olc::PixelGameEngine& pge, AnimationContainer& ac, olc::Pixel _color, olc::Pixel _pedal_color, uint8_t _speed, uint8_t _radius)
 	: ShapeList(pge, ac, ShapeType::OBJECT), default_color(_color), default_pedal_color(_pedal_color), default_speed(_speed), default_radius(_radius){}
 
@@ -32,11 +30,6 @@ public:
 		for(auto it = vortexes.begin(); it != vortexes.end(); ++it)
 			delete *it;
 		vortexes.clear();
-	}
-
-	virtual void hideAll() override {
-		for(auto it = vortexes.begin(); it != vortexes.end(); ++it)
-			(*it)->clear();
 	}
 
 	virtual void drawAll() override {

@@ -68,10 +68,6 @@ public:
 		alive = false;
 	}
 
-	virtual void hideAll() override {
-		if(alive) boss->clear();
-	}
-
 	virtual void drawAll() override {
 		if(alive) boss->draw();
 	}
