@@ -215,6 +215,7 @@ public:
 
 		// Called Once per frame
 		if(inMainMenu){
+			drawInfoText();
 			if(spaceButton.bPressed){
 				Clear(olc::WHITE);
 				inMainMenu = false;
