@@ -9,14 +9,14 @@ class ShapeGenerator{
 	ScoreContainer* scoreContainer;
 
 	// Likelyhood of shapes generated
-	int likelyHoodOfCircles = 50;
+	int likelyHoodOfCircles = 25;
 	int likelyHoodOfPowerUps = 500;
 	int likelyHoodOfNeedles = 1000;
 	int likelyHoodOfBuddyPowerUps = 1000;
 	int likelyHoodOfTraps = 500;
 	int likelyHoodOfCircleCars = 2000;
 	int likelyHoodOfNukes = 3000;
-	int likelyHoodOfVortex = 3000;
+	int likelyHoodOfVortex = 1500;
 
 	bool generateChecker(int likelyHood){
 		int module = likelyHood - (scoreContainer->getLevel() - 1) * likelyHood / 10;
