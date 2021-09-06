@@ -15,7 +15,7 @@
 // g++ -o AreaAbsorber.exe main.cpp -luser32 -lgdi32 -lopengl32 -lgdiplus -lShlwapi -ldwmapi -lstdc++fs -static -std=c++17
 
 class AreaAbsorber : public olc::PixelGameEngine {
-	InputControls inputControls;
+	InputControls* inputControls = nullptr;
 
 	// flags
 	bool inMainMenu;
@@ -24,7 +24,7 @@ class AreaAbsorber : public olc::PixelGameEngine {
 	const int textScale = 4;
 	
 	// Shape generator
-	ShapeGenerator* shapeGenerator;
+	ShapeGenerator* shapeGenerator = nullptr;
 
 	// Containers
 	ShapesContainer shapesContainer;
@@ -38,7 +38,7 @@ public:
 
 	void constructObjects(){
 		// Initialize the input controls class
-		inputControls = InputControls(*this);
+		inputControls = new InputControls(*this);
 		// Initialize Animation Container
 		animationContainer = AnimationContainer();
 		animationContainer.initializePopStorage(*this);
@@ -212,7 +212,7 @@ public:
 
 	bool OnUserUpdate(float fElapsedTime) override {
 		// Update input controls
-		inputControls.runInputFrame();
+		inputControls->runInputFrame();
 
 		// Called Once per frame
 		if(inMainMenu){
