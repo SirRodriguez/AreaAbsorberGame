@@ -24,7 +24,7 @@ class AreaAbsorber : public olc::PixelGameEngine {
 	const int textScale = 4;
 	
 	// Shape generator
-	ShapeGenerator shapeGenerator;
+	ShapeGenerator* shapeGenerator;
 
 	// Containers
 	ShapesContainer shapesContainer;
@@ -47,7 +47,7 @@ public:
 		// Initialize the scoreContainer
 		scoreContainer = ScoreContainer(*this, animationContainer);
 		// Initialize the shape Generator
-		shapeGenerator = ShapeGenerator(shapesContainer, scoreContainer);
+		shapeGenerator = new ShapeGenerator(shapesContainer, scoreContainer);
 	}
 
 	void setMainMenu(){
@@ -224,7 +224,7 @@ public:
 			}
 		}else{
 			// Shape Generation
-			shapeGenerator.runShapeGenerationFrame();
+			shapeGenerator->runShapeGenerationFrame();
 
 			// Move the shapes
 			shapesContainer.moveAllShapes();
