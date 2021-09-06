@@ -41,6 +41,7 @@ public:
 		inputControls = InputControls(*this);
 		// Initialize Animation Container
 		animationContainer = AnimationContainer();
+		animationContainer.initializePopStorage(*this);
 		// Initialize the hape container
 		shapesContainer = ShapesContainer(*this, animationContainer);
 		// Initialize the scoreContainer

@@ -1,6 +1,8 @@
 #ifndef ANIMATIONCONTAINER_H
 #define ANIMATIONCONTAINER_H
 
+#include <queue>
+
 #include "../Direction.h"
 #include "../animations/Animation.h"
 #include "../animations/derivedAnimations/Pop.h"
@@ -8,11 +10,33 @@
 
 class AnimationContainer{
 protected:
+	std::queue<Animation*> popStorage;
 	std::list<Animation*> animations;
 
 public:
 	AnimationContainer(){}
-	~AnimationContainer(){}
+	~AnimationContainer(){
+		for(auto it = animations.begin(); it != animations.end(); ++it)
+			delete *it;
+
+		while(!popStorage.empty()){
+			delete popStorage.front();
+			popStorage.pop();
+		}
+	}
+
+	void initializePopStorage(olc::PixelGameEngine& pge){
+		int storageSize = 50;
+
+		olc::vi2d pos = olc::vi2d(0,0);
+		int maxFrames = 60;
+		olc::Pixel lineColor = olc::BLACK;
+		int radius = 50;
+		int numLines = 8;
+		double degOffset = 0.0;
+		for(int i = 0; i < storageSize; ++i)
+			popStorage.push(new Pop(pge, pos, maxFrames, lineColor, radius, numLines, degOffset));
+	}
 
 	// 
 	// Drawing
